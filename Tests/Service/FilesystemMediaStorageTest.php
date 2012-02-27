@@ -74,7 +74,7 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
         $this->fs->store($this->file, $this->id, $this->name, $this->type, $this->variant);
     }
 
-    public function testLocate3()
+    public function testLocate3() //with variant
     {
         $this->variant = "summary";
         $url = $this->fs->locate($this->id, $this->name, $this->type, $this->variant);
@@ -98,45 +98,8 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
         $this->fs->store($this->file, $this->id, $this->name, $this->type);
     }
 
-    /*
-    public function testStore2()
-    {
-        $this->id = 2222;
-        $this->variant = "xyz";
-        $this->name = "copied.txt";
 
-        $file = __DIR__."/fixtures/source.txt";
-        $this->fs->store($file, $this->id, $this->name, $this->type, $this->variant);
-
-        $this->assertEquals("/sbaam/web/images/{$this->type}/". $this->id % 256 ."/{$this->id}/{$this->variant}/{$this->name}",
-            $this->fs->locate($this->id, $this->name, $this->type, $this->variant));
-    }
-
-
-    public function testLocate2()
-    {
-        $this->fs->setUseAbsoluteUrls(true);
-        $url = $this->fs->locate($this->id, $this->name, $this->type, $this->variant);
-        $this->assertEquals("{$this->absoluteBaseUrl}{$this->type}/". $this->id % 256 ."/{$this->id}/{$this->variant}/{$this->name}", $url);
-    }
-
-    */
-
-    /**
-     * @expectedException Oinm\ServiceBundle\Service\Image\Exception\CannotLocateImageException
-     */
-
-    /*
-    public function testLocateException()
-    {
-        $this->fs->locate($this->id, "i don't exist!", $this->type, $this->variant);
-    }
-
-    public function testStoreException()
-    {
-        //TODO
-    }
-    */
+    
 
     public static function tearDownAfterClass()
     {
