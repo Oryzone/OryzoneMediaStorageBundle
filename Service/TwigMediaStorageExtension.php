@@ -3,7 +3,7 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
 use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
-use Oryzone\Bundle\MediaStorageBundle\Exception\CannotLocateMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotLocateMediaException;
 
 /**
  * Twig extension written to ease the usage of media
@@ -40,7 +40,7 @@ class TwigMediaStorageExtension extends \Twig_Extension
             $url = $this->mediaStorage->locate($media->getId(), $media->getMediaName(), $media->getMediaType(), $variant);
             return $url;
         }
-        catch( CannotLocateImageException $e)
+        catch( CannotLocateMediaException $e)
         {
             if($this->debug)
                 throw $e;

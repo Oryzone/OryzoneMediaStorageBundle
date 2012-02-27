@@ -2,14 +2,14 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
-use Oryzone\Bundle\MediaStorageBundle\Exception\CannotLocateMediaException;
-use Oryzone\Bundle\MediaStorageBundle\Exception\CannotStoreMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotLocateMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotStoreMediaException;
 
 /**
  * Storage strategy based on local filesystem
  * @author Luciano Mammino
  */
-class FilesystemSMediatorage implements IMediaStorage
+class FilesystemMediaStorage implements IMediaStorage
 {
     
     protected $mediaPath;
@@ -20,8 +20,8 @@ class FilesystemSMediatorage implements IMediaStorage
     /**
      * Constructor
      * @param string 	$mediaPath 			the base path where media are stored
-     * @param string 	$relativeBaseUrl 	the relative url to image path
-     * @param string 	$absoluteBaseUrl 	the absolute url to image path
+     * @param string 	$relativeBaseUrl 	the relative url to media path
+     * @param string 	$absoluteBaseUrl 	the absolute url to media path
      * @param boolean 	$useAbsoluteUrls 	a boolean flag used to indicate wheter to use absolute urls
      */
     function __construct(   $mediaPath, 
@@ -78,27 +78,20 @@ class FilesystemSMediatorage implements IMediaStorage
         
     protected function getPath($id, $name, $type, $variant)
     {
-        $subpath = NULL;
+        //optimization to avoid having a lot of files in a sigle folder (which slows down unix systems)
+        $subpath = substr( md5($id), 0, 2 );
 
-		if(is_int($id))
-			$subpath = $id % 256
-		elseif(is_string($id))
-			$subpath = substring( preg_replace('/[^a-zA-Z0-9\s]/', '_', $id),0,3 );
-		else
-			throw new \InvalidArgumentException('The parameter id can be only integer or string');
+        $parts = array($type, $subpath, preg_replace('/[^a-zA-Z0-9\s]/', '-', $id));
+        if($variant)
+            $parts[] = $variant;
+        $parts[] = $name;
 
-		return join(DIRECTORY_SEPARATOR, array(
-                        $type,
-                        $subpath,
-                        $id,
-                        $variant,
-                        $name
-                    ));
+		return join(DIRECTORY_SEPARATOR, $parts);
     }
     
     protected function getFilename($id, $name, $type, $variant)
     {
-        return $this->imagesPath 
+        return $this->mediaPath
                . DIRECTORY_SEPARATOR 
                . $this->getPath($id, $name, $type, $variant);
     }
@@ -106,7 +99,7 @@ class FilesystemSMediatorage implements IMediaStorage
     /**
      * {@inheritDoc} 
      */
-    public function locate($id, $name, $type, $variant = null)
+    public function locate($id, $name, $type, $variant = NULL)
     {
         $path = $this->getPath($id, $name, $type, $variant);
         $filename = $this->getFilename($id, $name, $type, $variant);
@@ -134,14 +127,13 @@ class FilesystemSMediatorage implements IMediaStorage
     /**
      * {@inheritDoc} 
      */
-    public function store($file, $id, $name, $type, $variant = null)
+    public function store($file, $id, $name, $type, $variant = NULL)
     {
         $dest = $this->getFilename($id, $name, $type, $variant);
         
         $destPath = substr($dest, 0, strripos($dest, DIRECTORY_SEPARATOR));
         if(!file_exists($destPath))
         {
-            var_dump($destPath);
             if(!@mkdir($destPath, 0777, true))
             {
                 throw new CannotStoreMediaException ("Cannot create '{$destPath}' folder", $id, $name, $type, $variant);
