@@ -11,7 +11,7 @@ interface IMedia
      * @abstract
      * @return int|string get the id of the entity
      */
-	public function getId();
+	public function getMediaId();
 
     /**
      * @abstract

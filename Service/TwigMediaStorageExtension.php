@@ -24,20 +24,39 @@ class TwigMediaStorageExtension extends \Twig_Extension
     {
         $this->mediaStorage = $mediaStorage;
         $this->debug = $debug;
+
     }
-    
+
+    public function getGlobals()
+    {
+        return array(
+            'MediaStorage_instance' => $this->mediaStorage,
+            'MediaStorage_instance_debug' => $this->debug,
+        );
+    }
+
     public function getFilters()
     {
         return array(
-            'locateSource' => new \Twig_Filter_Method($this, 'locateSourceFilter'),
+            'locateSrc' => new \Twig_Filter_Method($this, 'locateSrcFilter'),
         );
     }
-    
-    public function locateSourceFilter(IMedia $media, $variant = NULL)
+
+
+    public function getFunctions()
+    {
+        return array(
+            'locateSrc' => new \Twig_Function_Function('Oryzone\Bundle\MediaStorageBundle\Service\locateSrc',
+                                array( 'is_safe' => array('html'), 'needs_context' => FALSE, 'needs_environment' => TRUE) ),
+        );
+    }
+
+
+    public function locateSrcFilter(IMedia $media, $variant = NULL)
     {
         try
         {
-            $url = $this->mediaStorage->locate($media->getId(), $media->getMediaName(), $media->getMediaType(), $variant);
+            $url = $this->mediaStorage->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
             return $url;
         }
         catch( CannotLocateMediaException $e)
@@ -45,7 +64,7 @@ class TwigMediaStorageExtension extends \Twig_Extension
             if($this->debug)
                 throw $e;
         }
-        
+
         return "";
     }
     
@@ -54,4 +73,22 @@ class TwigMediaStorageExtension extends \Twig_Extension
         return 'twigMediaStorage';
     }
    
+}
+
+function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant)
+{
+    $globals = $env->getGlobals();
+
+    try
+    {
+        $url = $globals['MediaStorage_instance']->locate($id, $name, $type, $variant);
+        return $url;
+    }
+    catch( CannotLocateMediaException $e)
+    {
+        if($globals['MediaStorage_instance_debug'])
+            throw $e;
+    }
+
+    return "";
 }
