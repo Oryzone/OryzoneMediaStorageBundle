@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class MediaStorageExtension extends Extension
+class OryzoneMediaStorageExtension extends Extension
 {
     /**
      * {@inheritDoc}
@@ -23,6 +23,9 @@ class MediaStorageExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('MediaStorageService.xml');      
+
+        if (isset($config['enabled']) && $config['enabled']) {
+            $loader->load('services.xml');
+        }
     }
 }

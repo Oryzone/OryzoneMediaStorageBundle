@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.mediapath">%kernel.root_dir%/../web/media/</parameter>
+        <parameter key="oryzone_media_storage.relativebaseurl">/media/</parameter>
+        <parameter key="oryzone_media_storage.absolutebaseurl"></parameter>
+        <parameter key="oryzone_media_storage.useabsoluteurls">false</parameter>
+        <parameter key="oryzone_media_storage.debug">%kernel.debug%</parameter>
+    </parameters>
+
+    <services>
+        <service public="false" id="oryzone_media_storage.filesystem_mediastorage" class="Oryzone\Bundle\MediaStorageBundle\Service\FilesystemMediaStorage" >
+            <argument type="string">%oryzone_media_storage.mediapath%</argument>
+            <argument type="string">%oryzone_media_storage.relativebaseurl%</argument>
+            <argument type="string">%oryzone_media_storage.absolutebaseurl%</argument>
+            <argument type="string">%oryzone_media_storage.useabsoluteurls%</argument>
+        </service>
+        
+        <!-- provides default image storage. Can be redefined in the config.yml file to use another storage engine -->
+        <service id="media_storage" alias="oryzone_media_storage.filesystem_mediastorage"></service>
+        
+        <service id="oryzone_twig_mediastorage_extension" class="Oryzone\Bundle\MediaStorageBundle\Service\TwigMediaStorageExtension">
+            <argument type="service" id="media_storage"/>
+            <argument type="string">%oryzone_media_storage.debug%</argument>
+            <tag name="twig.extension" />
+        </service>
+        
+    </services>
+</container>
