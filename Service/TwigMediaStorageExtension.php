@@ -56,6 +56,9 @@ class TwigMediaStorageExtension extends \Twig_Extension
     {
         try
         {
+            if($media->isMediaExternal())
+                return $media->getMediaName();
+
             $url = $this->mediaStorage->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
             return $url;
         }
