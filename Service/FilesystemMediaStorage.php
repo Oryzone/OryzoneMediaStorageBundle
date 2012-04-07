@@ -101,7 +101,7 @@ class FilesystemMediaStorage implements IMediaStorage
      */
     public function locate($id, $name, $type, $variant = NULL)
     {
-        if(preg_match("/^http(s)*:\/\//", $name))
+        if(preg_match('/^http(s)*:\/\//', $name))
             return $name;
 
         $path = $this->getPath($id, $name, $type, $variant);
