@@ -26,6 +26,34 @@ class SampleTextMedia implements IMedia
     {
         return "txt";
     }
+
+    public function isMediaExternal()
+    {
+        return false;
+    }
+}
+
+class SampleExternalImageMedia implements IMedia
+{
+    public function getMediaId()
+    {
+        return 1849;
+    }
+
+    public function getMediaName()
+    {
+        return "https://www.google.it/logos/classicplus.png";
+    }
+
+    public function getMediaType()
+    {
+        return "image";
+    }
+
+    public function isMediaExternal()
+    {
+        return true;
+    }
 }
 
 class TwigMediaStorageExtensionTest extends \PHPUnit_Framework_TestCase
@@ -68,17 +96,23 @@ class TwigMediaStorageExtensionTest extends \PHPUnit_Framework_TestCase
     public function testFilters()
     {
         $context = array(
-            'testMedia' => new SampleTextMedia()
+            'testMedia' => new SampleTextMedia(),
+            'testExternalMedia' => new SampleExternalImageMedia()
         );
 
-        $this->assertContains('/project/web/media/txt/cd/1849/summary/test.txt', $this->render('filter.twig.html', $context));
+        $rendered = $this->render('filter.twig.html', $context);
+
+        $this->assertContains('/project/web/media/txt/cd/1849/summary/test.txt', $rendered);
+        $this->assertContains('https://www.google.it/logos/classicplus.png', $rendered);
     }
 
     public function testFunctions()
     {
-        $this->assertContains('/project/web/media/txt/cd/1849/summary/test.txt', $this->render('function.twig.html'));
-    }
+        $rendered = $this->render('function.twig.html');
 
+        $this->assertContains('/project/web/media/txt/cd/1849/summary/test.txt', $rendered);
+        $this->assertContains('https://www.google.it/logos/classicplus.png', $rendered);
+    }
 
     protected function render($template, $context = array())
     {

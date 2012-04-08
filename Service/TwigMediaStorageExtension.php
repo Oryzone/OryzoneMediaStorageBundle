@@ -78,7 +78,7 @@ class TwigMediaStorageExtension extends \Twig_Extension
    
 }
 
-function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant)
+function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant = NULL)
 {
     $globals = $env->getGlobals();
 

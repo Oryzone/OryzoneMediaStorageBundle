@@ -55,6 +55,14 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->absoluteBaseUrl.'txt/cd/1849/test.txt', $url);
     }
 
+    public function testLocateExternal()
+    {
+        $externalFile = 'https://www.google.it/logos/classicplus.png';
+        $this->name = $externalFile;
+        $url = $this->fs->locate($this->id, $this->name, $this->type);
+        $this->assertEquals($url, $externalFile);
+    }
+
     public function testStore2() //with weird id
     {
         $this->id = '$tr@ngE(ID)';
@@ -97,9 +105,6 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
         $this->fs->setMediaPath('http://invalid inexistent path');
         $this->fs->store($this->file, $this->id, $this->name, $this->type);
     }
-
-
-
 
     public static function tearDownAfterClass()
     {
