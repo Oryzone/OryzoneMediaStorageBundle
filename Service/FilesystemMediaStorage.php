@@ -101,13 +101,13 @@ class FilesystemMediaStorage implements IMediaStorage
      */
     public function locate($id, $name, $type, $variant = NULL)
     {
-        if(preg_match('/^http(s)*:\/\//', $name))
+        if(preg_match('|^https?://.+$|iu', $name))
             return $name;
 
         $path = $this->getPath($id, $name, $type, $variant);
         $filename = $this->getFilename($id, $name, $type, $variant);
         
-        if(!file_exists($filename))
+        if( /*!file_exists($filename)*/ !is_file( $filename ) || !is_readable( $filename ) )
         {
             throw new CannotLocateMediaException(
                     sprintf("File '%s' not found", $filename), $id, $name, $type, $variant);
@@ -135,15 +135,19 @@ class FilesystemMediaStorage implements IMediaStorage
         $dest = $this->getFilename($id, $name, $type, $variant);
         
         $destPath = substr($dest, 0, strripos($dest, DIRECTORY_SEPARATOR));
-        if(!file_exists($destPath))
+        if( !is_dir( $destPath ) )
         {
-            if(!@mkdir($destPath, 0777, true))
+            if( is_file( $destPath ) )
+            {
+                throw new CannotStoreMediaException ("Unexpected file found '{$destPath}'", $id, $name, $type, $variant);
+            }
+            else if(!@mkdir($destPath, 0777, true))
             {
                 throw new CannotStoreMediaException ("Cannot create '{$destPath}' folder", $id, $name, $type, $variant);
             }
         }
         
-        if(!@copy($file, $dest))
+        if( !@copy($file, $dest) || @filesize( $file ) != @filesize( $dest ) )
             throw new CannotStoreMediaException ("Cannot copy '{$file}' to '{$dest}'", $id, $name, $type, $variant);
     }
     
