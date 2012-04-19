@@ -107,7 +107,7 @@ class FilesystemMediaStorage implements IMediaStorage
         $path = $this->getPath($id, $name, $type, $variant);
         $filename = $this->getFilename($id, $name, $type, $variant);
         
-        if( /*!file_exists($filename)*/ !is_file( $filename ) || !is_readable( $filename ) )
+        if( !is_file( $filename ) || !is_readable( $filename ) )
         {
             throw new CannotLocateMediaException(
                     sprintf("File '%s' not found", $filename), $id, $name, $type, $variant);
