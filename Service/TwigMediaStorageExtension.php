@@ -46,11 +46,28 @@ class TwigMediaStorageExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'locateSrc' => new \Twig_Function_Function('Oryzone\Bundle\MediaStorageBundle\Service\locateSrc',
+            'locateSrc' => new \Twig_Function_Function('Oryzone\Bundle\MediaStorageBundle\Service\TwigMediaStorageExtension::locateSrc',
                                 array( 'is_safe' => array('html'), 'needs_context' => FALSE, 'needs_environment' => TRUE) ),
         );
     }
 
+    public static function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant = NULL)
+    {
+      $globals = $env->getGlobals();
+
+      try
+      {
+        $url = $globals['MediaStorage_instance']->locate($id, $name, $type, $variant);
+        return $url;
+      }
+      catch( CannotLocateMediaException $e)
+      {
+        if($globals['MediaStorage_instance_debug'])
+          throw $e;
+      }
+
+      return "";
+    }
 
     public function locateSrcFilter(IMedia $media, $variant = NULL)
     {
@@ -76,22 +93,4 @@ class TwigMediaStorageExtension extends \Twig_Extension
         return 'twigMediaStorage';
     }
    
-}
-
-function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant = NULL)
-{
-    $globals = $env->getGlobals();
-
-    try
-    {
-        $url = $globals['MediaStorage_instance']->locate($id, $name, $type, $variant);
-        return $url;
-    }
-    catch( CannotLocateMediaException $e)
-    {
-        if($globals['MediaStorage_instance_debug'])
-            throw $e;
-    }
-
-    return "";
 }
