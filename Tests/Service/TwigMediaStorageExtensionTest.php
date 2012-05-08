@@ -2,10 +2,6 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Tests\Service;
 
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-include(__DIR__.'/../../Service/TwigMediaStorageExtension.php');
-
 use Oryzone\Bundle\MediaStorageBundle\Service\TwigMediaStorageExtension;
 use Oryzone\Bundle\MediaStorageBundle\Service\FilesystemMediaStorage;
 use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
