@@ -9,12 +9,34 @@ use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotStoreMediaExceptio
  * Storage strategy based on local filesystem
  * @author Luciano Mammino
  */
-class FilesystemMediaStorage implements IMediaStorage
+class FilesystemMediaStorage extends  AbstractMediaStorage
 {
-    
+    /**
+     * the base path where media are stored
+     *
+     * @var string $mediaPath
+     */
     protected $mediaPath;
+
+	/**
+	 * the relative url to media path
+	 *
+	 * @var string $relativeBaseUrl
+	 */
     protected $relativeBaseUrl;
+
+	/**
+	 * The absolute url to media path
+	 *
+	 * @var string $absoluteBaseUrl
+	 */
     protected $absoluteBaseUrl;
+
+	/**
+	 * A boolean flag used to indicate whether to use absolute urls
+	 *
+	 * @var bool $useAbsoluteUrls
+	 */
     protected $useAbsoluteUrls;
     
     /**
@@ -22,7 +44,7 @@ class FilesystemMediaStorage implements IMediaStorage
      * @param string 	$mediaPath 			the base path where media are stored
      * @param string 	$relativeBaseUrl 	the relative url to media path
      * @param string 	$absoluteBaseUrl 	the absolute url to media path
-     * @param boolean 	$useAbsoluteUrls 	a boolean flag used to indicate wheter to use absolute urls
+     * @param boolean 	$useAbsoluteUrls 	a boolean flag used to indicate whether to use absolute urls
      */
     function __construct(   $mediaPath, 
                             $relativeBaseUrl, 
@@ -35,47 +57,102 @@ class FilesystemMediaStorage implements IMediaStorage
         $this->useAbsoluteUrls = $useAbsoluteUrls;
     }
 
+	/**
+	 * Get media path
+	 *
+	 * @return string
+	 */
     public function getMediaPath()
     {
         return $this->mediaPath;
     }
 
+	/**
+	 * Set media path
+	 *
+	 * @param string $mediaPath
+	 * @return FilesystemMediaStorage for fluent syntax
+	 */
     public function setMediaPath($mediaPath)
     {
         $this->mediaPath = $mediaPath;
+	    return $this;
     }
 
+	/**
+	 * Get relative base url
+	 *
+	 * @return string
+	 */
     public function getRelativeBaseUrl()
     {
         return $this->relativeBaseUrl;
     }
 
+	/**
+	 * Set relative base url
+	 *
+	 * @param string $relativeBaseUrl
+	 * @return FilesystemMediaStorage for fluent syntax
+	 */
     public function setRelativeBaseUrl($relativeBaseUrl)
     {
         $this->relativeBaseUrl = $relativeBaseUrl;
+	    return $this;
     }
 
+	/**
+	 * Get absolute base url
+	 * @return string
+	 */
     public function getAbsoluteBaseUrl()
     {
         return $this->absoluteBaseUrl;
     }
 
+	/**
+	 * Set absolute base url
+	 *
+	 * @param string $absoluteBaseUrl
+	 * @return FilesystemMediaStorage for fluent syntax
+	 */
     public function setAbsoluteBaseUrl($absoluteBaseUrl)
     {
         $this->absoluteBaseUrl = $absoluteBaseUrl;
+	    return $this;
     }
 
+	/**
+	 * Get use absolute urls
+	 *
+	 * @return bool
+	 */
     public function getUseAbsoluteUrls()
     {
         return $this->useAbsoluteUrls;
     }
 
+	/**
+	 * Set use absolute urls
+	 *
+	 * @param $useAbsoluteUrls
+	 * @return FilesystemMediaStorage for fluent syntax
+	 */
     public function setUseAbsoluteUrls($useAbsoluteUrls)
     {
         $this->useAbsoluteUrls = $useAbsoluteUrls;
+	    return $this;
     }
 
-        
+    /**
+     * Calculates a path by media attributes
+     *
+     * @param $id
+     * @param $name
+     * @param $type
+     * @param $variant
+     * @return string
+     */
     protected function getPath($id, $name, $type, $variant)
     {
         //optimization to avoid having a lot of files in a sigle folder (which slows down unix systems)
@@ -88,7 +165,16 @@ class FilesystemMediaStorage implements IMediaStorage
 
 		return join(DIRECTORY_SEPARATOR, $parts);
     }
-    
+
+	/**
+	 * Get the filename by media attributes
+	 *
+	 * @param $id
+	 * @param $name
+	 * @param $type
+	 * @param $variant
+	 * @return string
+	 */
     protected function getFilename($id, $name, $type, $variant)
     {
         return $this->mediaPath

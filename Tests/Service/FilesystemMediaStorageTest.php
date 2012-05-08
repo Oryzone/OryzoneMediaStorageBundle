@@ -3,6 +3,12 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Tests\Service;
 
 use Oryzone\Bundle\MediaStorageBundle\Service\FilesystemMediaStorage;
+use Oryzone\Bundle\MediaStorageBundle\Entity\AbstractMedia;
+
+class SimpleMedia extends AbstractMedia
+{
+
+}
 
 class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,6 +94,23 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
         $url = $this->fs->locate($this->id, $this->name, $this->type, $this->variant);
         $this->assertEquals($this->baseUrl.'txt/cd/1849/summary/test.txt', $url);
     }
+
+	public function testStoreMedia() // using storeMedia
+	{
+		$this->variant = "summary";
+		$this->name = 'ciao-ciao';
+		$media = new SimpleMedia($this->id, $this->name, $this->type);
+		$this->fs->storeMedia($this->file, $media, $this->variant);
+	}
+
+	public function testLocateMedia()
+	{
+		$this->variant = "summary";
+		$this->name = 'ciao-ciao';
+		$media = new SimpleMedia($this->id, $this->name, $this->type);
+		$url = $this->fs->locateMedia($media, $this->variant);
+		$this->assertEquals($this->baseUrl.'txt/cd/1849/summary/ciao-ciao', $url);
+	}
 
     /**
      * @expectedException Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotLocateMediaException
