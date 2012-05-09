@@ -12,7 +12,6 @@ class SimpleMedia extends AbstractMedia
 
 class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
 {
-
     protected $basePath;
     protected $baseUrl;
     protected $absoluteBaseUrl;
@@ -56,7 +55,7 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
 
     public function testLocateAbsolute()
     {
-        $this->fs->setUseAbsoluteUrls(TRUE);
+        $this->fs->enableAbsoluteUrl(TRUE);
         $url = $this->fs->locate($this->id, $this->name, $this->type, $this->variant);
         $this->assertEquals($this->absoluteBaseUrl.'txt/cd/1849/test.txt', $url);
     }
@@ -110,6 +109,35 @@ class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
 		$media = new SimpleMedia($this->id, $this->name, $this->type);
 		$url = $this->fs->locateMedia($media, $this->variant);
 		$this->assertEquals($this->baseUrl.'txt/cd/1849/summary/ciao-ciao', $url);
+	}
+
+	public function testMoveFiles()
+	{
+		$newFile = $this->file.'_clone';
+		if(file_exists($newFile))
+			unlink($newFile); //ensure files will be always copied
+
+		copy($this->file, $newFile);
+
+		$this->file = $newFile;
+		$this->name .= '_clone';
+		$this->variant = "backup";
+
+		$this->fs->enableMoveFile()->store($this->file, $this->id, $this->name, $this->type, $this->variant);
+		$this->fs->enableMoveFile(false);
+	}
+
+	public function testMovedFileLocate()
+	{
+		$this->file .= '_clone';
+		$this->name .= '_clone';
+		$this->variant = "backup";
+
+		$url = $this->fs->locate($this->id, $this->name, $this->type, $this->variant);
+
+		$this->assertEquals($this->baseUrl.'txt/cd/1849/backup/test.txt_clone', $url);
+
+		$this->assertTrue(!file_exists($this->file));
 	}
 
     /**

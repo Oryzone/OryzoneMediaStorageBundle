@@ -35,9 +35,16 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
 	/**
 	 * A boolean flag used to indicate whether to use absolute urls
 	 *
-	 * @var bool $useAbsoluteUrls
+	 * @var boolean $absoluteUrlEnabled
 	 */
-    protected $useAbsoluteUrls;
+    protected $absoluteUrlEnabled;
+
+	/**
+	 * A boolean flag used to indicate whether files should be moved instead that copied
+	 *
+	 * @var boolean $moveFileEnabled
+	 */
+	protected $moveFileEnabled;
     
     /**
      * Constructor
@@ -49,12 +56,13 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
     function __construct(   $mediaPath, 
                             $relativeBaseUrl, 
                             $absoluteBaseUrl, 
-                            $useAbsoluteUrls    )
+                            $useAbsoluteUrls)
     {
         $this->mediaPath = $mediaPath;
         $this->relativeBaseUrl = $relativeBaseUrl;
         $this->absoluteBaseUrl = $absoluteBaseUrl;
-        $this->useAbsoluteUrls = $useAbsoluteUrls;
+        $this->absoluteUrlEnabled = $useAbsoluteUrls;
+	    $this->moveFileEnabled       = false;
     }
 
 	/**
@@ -123,26 +131,48 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
     }
 
 	/**
-	 * Get use absolute urls
+	 * Check if absolute urls are enabled
 	 *
-	 * @return bool
+	 * @return boolean
 	 */
-    public function getUseAbsoluteUrls()
+    public function isAbsoluteUrlEnabled()
     {
-        return $this->useAbsoluteUrls;
+        return $this->absoluteUrlEnabled;
     }
 
 	/**
-	 * Set use absolute urls
+	 * Enable or disable absolute urls
 	 *
-	 * @param $useAbsoluteUrls
+	 * @param boolean $enable
 	 * @return FilesystemMediaStorage for fluent syntax
 	 */
-    public function setUseAbsoluteUrls($useAbsoluteUrls)
+    public function enableAbsoluteUrl($enable = true)
     {
-        $this->useAbsoluteUrls = $useAbsoluteUrls;
+        $this->absoluteUrlEnabled = $enable;
 	    return $this;
     }
+
+	/**
+	 * Set move files flag
+	 *
+	 * @param boolean $enable
+	 * @return FilesystemMediaStorage for fluent syntax
+	 */
+	public function enableMoveFile($enable = true)
+	{
+		$this->moveFileEnabled = $enable;
+		return $this;
+	}
+
+	/**
+	 * Get move files flag
+	 *
+	 * @return boolean
+	 */
+	public function isMoveFileEnabled()
+	{
+		return $this->moveFileEnabled;
+	}
 
     /**
      * Calculates a path by media attributes
@@ -201,7 +231,7 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
             
         $url = str_replace("\\", "/", $path);
         
-        if($this->useAbsoluteUrls)
+        if($this->absoluteUrlEnabled)
         {
             $url = $this->absoluteBaseUrl . $url;
         }
@@ -232,9 +262,24 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
                 throw new CannotStoreMediaException ("Cannot create '{$destPath}' folder", $id, $name, $type, $variant);
             }
         }
-        
-        if( !@copy($file, $dest) || @filesize( $file ) != @filesize( $dest ) )
-            throw new CannotStoreMediaException ("Cannot copy '{$file}' to '{$dest}'", $id, $name, $type, $variant);
+
+	    $originalFileSize = @filesize( $file );
+	    $success = false;
+	    $operation = '';
+
+	    if($this->moveFileEnabled)
+	    {
+		    $success = @rename($file, $dest);
+		    $operation = 'move';
+	    }
+	    else
+	    {
+			$success = @copy($file, $dest);
+		    $operation = 'copy';
+	    }
+
+        if( !$success || $originalFileSize != @filesize( $dest ) )
+            throw new CannotStoreMediaException ("Cannot {$operation} '{$file}' ({$originalFileSize} bytes) to '{$dest}'", $id, $name, $type, $variant);
     }
-    
+
 }
