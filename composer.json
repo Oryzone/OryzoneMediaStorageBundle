@@ -1,0 +1,30 @@
+{
+  "name": "oryzone/media-storage-bundle",
+  "type": "symfony-bundle",
+  "description": "Simple media files storage for symfony2",
+  "keywords": ["media storage", "storage","media", "files", "images", "videos", "documents"],
+  "homepage": "https://github.com/Oryzone/OryzoneMediaStorageBundle",
+  "license": "As is",
+  "authors": [
+    {
+      "name": "Luciano Mammino",
+      "email": "lmammino@oryzone.com",
+      "homepage": "http://oryzone.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Andrea Mangano",
+      "email": "amangano@oryzone.com",
+      "homepage": "http://oryzone.com",
+      "role": "Designer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.2",
+    "symfony/framework-bundle": "2.1.*"
+  },
+  "autoload": {
+    "psr-0": { "Oryzone\\Bundle\\MediaStorageBundle": "" }
+  },
+  "target-dir": "Oryzone/Bundle/MediaStorageBundle"
+}
