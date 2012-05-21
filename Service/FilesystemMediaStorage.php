@@ -255,11 +255,11 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
         {
             if( is_file( $destPath ) )
             {
-                throw new CannotStoreMediaException ("Unexpected file found '{$destPath}'", $id, $name, $type, $variant);
+                throw new CannotStoreMediaException (sprintf('Unexpected file found "%s"', $destPath), $id, $name, $type, $variant);
             }
             else if(!@mkdir($destPath, 0777, true))
             {
-                throw new CannotStoreMediaException ("Cannot create '{$destPath}' folder", $id, $name, $type, $variant);
+                throw new CannotStoreMediaException (sprintf('Cannot create "%s" folder', $destPath), $id, $name, $type, $variant);
             }
         }
 
@@ -279,7 +279,7 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
 	    }
 
         if( !$success || $originalFileSize != @filesize( $dest ) )
-            throw new CannotStoreMediaException ("Cannot {$operation} '{$file}' ({$originalFileSize} bytes) to '{$dest}'", $id, $name, $type, $variant);
+            throw new CannotStoreMediaException (sprintf('Cannot %s "%s" (%d bytes) to "%s"', $operation, $file, ($originalFileSize?$originalFileSize:0), $dest), $id, $name, $type, $variant);
     }
 
 }
