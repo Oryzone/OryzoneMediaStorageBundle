@@ -2,8 +2,8 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
-use Oryzone\Bundle\MediaStorageBundle\Service\CannotLocateMediaException;
-use Oryzone\Bundle\MediaStorageBundle\Service\CannotStoreMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotLocateMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotStoreMediaException;
 use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
 
 /**
