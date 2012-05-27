@@ -2,8 +2,8 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
-use Oryzone\Bundle\MediaStorageBundle\Service\CannotLocateMediaException;
-use Oryzone\Bundle\MediaStorageBundle\Service\CannotStoreMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotLocateMediaException;
+use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotStoreMediaException;
 use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
 
 /**
@@ -12,27 +12,32 @@ use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
  */
 Interface IMediaStorage
 {
-    
-    /**
-     * Locates a stored media
-     * @abstract
-     * @param int|string	$id 		the id of the related entity
-     * @param string		$name 		the slug name of the media
-     * @param string		$type 		the type of the image
-     * @param string		$variant 	a tag that identifies the size or a generic variant of the image (eg. "small", "big", "uncompressed", "hd")
-     * @return string       the path/url of the media
-     * @throws CannotLocateMediaException if cannot locate the image
-     */
-    public function locate($id, $name, $type, $variant = NULL);
+
+	/**
+	 * Locates a stored media
+	 * @abstract
+	 * @param int|string    $id             the id of the related entity
+	 * @param string        $name           the slug name of the media
+	 * @param string        $type           the type of the image
+	 * @param string        $variant        a tag that identifies the size or a generic variant of the image
+	 *                                      (eg. "small", "big", "uncompressed", "hd")
+	 * @param bool          $fallbackToDefaultVariant       flag used to determinate whether to fallback to
+	 *                                                       original variant if the given variant where not found
+	 * @return string       the path/url of the media
+	 */
+    public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true);
 
 	/**
 	 * Locates a stored media by using a IMedia entity
 	 * @abstract
-	 * @param \Oryzone\Bundle\MediaStorageBundle\Entity\IMedia $media the media to locate
-	 * @return string the path/url of the media
-	 * @throws CannotLocateMediaException if cannot locate the image
+	 * @param   IMedia $media the media to locate
+	 * @param   null    $variant a tag that identifies the size or a generic variant of the image
+	 *                           (eg. "small", "big", "uncompressed", "hd")
+	 * @param   bool    $fallbackToDefaultVariant   flag used to determinate whether to fallback to
+	 *                                              original variant if the given variant where not found
+	 * @return  string  the path/url of the media
 	 */
-	public function locateMedia(IMedia $media, $variant = NULL);
+	public function locateMedia(IMedia $media, $variant = NULL, $fallbackToDefaultVariant = true);
     
     /**
      * Store a media
@@ -49,8 +54,8 @@ Interface IMediaStorage
 	/**
 	 * Store a media by using a IMedia entity
 	 * @abstract
-	 * @param string $sourceFile the path of the file to store
-	 * @param \Oryzone\Bundle\MediaStorageBundle\Entity\IMedia $media
+	 * @param string        $sourceFile the path of the file to store
+	 * @param IMedia        $media
 	 * @param string 		$variant 		a tag that identifies the size or a generic variant of the image
 	 * @throws CannotStoreMediaException if cannot store the image
 	 */
