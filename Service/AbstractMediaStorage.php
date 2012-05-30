@@ -29,7 +29,7 @@ abstract class AbstractMediaStorage implements IMediaStorage
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getSerializedConfiguration()
+	public function getStorageStateId()
 	{
 		return '';
 	}

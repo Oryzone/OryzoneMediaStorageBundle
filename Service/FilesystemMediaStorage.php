@@ -288,7 +288,7 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getSerializedConfiguration()
+	public function getStorageStateId()
 	{
 		return sprintf('_m:%s,_r:%s,_a:%s,_e:%s', $this->mediaPath, $this->relativeBaseUrl, $this->absoluteBaseUrl, $this->absoluteUrlEnabled);
 	}

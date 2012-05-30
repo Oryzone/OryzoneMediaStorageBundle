@@ -66,5 +66,5 @@ Interface IMediaStorage
 	 * @abstract
 	 * @return string
 	 */
-	public function getSerializedConfiguration();
+	public function getStorageStateId();
 }

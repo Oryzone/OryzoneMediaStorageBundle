@@ -57,7 +57,7 @@ class CachedMediaStorage extends AbstractMediaStorage
 	 */
 	protected function getHash($id, $name, $type, $variant)
 	{
-		return md5(sprintf('i:%s,n:%s,t:%s,v:%s,%s', $id, $name, $type, $variant, $this->getSerializedConfiguration()));
+		return md5(sprintf('i:%s,n:%s,t:%s,v:%s,%s', $id, $name, $type, $variant, $this->getStorageStateId()));
 	}
 
 	/**
