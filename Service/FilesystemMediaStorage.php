@@ -285,4 +285,13 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
             throw new CannotStoreMediaException (sprintf('Cannot %s "%s" (%d bytes) to "%s"', $operation, $file, ($originalFileSize?$originalFileSize:0), $dest), $id, $name, $type, $variant);
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getSerializedConfiguration()
+	{
+		return sprintf('_m:%s,_r:%s,_a:%s,_e:%s', $this->mediaPath, $this->relativeBaseUrl, $this->absoluteBaseUrl, $this->absoluteUrlEnabled);
+	}
+
+
 }

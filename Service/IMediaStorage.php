@@ -60,4 +60,11 @@ Interface IMediaStorage
 	 * @throws CannotStoreMediaException if cannot store the image
 	 */
 	public function storeMedia($sourceFile, IMedia $media, $variant = NULL);
+
+	/**
+	 * Returns a string that identifies all the currently set media storage settings. Mostly used for cache purposes
+	 * @abstract
+	 * @return string
+	 */
+	public function getSerializedConfiguration();
 }

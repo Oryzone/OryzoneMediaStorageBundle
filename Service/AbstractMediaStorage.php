@@ -25,4 +25,14 @@ abstract class AbstractMediaStorage implements IMediaStorage
 	{
 		$this->store($sourceFile, $media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getSerializedConfiguration()
+	{
+		return '';
+	}
+
+
 }
