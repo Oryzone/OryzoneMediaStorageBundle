@@ -15,9 +15,9 @@ class CachedMediaStorage extends AbstractMediaStorage
 	protected $originalMediaStorage;
 
 	/**
-	 * An associative array used as in-memory cache
+	 * The object used as cache storage
 	 *
-	 * @var array
+	 * @var ICacheStrategy
 	 */
 	protected $cache;
 
