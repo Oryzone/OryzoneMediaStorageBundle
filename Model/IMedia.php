@@ -1,6 +1,6 @@
 <?php
 
-namespace Oryzone\Bundle\MediaStorageBundle\Entity;
+namespace Oryzone\Bundle\MediaStorageBundle\Model;
 
 /**
  * Interface that must be implemented by all the entities that refers to one media
