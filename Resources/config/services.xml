@@ -19,8 +19,15 @@
             <argument type="string">%oryzone_media_storage.useabsoluteurls%</argument>
         </service>
         
-        <!-- provides default image storage. Can be redefined in the config.yml file to use another storage engine -->
-        <service id="media_storage" alias="oryzone_media_storage.filesystem_mediastorage"></service>
+        <!-- provides default base media storage. Can be redefined in the config.yml file to use another base media storage engine -->
+        <service id="base_media_storage" alias="oryzone_media_storage.filesystem_mediastorage"></service>
+
+        <service id="cached_media_storage" class="Oryzone\Bundle\MediaStorageBundle\Service\CachedMediaStorage">
+            <argument type="service" id="base_media_storage"/>
+        </service>
+
+        <!-- use a cached media storage as default media storage engine -->
+        <service id="media_storage" alias="cached_media_storage"></service>
         
         <service id="oryzone_twig_mediastorage_extension" class="Oryzone\Bundle\MediaStorageBundle\Service\TwigMediaStorageExtension">
             <argument type="service" id="media_storage"/>

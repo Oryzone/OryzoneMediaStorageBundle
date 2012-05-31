@@ -11,25 +11,28 @@ abstract class AbstractMediaStorage implements IMediaStorage
 {
 
 	/**
-	 * Locates a stored media by using a IMedia entity
-	 * @param \Oryzone\Bundle\MediaStorageBundle\Entity\IMedia $media the media to locate
-	 * @return string the path/url of the media
-	 * @throws CannotLocateMediaException if cannot locate the image
+	 * {@inheritDoc}
 	 */
-	public function locateMedia(IMedia $media, $variant = NULL)
+	public function locateMedia(IMedia $media, $variant = NULL, $fallbackToDefaultVariant = true)
 	{
-		return $this->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
+		return $this->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant, $fallbackToDefaultVariant);
 	}
 
 	/**
-	 * Store a media by using a IMedia entity
-	 * @param string $sourceFile the path of the file to store
-	 * @param \Oryzone\Bundle\MediaStorageBundle\Entity\IMedia $media
-	 * @param string         $variant         a tag that identifies the size or a generic variant of the image
-	 * @throws CannotStoreMediaException if cannot store the image
+	 * {@inheritDoc}
 	 */
 	public function storeMedia($sourceFile, IMedia $media, $variant = NULL)
 	{
 		$this->store($sourceFile, $media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getStorageStateId()
+	{
+		return '';
+	}
+
+
 }

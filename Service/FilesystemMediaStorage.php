@@ -215,7 +215,7 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
     /**
      * {@inheritDoc} 
      */
-    public function locate($id, $name, $type, $variant = NULL)
+    public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true)
     {
         if(preg_match('|^https?://.+$|iu', $name))
             return $name;
@@ -225,6 +225,9 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
         
         if( !is_file( $filename ) || !is_readable( $filename ) )
         {
+	        if($variant !== NULL && $fallbackToDefaultVariant)
+		        return $this->locate($id, $name, $type, NULL, false);
+
             throw new CannotLocateMediaException(
                     sprintf("File '%s' not found", $filename), $id, $name, $type, $variant);
         }
@@ -281,5 +284,14 @@ class FilesystemMediaStorage extends  AbstractMediaStorage
         if( !$success || $originalFileSize != @filesize( $dest ) )
             throw new CannotStoreMediaException (sprintf('Cannot %s "%s" (%d bytes) to "%s"', $operation, $file, ($originalFileSize?$originalFileSize:0), $dest), $id, $name, $type, $variant);
     }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getStorageStateId()
+	{
+		return sprintf('_m:%s,_r:%s,_a:%s,_e:%s', $this->mediaPath, $this->relativeBaseUrl, $this->absoluteBaseUrl, $this->absoluteUrlEnabled);
+	}
+
 
 }
