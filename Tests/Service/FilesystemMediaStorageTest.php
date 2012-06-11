@@ -3,9 +3,9 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Tests\Service;
 
 use Oryzone\Bundle\MediaStorageBundle\Service\FilesystemMediaStorage;
-use Oryzone\Bundle\MediaStorageBundle\Entity\AbstractMedia;
+use Oryzone\Bundle\MediaStorageBundle\Entity\Media;
 
-class SimpleMedia extends AbstractMedia
+class SimpleMedia extends Media
 {
 
 }
