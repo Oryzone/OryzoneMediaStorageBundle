@@ -5,7 +5,7 @@ namespace Oryzone\Bundle\MediaStorageBundle\Model;
 /**
  * Abstract class to simplify the creation of Media entities
  */
-abstract class Media implements IMedia
+abstract class Media implements MediaInterface
 {
 
 	/**
