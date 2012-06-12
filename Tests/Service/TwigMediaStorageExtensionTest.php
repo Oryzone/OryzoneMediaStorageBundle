@@ -4,9 +4,9 @@ namespace Oryzone\Bundle\MediaStorageBundle\Tests\Service;
 
 use Oryzone\Bundle\MediaStorageBundle\Service\TwigMediaStorageExtension;
 use Oryzone\Bundle\MediaStorageBundle\Service\FilesystemMediaStorage;
-use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
+use Oryzone\Bundle\MediaStorageBundle\Model\MediaInterface;
 
-class SampleTextMedia implements IMedia
+class SampleTextMedia implements MediaInterface
 {
     public function getMediaId()
     {
@@ -29,7 +29,7 @@ class SampleTextMedia implements IMedia
     }
 }
 
-class SampleExternalImageMedia implements IMedia
+class SampleExternalImageMedia implements MediaInterface
 {
     public function getMediaId()
     {

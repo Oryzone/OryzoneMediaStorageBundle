@@ -1,29 +1,29 @@
 <?php
 
-namespace Oryzone\Bundle\MediaStorageBundle\Entity;
+namespace Oryzone\Bundle\MediaStorageBundle\Model;
 
 /**
  * Interface that must be implemented by all the entities that refers to one media
  */
-interface IMedia
+interface MediaInterface
 {
     /**
      * @abstract
      * @return int|string get the id of the entity
      */
-	public function getMediaId();
+    public function getMediaId();
 
     /**
      * @abstract
      * @return string get the name of the connected media
      */
-	public function getMediaName();
+    public function getMediaName();
 
     /**
      * @abstract
      * @return string get the name of the media type
      */
-	public function getMediaType();
+    public function getMediaType();
 
     /**
      * @abstract
