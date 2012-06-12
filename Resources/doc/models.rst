@@ -1,34 +1,36 @@
-<?php
+Quick sample on how to use the models
 
-namespace Acne\MediaManager\SiteBundle\Entity;
+    <?php
 
-use Doctrine\ORM\Mapping as ORM;
-use Oryzone\Bundle\MediaStorageBundle\Entity\Media as BaseMedia;
+    namespace Acne\MediaManager\SiteBundle\Entity;
 
-/**
- * Acne\MediaManager\SiteBundle\Entity\Media
- *
- * @ORM\Table()
- * @ORM\Entity
- */
-class Media extends BaseMedia
-{
-    /**
-     * @var integer $id
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    use Doctrine\ORM\Mapping as ORM;
+    use Oryzone\Bundle\MediaStorageBundle\Entity\Media as BaseMedia;
 
     /**
-     * Get id
+     * Acne\MediaManager\SiteBundle\Entity\Media
      *
-     * @return integer
+     * @ORM\Table()
+     * @ORM\Entity
      */
-    public function getId()
+    class Media extends BaseMedia
     {
-        return $this->id;
+        /**
+         * @var integer $id
+         *
+         * @ORM\Column(name="id", type="integer")
+         * @ORM\Id
+         * @ORM\GeneratedValue(strategy="AUTO")
+         */
+        private $id;
+
+        /**
+         * Get id
+         *
+         * @return integer
+         */
+        public function getId()
+        {
+            return $this->id;
+        }
     }
-}

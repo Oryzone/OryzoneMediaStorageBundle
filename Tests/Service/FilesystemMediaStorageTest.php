@@ -7,7 +7,13 @@ use Oryzone\Bundle\MediaStorageBundle\Entity\Media;
 
 class SimpleMedia extends Media
 {
-
+    public function __construct($id, $name, $type, $isExternal = false)
+    {
+        $this->mediaId = $id;
+        $this->mediaName = $name;
+        $this->mediaType = $type;
+        $this->external = $isExternal;
+    }
 }
 
 class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase
