@@ -2,9 +2,9 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Service\Cache;
 
-use Oryzone\Bundle\MediaStorageBundle\Service\ICacheStrategy;
+use Oryzone\Bundle\MediaStorageBundle\Service\CacheStrategyInterface;
 
-class InMemoryCacheStrategy implements ICacheStrategy
+class InMemoryCacheStrategy implements CacheStrategyInterface
 {
 
 	/**

@@ -7,7 +7,7 @@ use Oryzone\Bundle\MediaStorageBundle\Model\MediaInterface;
 /**
  * Abstract class used to simplify the creation of new media storage classes
  */
-abstract class MediaStorage implements IMediaStorage
+abstract class MediaStorage implements MediaStorageInterface
 {
 
 	/**
