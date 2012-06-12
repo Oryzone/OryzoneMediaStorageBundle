@@ -2,7 +2,7 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
-use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
+use Oryzone\Bundle\MediaStorageBundle\Model\MediaInterface;
 use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotLocateMediaException;
 
 /**
@@ -15,7 +15,7 @@ class TwigMediaStorageExtension extends \Twig_Extension
 {
 
     /**
-     * @var IMediaStorage
+     * @var MediaStorageInterface
      */
     protected $mediaStorage;
     protected $debug;
@@ -69,7 +69,7 @@ class TwigMediaStorageExtension extends \Twig_Extension
       return "";
     }
 
-    public function locateSrcFilter(IMedia $media, $variant = NULL)
+    public function locateSrcFilter(MediaInterface $media, $variant = NULL)
     {
         try
         {

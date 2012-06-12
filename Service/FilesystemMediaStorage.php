@@ -9,7 +9,7 @@ use Oryzone\Bundle\MediaStorageBundle\Service\Exception\CannotStoreMediaExceptio
  * Storage strategy based on local filesystem
  * @author Luciano Mammino
  */
-class FilesystemMediaStorage extends  AbstractMediaStorage
+class FilesystemMediaStorage extends  MediaStorage
 {
     /**
      * the base path where media are stored

@@ -1,11 +1,11 @@
 <?php
 
-namespace Oryzone\Bundle\MediaStorageBundle\Entity;
+namespace Oryzone\Bundle\MediaStorageBundle\Model;
 
 /**
  * Abstract class to simplify the creation of Media entities
  */
-abstract class AbstractMedia implements IMedia
+abstract class Media implements MediaInterface
 {
 
 	/**
@@ -34,23 +34,7 @@ abstract class AbstractMedia implements IMedia
 	 *
 	 * @var bool $external
 	 */
-	protected $external;
-
-	/**
-	 * Constructor
-	 *
-	 * @param string $id the media id
-	 * @param string $name the media name
-	 * @param string $type the media type
-	 * @param bool $isExternal
-	 */
-	function __construct($id, $name, $type, $isExternal = false)
-	{
-		$this->mediaId = $id;
-		$this->mediaName = $name;
-		$this->mediaType = $type;
-		$this->external = $isExternal;
-	}
+	protected $external = false;
 
 	/**
 	 * {@inheritDoc}

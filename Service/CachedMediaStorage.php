@@ -4,20 +4,20 @@ namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
 use Oryzone\Bundle\MediaStorageBundle\Service\Cache\InMemoryCacheStrategy;
 
-class CachedMediaStorage extends AbstractMediaStorage
+class CachedMediaStorage extends MediaStorage
 {
 
 	/**
 	 * The original media storage used to perform requests
 	 *
-	 * @var IMediaStorage $originalMediaStorage
+	 * @var MediaStorageInterface $originalMediaStorage
 	 */
 	protected $originalMediaStorage;
 
 	/**
 	 * The object used as cache storage
 	 *
-	 * @var ICacheStrategy
+	 * @var CacheStrategyInterface
 	 */
 	protected $cache;
 
@@ -31,10 +31,10 @@ class CachedMediaStorage extends AbstractMediaStorage
 	/**
 	 * Constructor
 	 *
-	 * @param IMediaStorage $originalMediaStorage the original media storage used to perform requests
-	 * @param null|ICacheStrategy $cache the cache engine to use
+	 * @param MediaStorageInterface $originalMediaStorage the original media storage used to perform requests
+	 * @param null|CacheStrategyInterface $cache the cache engine to use
 	 */
-	public function __construct(IMediaStorage $originalMediaStorage, ICacheStrategy $cache = NULL)
+	public function __construct(MediaStorageInterface $originalMediaStorage, CacheStrategyInterface $cache = NULL)
 	{
 		$this->originalMediaStorage = $originalMediaStorage;
 
@@ -90,7 +90,7 @@ class CachedMediaStorage extends AbstractMediaStorage
 	/**
 	 * Gets the currently set cache strategy
 	 *
-	 * @return ICacheStrategy
+	 * @return CacheStrategyInterface
 	 */
 	public function getCache()
 	{
@@ -110,7 +110,7 @@ class CachedMediaStorage extends AbstractMediaStorage
 	/**
 	 * Gets the original media storage
 	 *
-	 * @return IMediaStorage
+	 * @return MediaStorageInterface
 	 */
 	public function getOriginalMediaStorage()
 	{
@@ -120,9 +120,9 @@ class CachedMediaStorage extends AbstractMediaStorage
 	/**
 	 * Sets the original media storage to use
 	 *
-	 * @param IMediaStorage $originalMediaStorage
+	 * @param MediaStorageInterface $originalMediaStorage
 	 */
-	public function setOriginalMediaStorage(IMediaStorage $originalMediaStorage)
+	public function setOriginalMediaStorage(MediaStorageInterface $originalMediaStorage)
 	{
 		$this->originalMediaStorage = $originalMediaStorage;
 	}

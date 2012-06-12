@@ -2,18 +2,18 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Service;
 
-use Oryzone\Bundle\MediaStorageBundle\Entity\IMedia;
+use Oryzone\Bundle\MediaStorageBundle\Model\MediaInterface;
 
 /**
  * Abstract class used to simplify the creation of new media storage classes
  */
-abstract class AbstractMediaStorage implements IMediaStorage
+abstract class MediaStorage implements MediaStorageInterface
 {
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function locateMedia(IMedia $media, $variant = NULL, $fallbackToDefaultVariant = true)
+	public function locateMedia(MediaInterface $media, $variant = NULL, $fallbackToDefaultVariant = true)
 	{
 		return $this->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant, $fallbackToDefaultVariant);
 	}
@@ -21,7 +21,7 @@ abstract class AbstractMediaStorage implements IMediaStorage
 	/**
 	 * {@inheritDoc}
 	 */
-	public function storeMedia($sourceFile, IMedia $media, $variant = NULL)
+	public function storeMedia($sourceFile, MediaInterface $media, $variant = NULL)
 	{
 		$this->store($sourceFile, $media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
 	}

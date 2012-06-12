@@ -3,11 +3,17 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Tests\Service;
 
 use Oryzone\Bundle\MediaStorageBundle\Service\FilesystemMediaStorage;
-use Oryzone\Bundle\MediaStorageBundle\Entity\AbstractMedia;
+use Oryzone\Bundle\MediaStorageBundle\Entity\Media;
 
-class SimpleMedia extends AbstractMedia
+class SimpleMedia extends Media
 {
-
+    public function __construct($id, $name, $type, $isExternal = false)
+    {
+        $this->mediaId = $id;
+        $this->mediaName = $name;
+        $this->mediaType = $type;
+        $this->external = $isExternal;
+    }
 }
 
 class FilesystemMediaStorageTest extends \PHPUnit_Framework_TestCase

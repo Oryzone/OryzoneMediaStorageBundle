@@ -5,7 +5,7 @@ namespace Oryzone\Bundle\MediaStorageBundle\Service;
 /**
  * Simple interface for cache strategy classes
  */
-interface ICacheStrategy
+interface CacheStrategyInterface
 {
 
 	/**
