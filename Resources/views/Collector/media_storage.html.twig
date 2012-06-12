@@ -91,6 +91,40 @@
             </table>
         {% endif %}
     {% else %}
-        <p>Media storage has not been used for this request</p>
+        <p><em>Media storage has not been used for this request</em></p>
     {% endif %}
+
+    <h2>Configuration</h2>
+    <table>
+        <thead>
+            <tr>
+                <th width="20%">Service</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th width="20%">Media Storage</th>
+                <td><code>{{ collector.mediaStorageInfo.class }}</code></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <thead>
+            <tr>
+                <th width="20%">Setting</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for settingName, settingValue in collector.mediaStorageInfo.settings %}
+            <tr>
+                <th width="20%">{{ settingName }}</th>
+                <td><code>{{ settingValue|default('false') }}</code></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}

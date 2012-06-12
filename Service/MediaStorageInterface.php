@@ -67,4 +67,11 @@ Interface MediaStorageInterface
 	 * @return string
 	 */
 	public function getStorageStateId();
+
+    /**
+     * Returns an array of settings of the current media storage
+     * @abstract
+     * @return array
+     */
+    public function getSettings();
 }

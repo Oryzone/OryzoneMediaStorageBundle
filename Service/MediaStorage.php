@@ -34,5 +34,13 @@ abstract class MediaStorage implements MediaStorageInterface
 		return '';
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getSettings()
+    {
+        return array();
+    }
+
 
 }

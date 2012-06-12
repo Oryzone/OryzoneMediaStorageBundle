@@ -43,7 +43,11 @@ class DataCollector extends BaseDataCollector
         $this->data = array(
             'cacheHits' => $this->cachedMediaStorage->getCacheHits(),
             'located'   => $located,
-            'stored'    => $this->cachedMediaStorage->getStored()
+            'stored'    => $this->cachedMediaStorage->getStored(),
+            'mediastorage' => array(
+                'class' => get_class($this->cachedMediaStorage->getOriginalMediaStorage()),
+                'settings' => $this->cachedMediaStorage->getOriginalMediaStorage()->getSettings()
+            )
         );
     }
 
@@ -60,6 +64,11 @@ class DataCollector extends BaseDataCollector
     public function getStored()
     {
         return $this->data['stored'];
+    }
+
+    public function getMediaStorageInfo()
+    {
+        return $this->data['mediastorage'];
     }
 
 }

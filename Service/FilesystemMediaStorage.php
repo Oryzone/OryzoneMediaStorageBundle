@@ -293,5 +293,19 @@ class FilesystemMediaStorage extends  MediaStorage
 		return sprintf('_m:%s,_r:%s,_a:%s,_e:%s', $this->mediaPath, $this->relativeBaseUrl, $this->absoluteBaseUrl, $this->absoluteUrlEnabled);
 	}
 
+    /**
+     * {@inheritDoc}
+     */
+    public function getSettings()
+    {
+        return array(
+            'mediaPath' => $this->mediaPath,
+            'relativeBaseUrl' => $this->relativeBaseUrl,
+            'absoluteBaseUrl' => $this->absoluteBaseUrl,
+            'absoluteUrlEnabled' => $this->absoluteUrlEnabled,
+            'moveFileEnabled' => $this->moveFileEnabled
+        );
+    }
+
 
 }
