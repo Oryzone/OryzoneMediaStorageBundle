@@ -1,0 +1,96 @@
+{% extends app.request.isXmlHttpRequest ? 'WebProfilerBundle:Profiler:ajax_layout.html.twig' : 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+    {% if collector.getLocated()|length or collector.getStored()|length %}
+        {% set icon %}
+            <img width="16" height="16" alt="MediaStorage" style="border-width: 0; vertical-align: middle; margin-right: 5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABy0lEQVR42n1TuYoCQRCdfD/DD9hgZA0W3D9wU00E0cgjEe9bMBJFBS8EA1HERBwQE8ELDPyTDXdyj9p5xXbviOM+eDo9Vf2q61WPUiqVvguFAuVyOUvm83kqFotfyjNg8+12IzOwBq/XK/9ns1kWgiCehXC5XNYULIBQKMTBWq1G/X6fRqMRzWYzjsXjcSl4uVyYWENECiCp1WrReDym+XxOy+WSKWLD4ZCm0ynHVqsVv0dBBT9ApVLhzQjudjs6Ho90OBw4lk6nSdM0Wq/XtNlsaLvd8vtMJvMn0Gw2WQQvU6kUJZNJrgxiLdjr9eh0Oj2eoNFocCX0eT6fLYneIdztdh8FYB6CgKqq5HQ6ye12UzAY5FMYo+RYIpFgk6UAnAR0XZcCdrudAoEAYcT1ep3a7TYbDOchdidgKO6RCCH0jySXy8UVB4MBjxLOTyYTjsViMXlfeIwGbAZVh8PxiZEiye/3U6fT4U3oF+Z5PB6O4VlcJBSXNzISibyJOxGNRtlUXCbMHv74fD6OIQcFf2mTAuFw+F0I4ARoAZsXiwVVq1Xyer1mgUcYJ/gQhv4H0bcVXgwzdSTAXRhqpvig7vq2wKupv2e0mTf8AGQ1bCX99FmBAAAAAElFTkSuQmCC"/>
+            <span>
+                {% if collector.getLocated()|length %}↑ {{ collector.getLocated()|length }}{% endif %}
+                {% if collector.getStored()|length %}↓ {{ collector.getStored()|length }}{% endif%}
+            </span>
+        {% endset %}
+        {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
+    {% endif %}
+{% endblock %}
+
+{% block menu %}
+    <span class="label">
+        <span class="icon"><img src="{{ asset('bundles/oryzonemediastorage/images/profiler/media-storage.png') }}" alt="" /></span>
+        <strong>Media Storage</strong>
+        <span class="count">
+            {% if collector.getLocated()|length %}<span>↑ {{ collector.getLocated()|length }}</span>{% endif %}
+            {% if collector.getStored()|length %}<span>↓ {{ collector.getStored()|length }}</span>{% endif%}
+        </span>
+    </span>
+{% endblock %}
+
+{% block panel %}
+    {% if collector.getLocated()|length or collector.getStored()|length %}
+        {% if collector.getLocated()|length %}
+            <h2>Located ({{ collector.getLocated()|length }})</h2>
+            {% if collector.cacheHits %}<p><em>{{ collector.cacheHits }} files has been loaded from the cache.</em></p>{% endif %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>Preview</th>
+                        <th>Id</th>
+                        <th>Filename</th>
+                        <th>Type</th>
+                        <th>Variant</th>
+                        <th>Path</th>
+                        <th>Times loaded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for located in collector.located %}
+                    <tr>
+                        <td>
+                            <a href="{{ located.path }}">
+                                {% if located.isImage %}
+                                    <img src="{{ located.path }}" alt="preview" width="28" title="Click to view the file"/>
+                                {% else %}
+                                    (Link)
+                                {% endif %}
+                            </a>
+                        </td>
+                        <td>{{ located.id }}</td>
+                        <td>{{ located.name }}</td>
+                        <td>{{ located.type }}</td>
+                        <td>{{ located.variant|default('-') }}</td>
+                        <td>{{ located.path }}</td>
+                        <td>{{ located.hits }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        {% if collector.getStored()|length %}
+            <h2>Stored ({{ collector.getStored()|length }})</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Source</th>
+                        <th>Id</th>
+                        <th>Filename</th>
+                        <th>Type</th>
+                        <th>Variant</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for stored in collector.stored %}
+                    <tr>
+                        <td>{{ stored.source }}</td>
+                        <td>{{ stored.id }}</td>
+                        <td>{{ stored.name }}</td>
+                        <td>{{ stored.type }}</td>
+                        <td>{{ stored.variant|default('-') }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% else %}
+        <p>Media storage has not been used for this request</p>
+    {% endif %}
+{% endblock %}
