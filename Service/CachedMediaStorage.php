@@ -6,7 +6,6 @@ use Oryzone\Bundle\MediaStorageBundle\Service\Cache\InMemoryCacheStrategy;
 
 class CachedMediaStorage extends MediaStorage
 {
-
 	/**
 	 * The original media storage used to perform requests
 	 *
@@ -28,6 +27,10 @@ class CachedMediaStorage extends MediaStorage
 	 */
 	protected $cacheHits;
 
+    protected $stored;
+
+    protected $located;
+
 	/**
 	 * Constructor
 	 *
@@ -44,6 +47,8 @@ class CachedMediaStorage extends MediaStorage
 		$this->cache = $cache;
 
 		$this->cacheHits = 0;
+        $this->stored = array();
+        $this->located = array();
 	}
 
 	/**
@@ -70,11 +75,20 @@ class CachedMediaStorage extends MediaStorage
 		if( $this->cache->has($hash) )
 		{
 			$this->cacheHits++;
+            $this->located[$hash]['hits']++;
 			return $this->cache->get($hash);
 		}
 
 		$path = $this->originalMediaStorage->locate($id, $name, $type, $variant, $fallbackToDefaultVariant);
 		$this->cache->set($hash, $path);
+        $this->located[$hash] = array(
+            'id'    => $id,
+            'name'  => $name,
+            'type'  => $type,
+            'variant' => $variant,
+            'path' => $path,
+            'hits' => 1
+        );
 
 		return $path;
 	}
@@ -84,7 +98,14 @@ class CachedMediaStorage extends MediaStorage
 	 */
 	public function store($sourceFile, $id, $name, $type, $variant = NULL)
 	{
-		return $this->originalMediaStorage->store($sourceFile, $id, $name, $type, $variant);
+        $this->stored[] = array(
+            'id'    => $id,
+            'name'  => $name,
+            'type'  => $type,
+            'variant' => $variant,
+            'source' => $sourceFile
+        );
+        return $this->originalMediaStorage->store($sourceFile, $id, $name, $type, $variant);
 	}
 
 	/**
@@ -96,6 +117,26 @@ class CachedMediaStorage extends MediaStorage
 	{
 		return $this->cache;
 	}
+
+    /**
+     * Get located files
+     *
+     * @return array
+     */
+    public function getLocated()
+    {
+        return $this->located;
+    }
+
+    /**
+     * Get stored files
+     *
+     * @return array
+     */
+    public function getStored()
+    {
+        return $this->stored;
+    }
 
 	/**
 	 * Gets the cache hits count

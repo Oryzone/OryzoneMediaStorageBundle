@@ -9,6 +9,7 @@
         <parameter key="oryzone_media_storage.absolutebaseurl"></parameter>
         <parameter key="oryzone_media_storage.useabsoluteurls">false</parameter>
         <parameter key="oryzone_media_storage.debug">%kernel.debug%</parameter>
+        <parameter key="oryzone_media_storage.data_collector.class">Oryzone\Bundle\MediaStorageBundle\Service\DataCollector\DataCollector</parameter>
     </parameters>
 
     <services>
@@ -24,6 +25,11 @@
 
         <service id="cached_media_storage" class="Oryzone\Bundle\MediaStorageBundle\Service\CachedMediaStorage">
             <argument type="service" id="base_media_storage"/>
+        </service>
+
+        <service id="data_collector.mediastorage" class="%oryzone_media_storage.data_collector.class%" public="false">
+            <argument type="service" id="cached_media_storage"/>
+            <tag name="data_collector" template="OryzoneMediaStorageBundle:Collector:media_storage" id="media_storage"/>
         </service>
 
         <!-- use a cached media storage as default media storage engine -->
