@@ -28,7 +28,7 @@
     {% if collector.getLocated()|length or collector.getStored()|length %}
         {% if collector.getLocated()|length %}
             <h2>Located ({{ collector.getLocated()|length }})</h2>
-            {% if collector.cacheHits %}<p><em>{{ collector.cacheHits }} files has been loaded from the cache.</em></p>{% endif %}
+            {% if collector.cacheHits %}<p><em>{{ collector.cacheHits }} requests has been loaded from the cache.</em></p>{% endif %}
             <table>
                 <thead>
                     <tr>
