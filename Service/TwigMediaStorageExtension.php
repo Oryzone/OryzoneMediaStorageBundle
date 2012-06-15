@@ -51,13 +51,13 @@ class TwigMediaStorageExtension extends \Twig_Extension
         );
     }
 
-    public static function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant = NULL)
+    public static function locateSrc(\Twig_Environment $env, $id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true, $options = array())
     {
       $globals = $env->getGlobals();
 
       try
       {
-        $url = $globals['MediaStorage_instance']->locate($id, $name, $type, $variant);
+        $url = $globals['MediaStorage_instance']->locate($id, $name, $type, $variant, $fallbackToDefaultVariant, $options);
         return $url;
       }
       catch( CannotLocateMediaException $e)
@@ -69,14 +69,14 @@ class TwigMediaStorageExtension extends \Twig_Extension
       return "";
     }
 
-    public function locateSrcFilter(MediaInterface $media, $variant = NULL)
+    public function locateSrcFilter(MediaInterface $media, $variant = NULL, $fallbackToDefaultVariant = true, $options = array())
     {
         try
         {
             if($media->isMediaExternal())
                 return $media->getMediaName();
 
-            $url = $this->mediaStorage->locateMedia($media, $variant);
+            $url = $this->mediaStorage->locateMedia($media, $variant, $fallbackToDefaultVariant, $options);
             return $url;
         }
         catch( CannotLocateMediaException $e)
