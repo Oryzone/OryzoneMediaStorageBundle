@@ -13,19 +13,20 @@ use Oryzone\Bundle\MediaStorageBundle\Model\MediaInterface;
 Interface MediaStorageInterface
 {
 
-	/**
-	 * Locates a stored media
-	 * @abstract
-	 * @param int|string    $id             the id of the related entity
-	 * @param string        $name           the slug name of the media
-	 * @param string        $type           the type of the image
-	 * @param string        $variant        a tag that identifies the size or a generic variant of the image
-	 *                                      (eg. "small", "big", "uncompressed", "hd")
-	 * @param bool          $fallbackToDefaultVariant       flag used to determinate whether to fallback to
-	 *                                                       original variant if the given variant where not found
-	 * @return string       the path/url of the media
-	 */
-    public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true);
+    /**
+     * Locates a stored media
+     * @abstract
+     * @param int|string    $id             the id of the related entity
+     * @param string        $name           the slug name of the media
+     * @param string        $type           the type of the image
+     * @param string        $variant        a tag that identifies the size or a generic variant of the image
+     *                                      (eg. "small", "big", "uncompressed", "hd")
+     * @param bool          $fallbackToDefaultVariant       flag used to determinate whether to fallback to
+     *                                                       original variant if the given variant where not found
+     * @param array         $options        an associative array of options
+     * @return string       the path/url of the media
+     */
+    public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true, $options = array());
 
 	/**
 	 * Locates a stored media by using a Media entity
@@ -35,9 +36,10 @@ Interface MediaStorageInterface
 	 *                           (eg. "small", "big", "uncompressed", "hd")
 	 * @param   bool            $fallbackToDefaultVariant   flag used to determinate whether to fallback to
 	 *                                              original variant if the given variant where not found
+     * @param array         $options        an associative array of options
 	 * @return  string  the path/url of the media
 	 */
-	public function locateMedia(MediaInterface $media, $variant = NULL, $fallbackToDefaultVariant = true);
+	public function locateMedia(MediaInterface $media, $variant = NULL, $fallbackToDefaultVariant = true, $options = array());
     
     /**
      * Store a media
@@ -47,9 +49,10 @@ Interface MediaStorageInterface
      * @param string 		$name 			the slug name of the image
      * @param string 		$type 			the type of the image
      * @param string 		$variant 		a tag that identifies the size or a generic variant of the image
+     * @param array         $options        an associative array of options
      * @throws CannotStoreMediaException if cannot store the image
      */
-    public function store($sourceFile, $id, $name, $type, $variant = NULL);
+    public function store($sourceFile, $id, $name, $type, $variant = NULL, $options = array());
 
 	/**
 	 * Store a media by using a Media entity
@@ -57,9 +60,10 @@ Interface MediaStorageInterface
 	 * @param string            $sourceFile the path of the file to store
 	 * @param MediaInterface    $media
 	 * @param string 		    $variant 		a tag that identifies the size or a generic variant of the image
+     * @param array             $options        an associative array of options
 	 * @throws CannotStoreMediaException if cannot store the image
 	 */
-	public function storeMedia($sourceFile, MediaInterface $media, $variant = NULL);
+	public function storeMedia($sourceFile, MediaInterface $media, $variant = NULL, $options = array());
 
 	/**
 	 * Returns a string that identifies all the currently set media storage settings. Mostly used for cache purposes

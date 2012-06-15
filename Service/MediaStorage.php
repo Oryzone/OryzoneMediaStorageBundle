@@ -13,17 +13,17 @@ abstract class MediaStorage implements MediaStorageInterface
 	/**
 	 * {@inheritDoc}
 	 */
-	public function locateMedia(MediaInterface $media, $variant = NULL, $fallbackToDefaultVariant = true)
+	public function locateMedia(MediaInterface $media, $variant = NULL, $fallbackToDefaultVariant = true, $options = array())
 	{
-		return $this->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant, $fallbackToDefaultVariant);
+		return $this->locate($media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant, $fallbackToDefaultVariant, $options = array());
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function storeMedia($sourceFile, MediaInterface $media, $variant = NULL)
+	public function storeMedia($sourceFile, MediaInterface $media, $variant = NULL, $options = array())
 	{
-		$this->store($sourceFile, $media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant);
+		$this->store($sourceFile, $media->getMediaId(), $media->getMediaName(), $media->getMediaType(), $variant, $options = array());
 	}
 
 	/**

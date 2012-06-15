@@ -27,8 +27,18 @@ class CachedMediaStorage extends MediaStorage
 	 */
 	protected $cacheHits;
 
+    /**
+     * Array that collects all the stored files in the current request
+     *
+     * @var array
+     */
     protected $stored;
 
+    /**
+     * Array that collects all the located files in the current request
+     *
+     * @var array
+     */
     protected $located;
 
 	/**
@@ -68,7 +78,7 @@ class CachedMediaStorage extends MediaStorage
 	/**
 	 * {@inheritDoc}
 	 */
-	public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true)
+	public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true, $options = array())
 	{
 		$hash = $this->getHash($id, $name, $type, $variant);
 
@@ -79,7 +89,7 @@ class CachedMediaStorage extends MediaStorage
 			return $this->cache->get($hash);
 		}
 
-		$path = $this->originalMediaStorage->locate($id, $name, $type, $variant, $fallbackToDefaultVariant);
+		$path = $this->originalMediaStorage->locate($id, $name, $type, $variant, $fallbackToDefaultVariant, $options);
 		$this->cache->set($hash, $path);
         $this->located[$hash] = array(
             'id'    => $id,
@@ -96,7 +106,7 @@ class CachedMediaStorage extends MediaStorage
 	/**
 	 * {@inheritDoc}
 	 */
-	public function store($sourceFile, $id, $name, $type, $variant = NULL)
+	public function store($sourceFile, $id, $name, $type, $variant = NULL, $options = array())
 	{
         $this->stored[] = array(
             'id'    => $id,
@@ -105,7 +115,7 @@ class CachedMediaStorage extends MediaStorage
             'variant' => $variant,
             'source' => $sourceFile
         );
-        return $this->originalMediaStorage->store($sourceFile, $id, $name, $type, $variant);
+        return $this->originalMediaStorage->store($sourceFile, $id, $name, $type, $variant, $options);
 	}
 
 	/**

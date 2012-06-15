@@ -215,10 +215,15 @@ class FilesystemMediaStorage extends  MediaStorage
     /**
      * {@inheritDoc} 
      */
-    public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true)
+    public function locate($id, $name, $type, $variant = NULL, $fallbackToDefaultVariant = true, $options = array())
     {
         if(preg_match('|^https?://.+$|iu', $name))
             return $name;
+
+        $absoluteUrlEnabled = $this->absoluteUrlEnabled;
+
+        if(isset($options['absolute']))
+            $absoluteUrlEnabled = (bool)$options['absolute'];
 
         $path = $this->getPath($id, $name, $type, $variant);
         $filename = $this->getFilename($id, $name, $type, $variant);
@@ -234,7 +239,7 @@ class FilesystemMediaStorage extends  MediaStorage
             
         $url = str_replace("\\", "/", $path);
         
-        if($this->absoluteUrlEnabled)
+        if($absoluteUrlEnabled)
         {
             $url = $this->absoluteBaseUrl . $url;
         }
@@ -249,7 +254,7 @@ class FilesystemMediaStorage extends  MediaStorage
     /**
      * {@inheritDoc} 
      */
-    public function store($file, $id, $name, $type, $variant = NULL)
+    public function store($file, $id, $name, $type, $variant = NULL, $options = array())
     {
         $dest = $this->getFilename($id, $name, $type, $variant);
         
