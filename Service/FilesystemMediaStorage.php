@@ -222,8 +222,8 @@ class FilesystemMediaStorage extends  MediaStorage
 
         $absoluteUrlEnabled = $this->absoluteUrlEnabled;
 
-        if(isset($options['absolute']))
-            $absoluteUrlEnabled = (bool)$options['absolute'];
+        if(isset($options['absoluteUrl']))
+            $absoluteUrlEnabled = (bool)$options['absoluteUrl'];
 
         $path = $this->getPath($id, $name, $type, $variant);
         $filename = $this->getFilename($id, $name, $type, $variant);
@@ -231,7 +231,7 @@ class FilesystemMediaStorage extends  MediaStorage
         if( !is_file( $filename ) || !is_readable( $filename ) )
         {
 	        if($variant !== NULL && $fallbackToDefaultVariant)
-		        return $this->locate($id, $name, $type, NULL, false);
+		        return $this->locate($id, $name, $type, NULL, false, array('absoluteUrl' => $absoluteUrlEnabled));
 
             throw new CannotLocateMediaException(
                     sprintf("File '%s' not found", $filename), $id, $name, $type, $variant);
