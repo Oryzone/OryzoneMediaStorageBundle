@@ -62,7 +62,7 @@ class FilesystemMediaStorage extends  MediaStorage
         $this->relativeBaseUrl = $relativeBaseUrl;
         $this->absoluteBaseUrl = $absoluteBaseUrl;
         $this->absoluteUrlEnabled = $useAbsoluteUrls;
-	    $this->moveFileEnabled       = false;
+	    $this->moveFileEnabled = false;
     }
 
 	/**
@@ -286,7 +286,7 @@ class FilesystemMediaStorage extends  MediaStorage
 		    $operation = 'copy';
 	    }
 
-        if( !$success || $originalFileSize != @filesize( $dest ) )
+        if( !$success )
             throw new CannotStoreMediaException (sprintf('Cannot %s "%s" (%d bytes) to "%s"', $operation, $file, ($originalFileSize?$originalFileSize:0), $dest), $id, $name, $type, $variant);
     }
 
