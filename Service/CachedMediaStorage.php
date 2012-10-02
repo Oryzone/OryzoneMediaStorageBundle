@@ -113,7 +113,7 @@ class CachedMediaStorage extends MediaStorage
             'name'  => $name,
             'type'  => $type,
             'variant' => $variant,
-            'source' => $sourceFile
+            'source' => (string)$sourceFile
         );
         return $this->originalMediaStorage->store($sourceFile, $id, $name, $type, $variant, $options);
 	}

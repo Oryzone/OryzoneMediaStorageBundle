@@ -1,16 +1,22 @@
 {% extends app.request.isXmlHttpRequest ? 'WebProfilerBundle:Profiler:ajax_layout.html.twig' : 'WebProfilerBundle:Profiler:layout.html.twig' %}
 
 {% block toolbar %}
-    {% if collector.getLocated()|length or collector.getStored()|length %}
-        {% set icon %}
-            <img width="16" height="16" alt="MediaStorage" style="border-width: 0; vertical-align: middle; margin-right: 5px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABy0lEQVR42n1TuYoCQRCdfD/DD9hgZA0W3D9wU00E0cgjEe9bMBJFBS8EA1HERBwQE8ELDPyTDXdyj9p5xXbviOM+eDo9Vf2q61WPUiqVvguFAuVyOUvm83kqFotfyjNg8+12IzOwBq/XK/9ns1kWgiCehXC5XNYULIBQKMTBWq1G/X6fRqMRzWYzjsXjcSl4uVyYWENECiCp1WrReDym+XxOy+WSKWLD4ZCm0ynHVqsVv0dBBT9ApVLhzQjudjs6Ho90OBw4lk6nSdM0Wq/XtNlsaLvd8vtMJvMn0Gw2WQQvU6kUJZNJrgxiLdjr9eh0Oj2eoNFocCX0eT6fLYneIdztdh8FYB6CgKqq5HQ6ye12UzAY5FMYo+RYIpFgk6UAnAR0XZcCdrudAoEAYcT1ep3a7TYbDOchdidgKO6RCCH0jySXy8UVB4MBjxLOTyYTjsViMXlfeIwGbAZVh8PxiZEiye/3U6fT4U3oF+Z5PB6O4VlcJBSXNzISibyJOxGNRtlUXCbMHv74fD6OIQcFf2mTAuFw+F0I4ARoAZsXiwVVq1Xyer1mgUcYJ/gQhv4H0bcVXgwzdSTAXRhqpvig7vq2wKupv2e0mTf8AGQ1bCX99FmBAAAAAElFTkSuQmCC"/>
-            <span>
-                {% if collector.getLocated()|length %}↑ {{ collector.getLocated()|length }}{% endif %}
-                {% if collector.getStored()|length %}↓ {{ collector.getStored()|length }}{% endif%}
-            </span>
-        {% endset %}
-        {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
-    {% endif %}
+    {% set icon %}
+        <img width="24" height="28" alt="MediaStorage" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAcCAYAAAB75n/uAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAu1JREFUeNrsVkuLGkEQ7p7xFTfBGAVJCOzBgAieggdBMIjkN0hO/gDPueb/LOwpsKewkru4uQgmBgRxQUUUddX1OZ36Ot0yTjKT5JDbNjTTj+qvqr6q6h4uhGD/s/EHBf+koNVqPbq/v09zzp9QZ3oPYz23LEt2x3icz+ebGseOeaLg5ubm9WQy+RiLxV4QIPaEUiDH9jW07XbLZ7OZWK/X7Wg0+q5QKHzxVNBoNN4QxudkMsmcHmBsX0NbLpes2+2yYDDIer3ep0gkUi0Wi9/tMoadr8PhAADdlDFHL44L9nWiSIRCIUFGvR2NRh9qtdozO+aJgv1+LznVbiqFck3voet1fIkeRsDSG5/PVyK5V3ZMn32iADgOgg5NoXZCKefaANM0WSKRkOsEzs7Ozp7P5/Onrgp2ux0zDEPgQLPZPMbULchKmZxnMhk+Ho8FBX7nqkDTAQ/wzeVyjNKWedVKIBBg9Xr9SCHJWq4KIAS3IQhvyF15eLPZnOQ/OmRBY6lUkmOy/CSGrhQRlxyCSpi32202nU7lWAFzgCGolD1QwDUw9uC9qwJskpBQ1kh++/0+aOKIDXkHABQWWywW8FbKQB5Fh5R10vlLFgEYFsEbooZfX1+z4XDIqFI5ZQk455p7xAeB1vI4+0cFJCjgCcBhLSiCB4PBQNizBi2bzfLVaiUAjiSDvKcCuIqy15mEIFYqFdbpdI5XhqxOw2B+v5+l02m5hnO6ISE8s4gOysLBIeR9tVqVIAgygPE9FsHPW1ZSpFJcjj0pgpv4Et/86upKOArqhCI9j8fjOAdw4Zmm2jpYk0qlZP/bposUsXBVAItgif3+cVjrXDuZq9vE8FKwpSDdUX/soMOTIg1OcbsjBe53EeX2N3rR3l9eXr6k1PPBGwosgm4q17nOIgKiZUvmJYowHA5b5+fnt/QafnV9k5EVFxcXnJSAKtN2k5rqy/ULipCpi00+QJR9FhWjVS6XheuT+fBf9Lv2Q4ABAK3evvbU8S1/AAAAAElFTkSuQmCC"/>
+        <span class="sf-toolbar-status{% if 100 < collector.getLocated()|length %} sf-toolbar-status-yellow{% endif %}">{{ collector.getLocated()|length }}</span>
+        <span class="sf-toolbar-status{% if 10 < collector.getStored()|length %} sf-toolbar-status-yellow{% endif %}">{{ collector.getStored()|length }}</span>
+    {% endset %}
+    {% set text %}
+        <div class="sf-toolbar-info-piece">
+            <b>↑ Images located</b>
+            <span class="sf-toolbar-status{% if 100 < collector.getLocated()|length %} sf-toolbar-status-yellow{% endif %}">{{ collector.getLocated()|length }}</span>
+        </div>
+        <div class="sf-toolbar-info-piece">
+            <b>↓ Images stored</b>
+            <span class="sf-toolbar-status{% if 10 < collector.getStored()|length %} sf-toolbar-status-yellow{% endif %}">{{ collector.getStored()|length }}</span>
+        </div>
+    {% endset %}
+    {% include 'WebProfilerBundle:Profiler:toolbar_item.html.twig' with { 'link': profiler_url } %}
 {% endblock %}
 
 {% block menu %}
