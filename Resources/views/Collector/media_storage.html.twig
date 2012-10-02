@@ -57,7 +57,13 @@
                         <td>{{ located.name }}</td>
                         <td>{{ located.type }}</td>
                         <td>{{ located.variant|default('-') }}</td>
-                        <td>{{ located.path }}</td>
+                        <td>
+                            {% if located.path %}
+                                <a href="{{ located.path }}" title="Click to view file">{{ located.path }}</a>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         <td>{{ located.hits }}</td>
                     </tr>
                     {% endfor %}
