@@ -25,8 +25,9 @@ Requirements (basic concepts)
 * Each Media must track every connected storage and it must be possible to retrieve the url of every stored file. E.g. to easily adopt S3/CDNs on production and local file system on development
 * Each media type should have a dedicated Manager (to store and retrieve the entities)
 * Managers can use processors (e.g. resizers) to convert original file to various required media variants
-* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), ** deferred ** (pushed in a query and processed asynchronously)
+* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a query and processed asynchronously)
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (img, video, embed, etc...)
+* **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
 * Has validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
 * Possibility to create named collection of medias (galleries)
 
@@ -41,7 +42,8 @@ Default available media types (and providers)
 Default available processors
 ============================
 
-* ImageResizer 
+* ImageResizer
+* Preserve
 
 Configuration
 =============
@@ -56,19 +58,32 @@ Here's a sample configuration
               type: 
                   image:
                       thumbnail: false
-              processors:
-                  ImageResizer:
-                      formats:
-                          square:   { width: 50, height: 50, resizeMode: crop, format: jpg, quality: 90 }
-                          small:    { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
-                          medium:   { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
-                          large:    { width: 800, resizeMode: proportional, format: jpg, quality: 70 }
-                          original: { resizeMode: preserve }
+              variants:
+                  square:
+                      processor:
+                          ImageResizer: { width: 50, height: 50, resizeMode: crop, format: jpg, quality: 90 }
+                          mode: instantly
+                  small:
+                      processor:
+                          ImageResizer: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
+                          mode: instantly
+                  medium:
+                      processor:
+                          ImageResizer: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
+                          mode: instantly
+                  large:
+                      processor:
+                          ImageResizer: { width: 800, resizeMode: proportional, format: jpg, quality: 70 }
+                          mode: instantly
+                  original:
+                      processor: 
+                          Preserve: ~
+                          mode: instantly
               storages: ~ #TO DEFINE
           product_image:
               type:
                   image: ~
-              processors: ~
+              variants: ~
               storages: ~
 
 Create a new Media
