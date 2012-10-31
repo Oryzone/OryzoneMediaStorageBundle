@@ -62,23 +62,23 @@ Here's a sample configuration
                   square:
                       processor:
                           ImageResizer: { width: 50, height: 50, resizeMode: crop, format: jpg, quality: 90 }
-                          mode: instantly
+                      mode: instantly
                   small:
                       processor:
                           ImageResizer: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
-                          mode: instantly
+                      mode: instantly
                   medium:
                       processor:
                           ImageResizer: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
-                          mode: instantly
+                      mode: instantly
                   large:
                       processor:
                           ImageResizer: { width: 800, resizeMode: proportional, format: jpg, quality: 70 }
-                          mode: instantly
+                      mode: instantly
                   original:
                       processor: 
                           Preserve: ~
-                          mode: instantly
+                      mode: instantly
               storages: ~ #TO DEFINE
           product_image:
               type:
