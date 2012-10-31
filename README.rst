@@ -12,7 +12,7 @@ thanks to `@ellis-`_ for the support!
 Requirements (basic concepts)
 =============================
 
-* Media are used to represent a file (and connected informations) stored somewhere (filesystem, amazon S3, cdn, etc.)
+* **Medias** are used to represent a file (and connected informations) stored somewhere (filesystem, amazon S3, cdn, etc.)
 * Each media is an entity and can be connected (related) to other entities
 * Media entity should be abstract and should work both in ODM and ORM contexts
 * Each media entity should have an array to holds metadata (width, height, source, gps coords, author, version, etc...)
@@ -28,7 +28,7 @@ Requirements (basic concepts)
 * Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a query and processed asynchronously)
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (img, video, embed, etc...)
 * **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
-* Has validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
+* Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
 * Possibility to create named collection of medias (galleries)
 
 Default available media types (and providers)
