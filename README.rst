@@ -25,6 +25,7 @@ Requirements (basic concepts)
 * Managers can use processors (e.g. resizers) to convert original file to various required media variants
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (img, video, embed, etc...)
 * Has validators and form types
+* Possibility to create named collection of medias (galleries)
 
 Configuration
 =============
