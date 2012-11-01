@@ -190,29 +190,15 @@ ThumbnailGeneratorInterface
 
 
 
-
-
-
 Create a new Media
 ==================
-From a controller
 
-.. code-block:: php
-
-  $path = 'path/to/file.jpg';
-
-  $managerFactory = $this->get('media-manager-factory');
-  $manager = $managerFactory->get('avatar');
-  $avatarMedia = $manager->create($path);
+TODO!
 
 Get a Media
 ===========
 
-.. code-block:: php
-
-  $managerFactory = $this->get('media-manager-factory');
-  $manager = $managerFactory->get('avatar');
-  $avatarMedia = $manager->findOneById(285);
+TODO!
 
 
 Delete a Media
