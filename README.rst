@@ -2,6 +2,11 @@
 MediaStorageBundle
 ------------------
 
+MediaStorage Bundle is a Symfony2 bundle that aims to provide a solid, extendible infrastructure to handle media storage
+and retrieval. It is freely inspired to some famouse Symfony2 media management bundles such as `SonataMediaBundle`_ and
+`AnoMediaBundle`_ but it wants to be more extendible and configurable.
+
+
 **WARNING:** This bundle is going to be totally rewritten, please check the `master branch`_ for the last working version.
 
 I will start by writing the README, following the `readme driven development`_ by `Tom Preston-Werner`_ , so everything you'll read heare is still the "design phase".
@@ -216,7 +221,9 @@ Delete a Media
 TODO!
 
 
+.. _SonataMediaBundle: https://github.com/sonata-project/SonataMediaBundle
 
+.. _AnoMediaBundle: https://github.com/benjamindulau/AnoMediaBundle
 
 .. _master branch: https://github.com/Oryzone/OryzoneMediaStorageBundle
 

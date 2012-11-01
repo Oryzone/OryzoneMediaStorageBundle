@@ -1,4 +1,5 @@
+--------------------------
 Documentation to come soon
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------
 
-Keep waiting please :)
+Please refer to the README.rst for the moment

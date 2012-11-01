@@ -4,7 +4,7 @@
   "description": "Simple media files storage for symfony2",
   "keywords": ["media storage", "storage","media", "files", "images", "videos", "documents"],
   "homepage": "https://github.com/Oryzone/OryzoneMediaStorageBundle",
-  "license": "As is",
+  "license": "GPL",
   "authors": [
     {
       "name": "Luciano Mammino",

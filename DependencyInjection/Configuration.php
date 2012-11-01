@@ -20,12 +20,6 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('media_storage');
 
-        $rootNode
-            ->children()
-            ->scalarNode('enabled')->defaultValue('false')->end()
-            ->end()
-        ;
-
         return $treeBuilder;
     }
 }
