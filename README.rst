@@ -31,7 +31,7 @@ Requirements (basic concepts)
 * Each Media must track every connected storage and it must be possible to retrieve the url of every stored file. E.g. to easily adopt S3/CDNs on production and local file system on development
 * Each media type should have a dedicated Manager (to store and retrieve the entities)
 * Managers can use processors (e.g. resizers) to convert original file to various required media variants
-* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a query and processed asynchronously)
+* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (img, video, embed, etc...)
 * **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
 * Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
