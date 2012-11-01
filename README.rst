@@ -66,7 +66,10 @@ Here's a sample configuration
               gallery:              Oryzone\Bundle\MediaStorageBundle\Entity\Gallery
               gallery_has_media:    Oryzone\Bundle\MediaStorageBundle\Entity\GalleryHasMedia
       providers:
-          ~ #TO DEFINE
+          file:     oryzone_media_storage.providers.file
+          image:    oryzone_media_storage.providers.image
+          youtube:  oryzone_media_storage.providers.youtube
+          vimeo:    oryzone_media_storage.providers.vimeo
       contexts:
           avatar:
               provider: image
@@ -100,7 +103,7 @@ Here's a sample configuration
               storages: ~ #TO DEFINE
 
 
-Intrfaces/Objects
+Interfaces/Objects
 =================
 
 Media (entity)
@@ -108,7 +111,7 @@ Media (entity)
 
 * id
 * name
-* binaryData
+* content (not persisted)
 * type
 * context
 * metadata (arbitrary array)
@@ -193,7 +196,21 @@ ThumbnailGeneratorInterface
 Create a new Media
 ==================
 
-TODO!
+Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of the ``User`` class:
+
+.. code-block:: php
+
+  $path = 'path/to/file.jpg';
+
+  $avatar = new Avatar();
+  $avatar->setName('Mario Red's profile picture');
+  $avatar->setContent($path);
+
+  $user->setAvatar( $avatar );
+
+  $em = $this->getDoctrine()->getEntityManager();
+  $em->persist($user);
+  $em->flush();
 
 Get a Media
 ===========
