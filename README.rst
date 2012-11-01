@@ -24,16 +24,15 @@ Requirements (basic concepts)
 * Each media entity should have an array that holds metadata (width, height, source, gps coords, author, version, etc...)
 * Each media has a given type (image, video, text document, etc...)
 * Each media type is managed by a **Provider**.
-* Each media may have variants (e.g. default, big, small, hi-res, etc...)
-* Each media can optionally have a thumbnail image
+* Each media may have variants (e.g. default, big, small, hi-res, long, short, subtitled, censored, etc...)
 * Media files can be references to external files/resources (youtube/vimeo/scribd/slideshare/etc...)
-* Media is stored to a given storage and located through a CDN configuration
+* Media is stored to a given filesystem and located through a CDN configuration
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (``img``, ``video``, ``embed``, etc...)
 * **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
 * Each context can defines processors (e.g. resizers) to convert original file to various media variants
 * Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
 * Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
-* Possibility to create named collection of medias (galleries)
+* Possibility to create named collection of medias (e.g. galleries)
 * Has a data collector to show stats about stored/retrieved medias
 
 Default available media types (and providers)
@@ -48,7 +47,6 @@ Default available processors
 ============================
 
 * ImageResizer
-* Preserve
 
 Configuration
 =============
@@ -59,21 +57,20 @@ Here's a sample configuration
 
   oryzone_media_storage:
       db_driver: doctrine_orm
-          class:
-              media:                Oryzone\Bundle\MediaStorageBundle\Entity\Media
-              gallery:              Oryzone\Bundle\MediaStorageBundle\Entity\Gallery
-              gallery_has_media:    Oryzone\Bundle\MediaStorageBundle\Entity\GalleryHasMedia
       providers:
           file:     oryzone_media_storage.providers.file
           image:    oryzone_media_storage.providers.image
           youtube:  oryzone_media_storage.providers.youtube
           vimeo:    oryzone_media_storage.providers.vimeo
-      storages:
+      processors:
+          resizer:  oryzone_media_storage_processors.resize
+
+      filesystems:
           avatars:
                 local: { directory: '%kernel.root_dir%/../web/images/pictures'}
           product_pictures:
-                S3: { bucket: 'productpics', key: '...'}
-      cdn:
+                S3: { bucket: 'productpics', key: '...', secret: '...'}
+      cdns:
           avatars:
                 local: { path: 'images/pictures/' }
           products_pictures:
@@ -81,8 +78,7 @@ Here's a sample configuration
       contexts:
           avatar:
               provider: image
-              thumbnail: false
-              storage: pictures
+              filesystem: pictures
               cdn: pictures
               variants:
                   square:
@@ -99,22 +95,45 @@ Here's a sample configuration
                       mode: instantly
                   large:
                       processor:
-                          ImageResizer: { width: 800, resizeMode: proportional, format: jpg, quality: 70 }
+                          ImageResizer: { width: 500, resizeMode: proportional, format: jpg, quality: 70 }
                       mode: instantly
                   original:
                       processor: 
                           Preserve: ~
                       mode: instantly
-              storages: ~ #TO DEFINE
-          product_image:
+          product_picture:
               provider: image
-              thumbnail: ~
+              filesystem: product_pictures
+              cdn: product_pictures
               variants: ~
-              storages: ~ #TO DEFINE
 
 
 Interfaces/Objects
 =================
+
+MediaStorage
+------------
+
+* providers
+* filesystems
+* cdns
+* contexts
+* getProvider($provider)
+* getFilesystem($filesystem)
+* getCdn($cdn)
+* getContext($context)
+* addProvider(ProviderInterface $provider)
+* addFilesystem(FilesystemInterface $filesystem)
+* addCdn(CdnInterface $cdn)
+* addContext(ContextInterface $context)
+* hasProvider($provider)
+* hasFilesystem($filesystem)
+* hasCdn($cdn)
+* hasContext($context)
+* prepareMedia(Media $media)
+* saveMedia(Media $media)
+* removeMedia(Media $media)
+
 
 Media (entity)
 --------------
@@ -130,7 +149,7 @@ Media (entity)
 * modifiedAt
 
 
-Gallery (entity)
+MediaCollection (entity)
 ----------------
 
 * id
@@ -140,12 +159,12 @@ Gallery (entity)
 * modifiedAt
 
 
-GalleryHasMedia (entity)
+MediaCollectionHasMedia (entity)
 ------------------------
 
-* id_media
-* id_gallery
-* order
+* media
+* collection
+* position
 * createdAt
 * modifiedAt
 
@@ -155,8 +174,9 @@ ContextInterface
 
 * getName()
 * getProvider()
+* getFilesystem()
+* getCdn()
 * getVariants()
-* getThumbnailGenerator()
 * ...
 
 
@@ -193,12 +213,6 @@ ProcessorInterface
 
 * process($binaryData, $context, $variant, $options)
 * getAvailableOptions()
-* ...
-
-
-ThumbnailGeneratorInterface
----------------------------
-
 * ...
 
 
