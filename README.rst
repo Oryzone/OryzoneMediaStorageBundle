@@ -1,3 +1,4 @@
+------------------
 MediaStorageBundle
 ------------------
 
@@ -30,6 +31,7 @@ Requirements (basic concepts)
 * **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
 * Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
 * Possibility to create named collection of medias (galleries)
+* Has a data collector to show stats about stored/retrieved medias
 
 Default available media types (and providers)
 =============================================
@@ -53,6 +55,11 @@ Here's a sample configuration
 .. code-block:: yaml
 
   oryzone_media_storage:
+      db_driver: doctrine_orm
+          class:
+              media:                Oryzone\Bundle\MediaStorageBundle\Entity\Media
+              gallery:              Oryzone\Bundle\MediaStorageBundle\Entity\Gallery
+              gallery_has_media:    Oryzone\Bundle\MediaStorageBundle\Entity\GalleryHasMedia
       contexts:
           avatar:
               type: 
@@ -85,6 +92,74 @@ Here's a sample configuration
                   image: ~
               variants: ~
               storages: ~
+
+
+Intrfaces/Objects
+=================
+
+Media (entity)
+--------------
+
+* id
+* name
+* binaryData
+* type
+* context
+* metadata (arbitrary array)
+* variants (arbitrary array)
+* createdAt
+* modifiedAt
+
+
+Gallery (entity)
+----------------
+
+* id
+* name
+* medias
+* createdAt
+* modifiedAt
+
+
+GalleryHasMedia (entity)
+------------------------
+
+* id_media
+* id_gallery
+* order
+* createdAt
+* modifiedAt
+
+
+ProviderInterface
+--------
+
+* getName()
+* getTemplateHelperAvailableOptions()
+* ...
+
+
+ProcessInterface
+----------------
+
+* const STATUS_OK          = 1;
+* const STATUS_SENDING     = 2;
+* const STATUS_PENDING     = 3;
+* const STATUS_ERROR       = 4;
+* const STATUS_ENCODING    = 5;
+
+
+ProcessorInterface
+------------------
+
+* process($binaryData, $context, $variant, $options)
+* getAvailableOptions()
+* ...
+
+
+
+
+
 
 Create a new Media
 ==================
