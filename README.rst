@@ -68,10 +68,22 @@ Here's a sample configuration
           image:    oryzone_media_storage.providers.image
           youtube:  oryzone_media_storage.providers.youtube
           vimeo:    oryzone_media_storage.providers.vimeo
+      storages:
+          avatars:
+                local: { directory: %kernel.root_dir%/../web/images/pictures}
+          product_pictures:
+                S3: { bucket: 'productpics', key: '...'}
+      cdn:
+          avatars:
+                local: { path: 'images/pictures/' }
+          products_pictures:
+                remote: { base_url: 'http://productpics.s3.amazonaws.com/' }
       contexts:
           avatar:
               provider: image
               thumbnail: false
+              storage: pictures
+              cdn: pictures
               variants:
                   square:
                       processor:
