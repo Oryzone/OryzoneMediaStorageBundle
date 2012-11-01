@@ -70,7 +70,7 @@ Here's a sample configuration
           vimeo:    oryzone_media_storage.providers.vimeo
       storages:
           avatars:
-                local: { directory: %kernel.root_dir%/../web/images/pictures}
+                local: { directory: '%kernel.root_dir%/../web/images/pictures'}
           product_pictures:
                 S3: { bucket: 'productpics', key: '...'}
       cdn:
