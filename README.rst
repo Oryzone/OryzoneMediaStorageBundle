@@ -60,11 +60,12 @@ Here's a sample configuration
               media:                Oryzone\Bundle\MediaStorageBundle\Entity\Media
               gallery:              Oryzone\Bundle\MediaStorageBundle\Entity\Gallery
               gallery_has_media:    Oryzone\Bundle\MediaStorageBundle\Entity\GalleryHasMedia
+      providers:
+          ~ #TO DEFINE
       contexts:
           avatar:
-              type: 
-                  image:
-                      thumbnail: false
+              provider: image
+              thumbnail: false
               variants:
                   square:
                       processor:
@@ -88,10 +89,10 @@ Here's a sample configuration
                       mode: instantly
               storages: ~ #TO DEFINE
           product_image:
-              type:
-                  image: ~
+              provider: image
+              thumbnail: ~
               variants: ~
-              storages: ~
+              storages: ~ #TO DEFINE
 
 
 Intrfaces/Objects
@@ -131,11 +132,31 @@ GalleryHasMedia (entity)
 * modifiedAt
 
 
+ContextInterface
+----------------
+
+* getName()
+* getProvider()
+* getVariants()
+* getThumbnailGenerator()
+* ...
+
+
+VariantInterface
+----------------
+
+* getName()
+* getProcessor()
+* getProcessorOptions()
+* getMode()
+* ...
+
+
 ProviderInterface
 --------
 
 * getName()
-* getTemplateHelperAvailableOptions()
+* getRenderAvailableOptions()
 * ...
 
 
@@ -154,6 +175,12 @@ ProcessorInterface
 
 * process($binaryData, $context, $variant, $options)
 * getAvailableOptions()
+* ...
+
+
+ThumbnailGeneratorInterface
+---------------------------
+
 * ...
 
 
