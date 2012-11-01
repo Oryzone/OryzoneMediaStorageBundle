@@ -19,21 +19,19 @@ Requirements (basic concepts)
 =============================
 
 * **Medias** are used to represent a file (and connected informations) stored somewhere (filesystem, amazon S3, cdn, etc.)
-* Each media is an entity and can be connected (related) to other entities
+* Each media is an entity and can be connected (related) to other entities (e.g. a ``Avatar`` media entity can be connected to a ``User`` entity)
 * Media entity should be abstract and should work both in ODM and ORM contexts
-* Each media entity should have an array to holds metadata (width, height, source, gps coords, author, version, etc...)
-* Each media is of a type (image, video, text document, etc...)
-* Each media type is managed by a Provider class.
-* Each media may have variants (default, big, small, hi-res, etc...)
+* Each media entity should have an array that holds metadata (width, height, source, gps coords, author, version, etc...)
+* Each media has a given type (image, video, text document, etc...)
+* Each media type is managed by a **Provider**.
+* Each media may have variants (e.g. default, big, small, hi-res, etc...)
 * Each media can optionally have a thumbnail image
 * Media files can be references to external files/resources (youtube/vimeo/scribd/slideshare/etc...)
-* Media can be replicated to different storages
-* Each Media must track every connected storage and it must be possible to retrieve the url of every stored file. E.g. to easily adopt S3/CDNs on production and local file system on development
-* Each media type should have a dedicated Manager (to store and retrieve the entities)
-* Managers can use processors (e.g. resizers) to convert original file to various required media variants
-* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
-* Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (img, video, embed, etc...)
+* Media is stored to a given storage and located through a CDN configuration
+* Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (``img``, ``video``, ``embed``, etc...)
 * **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
+* Each context can defines processors (e.g. resizers) to convert original file to various media variants
+* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
 * Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
 * Possibility to create named collection of medias (galleries)
 * Has a data collector to show stats about stored/retrieved medias
@@ -203,7 +201,7 @@ Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of
   $path = 'path/to/file.jpg';
 
   $avatar = new Avatar();
-  $avatar->setName('Mario Red's profile picture');
+  $avatar->setName('Super Mario\'s profile picture');
   $avatar->setContent($path);
 
   $user->setAvatar( $avatar );
