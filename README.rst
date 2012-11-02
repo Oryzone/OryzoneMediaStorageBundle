@@ -199,7 +199,8 @@ ProviderInterface
 Create a new Media
 ==================
 
-Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of the ``User`` class:
+Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of the ``User`` class.
+N.B. ``User`` class mapping with ``avatar`` should have set the option ``cascade=all``.
 
 .. code-block:: php
 
