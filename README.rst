@@ -24,13 +24,13 @@ Requirements (basic concepts)
 * Each media entity should have an array that holds metadata (width, height, source, gps coords, author, version, etc...)
 * Each media has a given type (image, video, text document, etc...)
 * Each media type is managed by a **Provider**.
+* Each provide defines a ``process`` method (e.g. used to resize or optimize pictures) to convert original file to various media variants
+* **Process method** can be called **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
 * Each media may have variants (e.g. default, big, small, hi-res, long, short, subtitled, censored, etc...)
 * Media files can be references to external files/resources (youtube/vimeo/scribd/slideshare/etc...)
 * Media is stored to a given filesystem and located through a CDN configuration
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (``img``, ``video``, ``embed``, etc...)
 * **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
-* Each context can defines processors (e.g. resizers) to convert original file to various media variants
-* Processors can work **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
 * Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
 * Possibility to create named collection of medias (e.g. galleries)
 * Has a data collector to show stats about stored/retrieved medias
@@ -51,7 +51,7 @@ Default available processors
 Configuration
 =============
 
-Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are requires as they are used to abstract filesystems.
+Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required as they are used to abstract filesystems.
 
 .. code-block:: yaml
 
@@ -72,8 +72,6 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are requires 
           image:    oryzone_media_storage.providers.image
           youtube:  oryzone_media_storage.providers.youtube
           vimeo:    oryzone_media_storage.providers.vimeo
-      processors:
-          resizer:  oryzone_media_storage_processors.resize
       cdns:
           avatars:
                 local: { path: 'images/pictures/' }
@@ -86,24 +84,19 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are requires 
               cdn: pictures
               variants:
                   square:
-                      processor:
-                          ImageResizer: { width: 50, height: 50, resizeMode: crop, format: jpg, quality: 90 }
+                      process: { width: 50, height: 50, mode: crop, format: jpg, quality: 90 }
                       mode: instantly
                   small:
-                      processor:
-                          ImageResizer: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
+                      process: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
                       mode: instantly
                   medium:
-                      processor:
-                          ImageResizer: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
+                      process: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
                       mode: instantly
                   large:
-                      processor:
-                          ImageResizer: { width: 500, resizeMode: proportional, format: jpg, quality: 70 }
+                      process: { width: 500, resizeMode: proportional, format: jpg, quality: 70 }
                       mode: instantly
                   original:
-                      processor: 
-                          Preserve: ~
+                      process: ~
                       mode: instantly
           product_picture:
               provider: image
@@ -125,6 +118,8 @@ MediaStorage
 * prepareMedia(Media $media)
 * saveMedia(Media $media)
 * removeMedia(Media $media)
+* getPath(Media $media)
+* getUrl(Media $media)
 
 
 Media (entity)
@@ -174,37 +169,29 @@ ContextInterface
 
 VariantInterface
 ----------------
-
+* const STATUS_READY       = 1;
+* const STATUS_ON_DEMAND   = 2;
+* const STATUS_QUEUED      = 3;
+* const STATUS_PROCESSING  = 5;
+* const STATUS_ERROR       = 4;
 * getName()
-* getProcessor()
-* getProcessorOptions()
+* getOptions()
 * getMode()
-* ...
-
+* getState()
+* isReady() (checks if the state is READY)
+* hasError() (checks if the state is ERROR)
+* getError() (filled in case of the state ERROR)
+* serialize()
+* unserialize()
 
 ProviderInterface
 --------
 
 * getName()
 * getRenderAvailableOptions()
-* ...
-
-
-ProcessInterface
-----------------
-
-* const STATUS_OK          = 1;
-* const STATUS_SENDING     = 2;
-* const STATUS_PENDING     = 3;
-* const STATUS_ERROR       = 4;
-* const STATUS_ENCODING    = 5;
-
-
-ProcessorInterface
-------------------
-
-* process($binaryData, $context, $variant, $options)
-* getAvailableOptions()
+* supports(Media $media)
+* render(Media $media)
+* process(Media $media, VariantInterface $variant)
 * ...
 
 
