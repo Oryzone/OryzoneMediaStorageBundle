@@ -128,7 +128,7 @@ Media (entity)
 * id
 * name
 * content (not persisted)
-* type
+* provider
 * context
 * metadata (arbitrary array)
 * variants (arbitrary array)
@@ -175,6 +175,8 @@ VariantInterface
 * const STATUS_PROCESSING  = 5;
 * const STATUS_ERROR       = 4;
 * getName()
+* getFilename()
+* getContentType()
 * getOptions()
 * getMode()
 * getState()
