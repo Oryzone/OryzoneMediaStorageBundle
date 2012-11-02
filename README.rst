@@ -25,7 +25,7 @@ Requirements (basic concepts)
 * Each media has a given type (image, video, text document, etc...)
 * Each media type is managed by a **Provider**.
 * Each provide defines a ``process`` method (e.g. used to resize or optimize pictures) to convert original file to various media variants
-* **Process method** can be called **instantly** (when the media is created), **on-demand** (the first time a media variant is requested), **deferred** (pushed in a queue and processed asynchronously)
+* **Process method** can be called **instantly** (when the media is created - ``instant`` mode), **on-demand** (the first time a media variant is requested - ``lazy`` mode), **deferred** (pushed in a queue and processed asynchronously - ``queue`` mode)
 * Each media may have variants (e.g. default, big, small, hi-res, long, short, subtitled, censored, etc...)
 * Media files can be references to external files/resources (youtube/vimeo/scribd/slideshare/etc...)
 * Media is stored to a given filesystem and located through a CDN configuration
@@ -85,19 +85,19 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
               variants:
                   square:
                       process: { width: 50, height: 50, mode: crop, format: jpg, quality: 90 }
-                      mode: instantly
+                      mode: instant
                   small:
                       process: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
-                      mode: instantly
+                      mode: instant
                   medium:
                       process: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
-                      mode: instantly
+                      mode: instant
                   large:
                       process: { width: 500, resizeMode: proportional, format: jpg, quality: 70 }
-                      mode: instantly
+                      mode: instant
                   original:
                       process: ~
-                      mode: instantly
+                      mode: instant
           product_picture:
               provider: image
               filesystem: product_pictures
@@ -160,9 +160,9 @@ ContextInterface
 ----------------
 
 * getName()
-* getProvider()
-* getFilesystem()
-* getCdn()
+* getProviderName()
+* getFilesystemName()
+* getCdnName()
 * getVariants()
 * ...
 
@@ -183,8 +183,8 @@ VariantInterface
 * isReady() (checks if the state is READY)
 * hasError() (checks if the state is ERROR)
 * getError() (filled in case of the state ERROR)
-* serialize()
-* unserialize()
+* toArray()
+* fromArray()
 
 ProviderInterface
 --------
