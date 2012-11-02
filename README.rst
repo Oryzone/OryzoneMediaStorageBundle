@@ -51,9 +51,19 @@ Default available processors
 Configuration
 =============
 
-Here's a sample configuration
+Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are requires as they are used to abstract filesystems.
 
 .. code-block:: yaml
+
+  knp_gaufrette:
+      adapters:
+          avatars:
+              local:
+                  directory: '%kernel.root_dir%/../web/images/pictures'
+          product_pictures:
+              amazon:
+                  bucket: 'productpics'
+                  create: false
 
   oryzone_media_storage:
       db_driver: doctrine_orm
@@ -64,12 +74,6 @@ Here's a sample configuration
           vimeo:    oryzone_media_storage.providers.vimeo
       processors:
           resizer:  oryzone_media_storage_processors.resize
-
-      filesystems:
-          avatars:
-                local: { directory: '%kernel.root_dir%/../web/images/pictures'}
-          product_pictures:
-                S3: { bucket: 'productpics', key: '...', secret: '...'}
       cdns:
           avatars:
                 local: { path: 'images/pictures/' }
@@ -108,28 +112,16 @@ Here's a sample configuration
               variants: ~
 
 
-Interfaces/Objects
+Prototyping
 =================
 
 MediaStorage
 ------------
 
-* providers
-* filesystems
-* cdns
-* contexts
-* getProvider($provider)
-* getFilesystem($filesystem)
-* getCdn($cdn)
-* getContext($context)
-* addProvider(ProviderInterface $provider)
-* addFilesystem(FilesystemInterface $filesystem)
-* addCdn(CdnInterface $cdn)
-* addContext(ContextInterface $context)
-* hasProvider($provider)
-* hasFilesystem($filesystem)
-* hasCdn($cdn)
-* hasContext($context)
+* cdnFactory
+* contextFactory
+* filesystemMap (from gaufrette bundle)
+* providerFactory
 * prepareMedia(Media $media)
 * saveMedia(Media $media)
 * removeMedia(Media $media)
@@ -248,6 +240,7 @@ Delete a Media
 TODO!
 
 
+
 .. _SonataMediaBundle: https://github.com/sonata-project/SonataMediaBundle
 
 .. _AnoMediaBundle: https://github.com/benjamindulau/AnoMediaBundle
@@ -259,3 +252,7 @@ TODO!
 .. _Tom Preston-Werner: https://github.com/mojombo
 
 .. _@ellis-: https://github.com/ellis-
+
+.. _Gaufrette: https://github.com/KnpLabs/Gaufrette
+
+.. _GaufretteBundle: https://github.com/KnpLabs/KnpGaufretteBundle
