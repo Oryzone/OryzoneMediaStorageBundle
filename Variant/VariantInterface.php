@@ -60,7 +60,7 @@ interface VariantInterface
      *
      * @return string
      */
-    public function getFileName();
+    public function getFilename();
 
     /**
      * Get the content type (mime type) of the file associated with the variant
@@ -87,11 +87,11 @@ interface VariantInterface
     public function getMode();
 
     /**
-     * Get the current variant state
+     * Get the current variant status
      *
      * @return int
      */
-    public function getState();
+    public function getStatus();
 
     /**
      * Returns <code>TRUE</code> if the current variant has been successfully processed and it's ready to be used
@@ -124,7 +124,7 @@ interface VariantInterface
     /**
      * Creates a variant from an array
      * @param array $array
-     * 
+     *
      * @return VariantInterface
      */
     public static function fromArray($array);
