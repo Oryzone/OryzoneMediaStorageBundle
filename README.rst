@@ -192,7 +192,7 @@ ProviderInterface
 * getName()
 * getRenderAvailableOptions()
 * supports(Media $media)
-* render(Media $media)
+* render(Media $media, $variantName, $options = array(), CdnInterface $cdn = NULL)
 * process(Media $media, VariantInterface $variant)
 * ...
 
