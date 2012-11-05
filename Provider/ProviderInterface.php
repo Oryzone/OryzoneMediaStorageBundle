@@ -31,6 +31,14 @@ interface ProviderInterface
     public function supports(Media $media);
 
     /**
+     * Executed each time a media is about to be saved, before the process method
+     *
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @return mixed
+     */
+    public function prepare(Media $media);
+
+    /**
      * Process the media to create a variant
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media

@@ -6,12 +6,13 @@ use Knp\Bundle\GaufretteBundle\FilesystemMap;
 
 use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
     Oryzone\Bundle\MediaStorageBundle\Context\ContextFactory,
-    Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory;
+    Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory,
+    Oryzone\Bundle\MediaStorageBundle\Model\Media;
 
 /**
  * Base media storage class
  */
-class MediaStorage
+class MediaStorage implements MediaStorageInterface
 {
     /**
      * @var \Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory $cdnFactory
@@ -50,4 +51,43 @@ class MediaStorage
         $this->providerFactory = $providerFactory;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function prepareMedia(Media $media)
+    {
+        // TODO: Implement prepareMedia() method.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function saveMedia(Media $media)
+    {
+        // TODO: Implement saveMedia() method.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeMedia(Media $media)
+    {
+        // TODO: Implement removeMedia() method.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPath(Media $media)
+    {
+        // TODO: Implement getPath() method.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUrl(Media $media)
+    {
+        // TODO: Implement getUrl() method.
+    }
 }
