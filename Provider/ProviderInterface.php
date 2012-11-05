@@ -32,6 +32,7 @@ interface ProviderInterface
 
     /**
      * Executed each time a media is about to be saved, before the process method
+     * Generally used to set metadata
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
      * @return mixed

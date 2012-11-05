@@ -70,6 +70,14 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
+    public function updateMedia(Media $media)
+    {
+        // TODO implement updateMedia() method
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function removeMedia(Media $media)
     {
         // TODO: Implement removeMedia() method.
