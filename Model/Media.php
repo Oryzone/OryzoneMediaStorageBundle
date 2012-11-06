@@ -134,6 +134,37 @@ abstract class Media
     }
 
     /**
+     * Get a metadata value for a given key
+     *
+     * @param string $key
+     * @param mixed|null $default will return this value if the given key does not exist
+     * in the metadata array
+     *
+     * @return mixed|null
+     */
+    public function getMetadataValue($key, $default = NULL)
+    {
+        if(is_array($this->metadata) && isset($this->metadata[$key]))
+            return $this->metadata[$key];
+
+        return $default;
+    }
+
+    /**
+     * Sets a metadata value
+     *
+     * @param string $key
+     * @param mixed $value
+     */
+    public function setMetadataValue($key, $value)
+    {
+        if(!is_array($this->metadata))
+            $this->metadata = array();
+
+        $this->metadata[$key] = $value;
+    }
+
+    /**
      * @param \DateTime $modifiedAt
      */
     public function setModifiedAt($modifiedAt)

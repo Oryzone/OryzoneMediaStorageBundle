@@ -34,7 +34,7 @@ class DoctrineMediaListener
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if($entity instanceof Media)
+        if(!$entity instanceof Media)
             return false;
 
         $this->mediaStorage->prepareMedia($entity);
@@ -74,10 +74,8 @@ class DoctrineMediaListener
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-
-        if (!$entity instanceof Media) {
+        if (!$entity instanceof Media)
             return false;
-        }
 
         $this->mediaStorage->saveMedia($entity);
         return true;
@@ -90,10 +88,8 @@ class DoctrineMediaListener
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-
-        if (!$entity instanceof Media) {
+        if (!$entity instanceof Media)
             return false;
-        }
 
         $this->mediaStorage->updateMedia($entity);
         return true;
@@ -106,9 +102,8 @@ class DoctrineMediaListener
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if (!$entity instanceof Media) {
+        if (!$entity instanceof Media)
             return false;
-        }
 
         $this->mediaStorage->removeMedia($entity);
         return true;
