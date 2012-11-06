@@ -67,8 +67,10 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
 
   oryzone_media_storage:
       db_driver: doctrine_orm
+      namingStrategies:
+          default:  oryzone_media_storage.namingStrategies.slugged
       providers:
-          file:     oryzone_media_storage.providers.file
+          default:  oryzone_media_storage.providers.file
           image:    oryzone_media_storage.providers.image
           youtube:  oryzone_media_storage.providers.youtube
           vimeo:    oryzone_media_storage.providers.vimeo
@@ -83,21 +85,25 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
               filesystem: pictures
               cdn: pictures
               variants:
+                  default:
+                      process: { width: 800, resizeMode: proportional, format: jpg, quality: 90, enlarge: false }
+                      # must be processed instantaneously
                   square:
                       process: { width: 50, height: 50, mode: crop, format: jpg, quality: 90 }
                       mode: instant
+                      from: default
                   small:
                       process: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
                       mode: instant
+                      from: default
                   medium:
                       process: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
                       mode: instant
+                      from: default
                   large:
                       process: { width: 500, resizeMode: proportional, format: jpg, quality: 70 }
                       mode: instant
-                  original:
-                      process: ~
-                      mode: instant
+                      from: default
           product_picture:
               provider: image
               filesystem: product_pictures

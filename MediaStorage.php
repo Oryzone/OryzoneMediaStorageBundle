@@ -7,6 +7,7 @@ use Knp\Bundle\GaufretteBundle\FilesystemMap;
 use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
     Oryzone\Bundle\MediaStorageBundle\Context\ContextFactory,
     Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory,
+    Oryzone\Bundle\MediaStorageBundle\NamingStrategy\NamingStrategyFactory,
     Oryzone\Bundle\MediaStorageBundle\Model\Media;
 
 /**
@@ -15,12 +16,12 @@ use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
 class MediaStorage implements MediaStorageInterface
 {
     /**
-     * @var \Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory $cdnFactory
+     * @var Cdn\CdnFactory $cdnFactory
      */
     protected $cdnFactory;
 
     /**
-     * @var \Oryzone\Bundle\MediaStorageBundle\Context\ContextFactory $contextFactory
+     * @var Context\ContextFactory $contextFactory
      */
     protected $contextFactory;
 
@@ -30,9 +31,14 @@ class MediaStorage implements MediaStorageInterface
     protected $filesystemMap;
 
     /**
-     * @var \Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory $providerFactory
+     * @var Provider\ProviderFactory $providerFactory
      */
     protected $providerFactory;
+
+    /**
+     * @var NamingStrategy\NamingStrategyFactory $
+     */
+    protected $namingStrategyFactory;
 
 
     /**
@@ -42,13 +48,16 @@ class MediaStorage implements MediaStorageInterface
      * @param Context\ContextFactory $contextFactory
      * @param \Knp\Bundle\GaufretteBundle\FilesystemMap $filesystemMap
      * @param Provider\ProviderFactory $providerFactory
+     * @param NamingStrategy\NamingStrategyFactory $namingStrategyFactory
      */
-    function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap, ProviderFactory $providerFactory)
+    function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap,
+                         ProviderFactory $providerFactory, NamingStrategyFactory $namingStrategyFactory)
     {
         $this->cdnFactory = $cdnFactory;
         $this->contextFactory = $contextFactory;
         $this->filesystemMap = $filesystemMap;
         $this->providerFactory = $providerFactory;
+        $this->namingStrategyFactory = $namingStrategyFactory;
     }
 
     /**
