@@ -3,8 +3,8 @@ MediaStorageBundle
 ------------------
 
 MediaStorage Bundle is a Symfony2 bundle that aims to provide a solid, extendible infrastructure to handle media storage
-and retrieval. It is freely inspired to some famouse Symfony2 media management bundles such as `SonataMediaBundle`_ and
-`AnoMediaBundle`_ but it wants to be more extendible and configurable.
+and retrieval. It is freely inspired to some famouse Symfony2 media management bundles such as `SonataMediaBundle`_,
+`AnoMediaBundle`_ and `VichUploaderBundle`_ but it wants to be more extendible and configurable.
 
 
 **WARNING:** This bundle is going to be totally rewritten, please check the `master branch`_ for the last working version.
@@ -57,13 +57,18 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
 
   knp_gaufrette:
       adapters:
-          avatars:
+          avatars_adapter:
               local:
                   directory: '%kernel.root_dir%/../web/images/pictures'
-          product_pictures:
+          product_pictures_adapter:
               amazon:
                   bucket: 'productpics'
                   create: false
+      filesystems:
+              avatars:
+                  adapter:    avatars_adapter
+              product_pictures:
+                  adapter:    product_pictures_adapter
 
   oryzone_media_storage:
       db_driver: doctrine_orm
@@ -240,6 +245,8 @@ TODO!
 .. _SonataMediaBundle: https://github.com/sonata-project/SonataMediaBundle
 
 .. _AnoMediaBundle: https://github.com/benjamindulau/AnoMediaBundle
+
+.. _VichUploaderBundle: https://github.com/dustin10/VichUploaderBundle
 
 .. _master branch: https://github.com/Oryzone/OryzoneMediaStorageBundle
 
