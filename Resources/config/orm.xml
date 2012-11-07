@@ -8,8 +8,11 @@
     </parameters>
 
     <services>
+        <service id="oryzone_media_storage.listener.doctrine.adapter" class="%oryzone_media_storage.listener.doctrine.adapter.class%" public="false" />
+
         <service id="oryzone_media_storage.listener.doctrine" class="%oryzone_media_storage.listener.doctrine.class%">
             <argument type="service" id="oryzone_media_storage" />
+            <argument type="service" id="oryzone_media_storage.listener.doctrine.adapter" />
             <tag name="doctrine.event_listener" event="prePersist" />
             <tag name="doctrine.event_listener" event="preUpdate" />
             <tag name="doctrine.event_listener" event="postPersist" />

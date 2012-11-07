@@ -14,14 +14,6 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function getRenderAvailableOptions()
-    {
-        return array();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function supports(Media $media, File $file = NULL)
     {
         return ($file != NULL && $file->exists());

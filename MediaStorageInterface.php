@@ -11,9 +11,10 @@ interface MediaStorageInterface
      * Prepares a media to be stored
      *
      * @param  Model\Media $media
+     * @param  bool        $isUpdate
      * @return mixed
      */
-    public function prepareMedia(Media $media);
+    public function prepareMedia(Media $media, $isUpdate = FALSE);
 
     /**
      * Saves a media

@@ -62,9 +62,12 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
-    public function prepareMedia(Media $media)
+    public function prepareMedia(Media $media, $isUpdate = false)
     {
         // TODO: Implement prepareMedia() method.
+        //W.I.P.
+        //$provider = $this->providerFactory->get($media->getProvider());
+        //$provider->prepare($media);
     }
 
     /**

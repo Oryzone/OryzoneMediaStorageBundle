@@ -6,24 +6,32 @@ use Doctrine\ORM\Event\LifecycleEventArgs,
     Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface,
-    Oryzone\Bundle\MediaStorageBundle\Model\Media;
+    Oryzone\Bundle\MediaStorageBundle\Model\Media,
+    Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\AdapterInterface;
 
 class DoctrineMediaListener
 {
 
     /**
-     * @var \Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface $mediastorage
+     * @var \Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface $mediaStorage
      */
     protected $mediaStorage;
 
     /**
+     * @var Adapter\AdapterInterface $adapter
+     */
+    protected $adapter;
+
+    /**
      * Constructor
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface $mediaStorage
+     * @param \Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface             $mediaStorage
+     * @param \Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\AdapterInterface $adapter
      */
-    public function __construct(MediaStorageInterface $mediaStorage)
+    public function __construct(MediaStorageInterface $mediaStorage, AdapterInterface $adapter)
     {
         $this->mediaStorage = $mediaStorage;
+        $this->adapter = $adapter;
     }
 
     /**
@@ -32,14 +40,9 @@ class DoctrineMediaListener
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        if(!$entity instanceof Media)
-
-            return false;
-
-        $this->mediaStorage->prepareMedia($entity);
-
-        return true;
+        $object = $this->adapter->getObjectFromArgs($eventArgs);
+        if($object instanceof Media)
+            $this->mediaStorage->prepareMedia($object);
     }
 
     /**
@@ -48,24 +51,11 @@ class DoctrineMediaListener
      */
     public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        if ($entity instanceof Media) {
-            $this->mediaStorage->prepareMedia($entity);
-
-            // Hack ? Don't know, that's the behaviour Doctrine 2 seems to want
-            // See : http://www.doctrine-project.org/jira/browse/DDC-1020
-            $em = $eventArgs->getEntityManager();
-            $uow = $em->getUnitOfWork();
-            $uow->recomputeSingleEntityChangeSet
-            (
-                $em->getClassMetadata(get_class($entity)),
-                $eventArgs->getEntity()
-            );
-
-            return true;
+        $object = $this->adapter->getObjectFromArgs($eventArgs);
+        if ($object instanceof Media) {
+            $this->mediaStorage->prepareMedia($object, true);
+            $this->adapter->recomputeChangeSet($eventArgs);
         }
-
-        return false;
     }
 
     /**
@@ -74,13 +64,9 @@ class DoctrineMediaListener
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        if (!$entity instanceof Media)
-            return false;
-
-        $this->mediaStorage->saveMedia($entity);
-
-        return true;
+        $object = $this->adapter->getObjectFromArgs($eventArgs);
+        if ($object instanceof Media)
+            $this->mediaStorage->saveMedia($object);
     }
 
     /**
@@ -89,13 +75,9 @@ class DoctrineMediaListener
      */
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        if (!$entity instanceof Media)
-            return false;
-
-        $this->mediaStorage->updateMedia($entity);
-
-        return true;
+        $object = $this->adapter->getObjectFromArgs($eventArgs);
+        if ($object instanceof Media)
+            $this->mediaStorage->updateMedia($object);
     }
 
     /**
@@ -104,13 +86,9 @@ class DoctrineMediaListener
      */
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
-        $entity = $eventArgs->getEntity();
-        if (!$entity instanceof Media)
-            return false;
-
-        $this->mediaStorage->removeMedia($entity);
-
-        return true;
+        $object = $this->adapter->getObjectFromArgs($eventArgs);
+        if (!$object instanceof Media)
+            $this->mediaStorage->removeMedia($object);
     }
 
 }

@@ -40,13 +40,6 @@ interface ProviderInterface
     public function getContentType();
 
     /**
-     * Get an array representing the provider available options
-     *
-     * @return array
-     */
-    public function getRenderAvailableOptions();
-
-    /**
      * Checks if the current provider supports a given Media
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media

@@ -14,6 +14,12 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class OryzoneMediaStorageExtension extends Extension
 {
+
+    protected $adapterMap = array(
+        'orm'     => 'Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\ORM\DoctrineORMAdapter',
+        'mongodb' => 'Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\ODM\MongoDB\MongoDBAdapter'
+    );
+
     /**
      * {@inheritDoc}
      */
@@ -21,6 +27,9 @@ class OryzoneMediaStorageExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
+
+        $dbDriver = $config['db_driver'];
+        $container->setParameter('oryzone_media_storage.listener.doctrine.adapter.class', $this->adapterMap[$dbDriver]);
 
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('naming_strategies.xml');
