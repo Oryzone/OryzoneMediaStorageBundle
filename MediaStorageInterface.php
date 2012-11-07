@@ -10,7 +10,7 @@ interface MediaStorageInterface
     /**
      * Prepares a media to be stored
      *
-     * @param Model\Media $media
+     * @param  Model\Media $media
      * @return mixed
      */
     public function prepareMedia(Media $media);
@@ -18,7 +18,7 @@ interface MediaStorageInterface
     /**
      * Saves a media
      *
-     * @param Model\Media $media
+     * @param  Model\Media $media
      * @return mixed
      */
     public function saveMedia(Media $media);
@@ -26,7 +26,7 @@ interface MediaStorageInterface
     /**
      * Update media
      *
-     * @param Model\Media $media
+     * @param  Model\Media $media
      * @return mixed
      */
     public function updateMedia(Media $media);
@@ -34,7 +34,7 @@ interface MediaStorageInterface
     /**
      * Removes (deletes) a media and connected files
      *
-     * @param Model\Media $media
+     * @param  Model\Media $media
      * @return mixed
      */
     public function removeMedia(Media $media);
@@ -42,7 +42,7 @@ interface MediaStorageInterface
     /**
      * Get the local path of a media file (if any)
      *
-     * @param Model\Media $media
+     * @param  Model\Media $media
      * @return mixed
      */
     public function getPath(Media $media);
@@ -50,7 +50,7 @@ interface MediaStorageInterface
     /**
      * Get the url of a media file (if any)
      *
-     * @param Model\Media $media
+     * @param  Model\Media $media
      * @return mixed
      */
     public function getUrl(Media $media);

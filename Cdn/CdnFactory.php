@@ -21,7 +21,7 @@ class CdnFactory implements \IteratorAggregate
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array $cdns
+     * @param array                                                     $cdns
      */
     public function __construct(ContainerInterface $container, $cdns = array())
     {

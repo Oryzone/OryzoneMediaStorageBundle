@@ -50,7 +50,7 @@ interface ProviderInterface
      * Checks if the current provider supports a given Media
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param \Gaufrette\File|null $file
+     * @param \Gaufrette\File|null                           $file
      *
      * @return boolean
      */
@@ -61,7 +61,7 @@ interface ProviderInterface
      * Generally used to set metadata
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param \Gaufrette\File|null $file
+     * @param \Gaufrette\File|null                           $file
      *
      * @return mixed
      */
@@ -70,10 +70,10 @@ interface ProviderInterface
     /**
      * Process the media to create a variant
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
      * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param \Gaufrette\File|null $origin
-     * @param \Gaufrette\File|null $destination
+     * @param \Gaufrette\File|null                                        $origin
+     * @param \Gaufrette\File|null                                        $destination
      *
      * @return mixed
      */
@@ -82,10 +82,10 @@ interface ProviderInterface
     /**
      * Renders a variant to HTML code. Useful for twig (or other template engines) integrations
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
      * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param \Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface $cdn
-     * @param array $options
+     * @param \Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface         $cdn
+     * @param array                                                       $options
      *
      * @return string
      */

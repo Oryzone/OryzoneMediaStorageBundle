@@ -16,7 +16,7 @@ abstract class NamingStrategy implements NamingStrategyInterface
      *
      * By bmorel at ssi dot fr
      *
-     * @param  string $string
+     * @param  string  $string
      * @return boolean $bool
      */
     public static function seemsUtf8($string)
@@ -34,13 +34,14 @@ abstract class NamingStrategy implements NamingStrategyInterface
                     return false;
             }
         }
+
         return true;
     }
 
     /**
      * Remove any illegal characters, accents, etc.
      *
-     * @param  string $string  String to unaccent
+     * @param  string $string String to unaccent
      * @return string $string  Unaccented string
      */
     protected static function unaccent($string)
@@ -183,8 +184,8 @@ abstract class NamingStrategy implements NamingStrategyInterface
     /**
      * Cleans up the text and adds separator
      *
-     * @param string $text
-     * @param string $separator
+     * @param  string $text
+     * @param  string $separator
      * @return string
      */
     private static function postProcessText($text, $separator)
@@ -210,13 +211,14 @@ abstract class NamingStrategy implements NamingStrategyInterface
     /**
      * Does not transliterate correctly eastern languages
      *
-     * @param string $text
-     * @param string $separator
+     * @param  string $text
+     * @param  string $separator
      * @return string
      */
     public static function urlize($text, $separator = '-')
     {
         $text = self::unaccent($text);
+
         return self::postProcessText($text, $separator);
     }
 

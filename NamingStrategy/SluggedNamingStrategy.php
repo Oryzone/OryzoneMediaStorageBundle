@@ -20,6 +20,7 @@ class SluggedNamingStrategy extends NamingStrategy
 
         $name = self::urlize($media->getName());
         $uid = uniqid('_'.$variant->getName());
+
         return $name.$uid;
     }
 }

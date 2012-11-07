@@ -26,12 +26,12 @@ class ProviderProcessException extends MediaStorageException
     /**
      * Constructor
      *
-     * @param string $message
+     * @param string                                                        $message
      * @param \Oryzone\Bundle\MediaStorageBundle\Provider\ProviderInterface $provider
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param int $code
-     * @param \Exception $previous
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media                $media
+     * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface   $variant
+     * @param int                                                           $code
+     * @param \Exception                                                    $previous
      */
     public function __construct($message = "", ProviderInterface $provider = NULL, Media $media = NULL, VariantInterface $variant = NULL, $code = 0, \Exception $previous = null)
     {

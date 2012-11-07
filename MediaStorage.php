@@ -40,17 +40,16 @@ class MediaStorage implements MediaStorageInterface
      */
     protected $namingStrategyFactory;
 
-
     /**
      * Constructor
      *
-     * @param Cdn\CdnFactory $cdnFactory
-     * @param Context\ContextFactory $contextFactory
+     * @param Cdn\CdnFactory                            $cdnFactory
+     * @param Context\ContextFactory                    $contextFactory
      * @param \Knp\Bundle\GaufretteBundle\FilesystemMap $filesystemMap
-     * @param Provider\ProviderFactory $providerFactory
-     * @param NamingStrategy\NamingStrategyFactory $namingStrategyFactory
+     * @param Provider\ProviderFactory                  $providerFactory
+     * @param NamingStrategy\NamingStrategyFactory      $namingStrategyFactory
      */
-    function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap,
+    public function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap,
                          ProviderFactory $providerFactory, NamingStrategyFactory $namingStrategyFactory)
     {
         $this->cdnFactory = $cdnFactory;

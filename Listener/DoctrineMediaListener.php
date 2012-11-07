@@ -26,31 +26,30 @@ class DoctrineMediaListener
         $this->mediaStorage = $mediaStorage;
     }
 
-
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param  \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
      * @return bool
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
         if(!$entity instanceof Media)
+
             return false;
 
         $this->mediaStorage->prepareMedia($entity);
+
         return true;
     }
 
-
     /**
-     * @param \Doctrine\ORM\Event\PreUpdateEventArgs $eventArgs
+     * @param  \Doctrine\ORM\Event\PreUpdateEventArgs $eventArgs
      * @return bool
      */
     public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if($entity instanceof Media)
-        {
+        if ($entity instanceof Media) {
             $this->mediaStorage->prepareMedia($entity);
 
             // Hack ? Don't know, that's the behaviour Doctrine 2 seems to want
@@ -62,13 +61,15 @@ class DoctrineMediaListener
                 $em->getClassMetadata(get_class($entity)),
                 $eventArgs->getEntity()
             );
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param  \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
      * @return bool
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
@@ -78,11 +79,12 @@ class DoctrineMediaListener
             return false;
 
         $this->mediaStorage->saveMedia($entity);
+
         return true;
     }
 
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param  \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
      * @return bool
      */
     public function postUpdate(LifecycleEventArgs $eventArgs)
@@ -92,11 +94,12 @@ class DoctrineMediaListener
             return false;
 
         $this->mediaStorage->updateMedia($entity);
+
         return true;
     }
 
     /**
-     * @param \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param  \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
      * @return bool
      */
     public function preRemove(LifecycleEventArgs $eventArgs)
@@ -106,6 +109,7 @@ class DoctrineMediaListener
             return false;
 
         $this->mediaStorage->removeMedia($entity);
+
         return true;
     }
 

@@ -22,9 +22,9 @@ class ContextFactory implements \IteratorAggregate
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array $contexts
+     * @param array                                                     $contexts
      */
-    function __construct(ContainerInterface $container, $contexts = array())
+    public function __construct(ContainerInterface $container, $contexts = array())
     {
         $this->container = $container;
         $this->contexts = $contexts;

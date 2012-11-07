@@ -2,7 +2,6 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Variant;
 
-
 interface VariantInterface
 {
 

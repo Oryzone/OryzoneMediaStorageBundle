@@ -21,7 +21,7 @@ class NamingStrategyFactory implements \IteratorAggregate
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array $namingStrategies
+     * @param array                                                     $namingStrategies
      */
     public function __construct(ContainerInterface $container, $namingStrategies = array())
     {

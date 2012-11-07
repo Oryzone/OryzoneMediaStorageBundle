@@ -37,9 +37,9 @@ class Context implements ContextInterface
      * @param string $providerName
      * @param string $filesystemName
      * @param string $cdnName
-     * @param array $variants
+     * @param array  $variants
      */
-    function __construct($name, $providerName, $filesystemName, $cdnName, $variants = array())
+    public function __construct($name, $providerName, $filesystemName, $cdnName, $variants = array())
     {
         $this->cdnName = $cdnName;
         $this->filesystemName = $filesystemName;
@@ -47,7 +47,6 @@ class Context implements ContextInterface
         $this->providerName = $providerName;
         $this->variants = $variants;
     }
-
 
     /**
      * {@inheritDoc}

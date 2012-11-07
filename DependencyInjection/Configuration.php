@@ -26,7 +26,6 @@ class Configuration implements ConfigurationInterface
         return $treeBuilder;
     }
 
-
     protected function addDbDriver(ArrayNodeDefinition $root)
     {
         $root

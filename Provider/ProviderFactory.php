@@ -21,7 +21,7 @@ class ProviderFactory implements \IteratorAggregate
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array $providers
+     * @param array                                                     $providers
      */
     public function __construct(ContainerInterface $container, $providers = array())
     {

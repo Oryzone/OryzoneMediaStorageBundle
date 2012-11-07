@@ -136,7 +136,7 @@ abstract class Media
     /**
      * Get a metadata value for a given key
      *
-     * @param string $key
+     * @param string     $key
      * @param mixed|null $default will return this value if the given key does not exist
      * in the metadata array
      *
@@ -145,6 +145,7 @@ abstract class Media
     public function getMetadataValue($key, $default = NULL)
     {
         if(is_array($this->metadata) && isset($this->metadata[$key]))
+
             return $this->metadata[$key];
 
         return $default;
@@ -154,7 +155,7 @@ abstract class Media
      * Sets a metadata value
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function setMetadataValue($key, $value)
     {
@@ -231,7 +232,7 @@ abstract class Media
     /**
      * Checks if the media has a given variant
      *
-     * @param string $variantName
+     * @param  string $variantName
      * @return bool
      */
     public function hasVariant($variantName)
@@ -242,14 +243,14 @@ abstract class Media
     /**
      * Remove a variant with a given name
      *
-     * @param string $variantName
+     * @param  string $variantName
      * @return bool
      */
     public function removeVariant($variantName)
     {
-        if(array_key_exists($variantName, $this->variants))
-        {
+        if (array_key_exists($variantName, $this->variants)) {
             unset($this->variants[$variantName]);
+
             return true;
         }
 
