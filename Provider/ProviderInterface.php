@@ -72,11 +72,12 @@ interface ProviderInterface
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
      * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param \Gaufrette\File|null $file
+     * @param \Gaufrette\File|null $origin
+     * @param \Gaufrette\File|null $destination
      *
      * @return mixed
      */
-    public function process(Media $media, VariantInterface $variant, File $file = NULL);
+    public function process(Media $media, VariantInterface $variant, File $origin = NULL, File $destination = NULL);
 
     /**
      * Renders a variant to HTML code. Useful for twig (or other template engines) integrations

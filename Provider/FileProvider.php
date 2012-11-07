@@ -32,17 +32,18 @@ class FileProvider extends Provider
      */
     public function prepare(Media $media, File $file = NULL)
     {
-
+        // nothing to do
     }
 
     /**
      * {@inheritDoc}
      */
-    public function process(Media $media, VariantInterface $variant, File $file = NULL)
+    public function process(Media $media, VariantInterface $variant, File $origin = NULL, File $destination = NULL)
     {
-        $media->setMetadata($variant->getName().'.contentType', mime_content_type($file->getContent()));
-        $media->setMetadata($variant->getName().'.size', $file->getSize());
-        return $file;
+        //TODO find a reliable way to read mime type from a gaufrette file
+        //$media->setMetadata($variant->getName().'.contentType', mime_content_type($origin));
+        $media->setMetadata($variant->getName().'.size', $origin->getSize());
+        $destination->setContent($origin->getContent());
     }
 
     /**
