@@ -13,12 +13,23 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
  */
 class Configuration implements ConfigurationInterface
 {
+    protected $defaultNamingStrategy = 'slugged';
     protected $defaultNamingStrategies = array(
-        'default' => 'oryzone_media_storage.namingStrategies.slugged'
+        'slugged' => 'oryzone_media_storage.namingStrategies.slugged'
     );
 
+    protected $defaultProvider = 'file';
     protected $defaultProviders = array(
-        'default' => 'oryzone_media_storage.providers.file'
+        'file' => 'oryzone_media_storage.providers.file'
+    );
+
+    protected $defaultCdn = 'media_local';
+    protected $defaultCdns = array(
+        'media_local' => array(
+            'local' => array(
+                'path' => '/media/'
+            )
+        )
     );
 
     /**
@@ -30,6 +41,7 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('oryzone_media_storage');
 
         $this->addDbDriver($rootNode);
+        $this->addDefaults($rootNode);
         $this->addNamingStrategies($rootNode);
         $this->addProviders($rootNode);
         $this->addCdns($rootNode);
@@ -48,6 +60,22 @@ class Configuration implements ConfigurationInterface
                     ->thenInvalid('Invalid database driver "%s". Allowed values: "orm", "mongodb"')
                 ->end()
             ->end()
+        ->end();
+    }
+
+    protected function addDefaults(ArrayNodeDefinition $root)
+    {
+        $root->children()
+            ->scalarNode('defaultNamingStrategy')
+            ->defaultValue($this->defaultNamingStrategy)
+        ->end();
+        $root->children()
+        ->scalarNode('defaultProvider')
+        ->defaultValue($this->defaultProvider)
+        ->end();
+        $root->children()
+            ->scalarNode('defaultCdn')
+            ->defaultValue($this->defaultCdn)
         ->end();
     }
 
@@ -77,7 +105,14 @@ class Configuration implements ConfigurationInterface
 
     protected function addCdns(ArrayNodeDefinition $root)
     {
-
+        $root
+        ->children()
+            ->arrayNode('cdns')
+                ->useAttributeAsKey('id')
+                ->prototype('array')->end()
+                ->defaultValue($this->defaultCdns)
+            ->end()
+        ->end();
     }
 
     protected function addContexts(ArrayNodeDefinition $root)
