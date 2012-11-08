@@ -13,6 +13,14 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
  */
 class Configuration implements ConfigurationInterface
 {
+    protected $defaultNamingStrategies = array(
+        'default' => 'oryzone_media_storage.namingStrategies.slugged'
+    );
+
+    protected $defaultProviders = array(
+        'default' => 'oryzone_media_storage.providers.file'
+    );
+
     /**
      * {@inheritDoc}
      */
@@ -22,6 +30,10 @@ class Configuration implements ConfigurationInterface
         $rootNode = $treeBuilder->root('oryzone_media_storage');
 
         $this->addDbDriver($rootNode);
+        $this->addNamingStrategies($rootNode);
+        $this->addProviders($rootNode);
+        $this->addCdns($rootNode);
+        $this->addContexts($rootNode);
 
         return $treeBuilder;
     }
@@ -37,5 +49,39 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ->end();
+    }
+
+    protected function addNamingStrategies(ArrayNodeDefinition $root)
+    {
+        $root
+        ->children()
+            ->arrayNode('namingStrategies')
+                ->useAttributeAsKey('id')
+                ->prototype('scalar')->end()
+                ->defaultValue($this->defaultNamingStrategies)
+            ->end()
+        ->end();
+    }
+
+    protected function addProviders(ArrayNodeDefinition $root)
+    {
+        $root
+        ->children()
+            ->arrayNode('providers')
+                ->useAttributeAsKey('id')
+                ->prototype('scalar')->end()
+                ->defaultValue($this->defaultProviders)
+            ->end()
+        ->end();
+    }
+
+    protected function addCdns(ArrayNodeDefinition $root)
+    {
+
+    }
+
+    protected function addContexts(ArrayNodeDefinition $root)
+    {
+
     }
 }

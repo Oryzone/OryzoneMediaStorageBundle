@@ -4,7 +4,8 @@ namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
-    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface;
+    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
+    Oryzone\Bundle\MediaStorageBundle\Context\Context;
 
 use Gaufrette\File;
 
@@ -53,12 +54,12 @@ interface ProviderInterface
      * Executed each time a media is about to be saved, before the process method
      * Generally used to set metadata
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param \Gaufrette\File|null                           $file
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media     $media
+     * @param \Oryzone\Bundle\MediaStorageBundle\Context\Context $context
      *
      * @return mixed
      */
-    public function prepare(Media $media, File $file = NULL);
+    public function prepare(Media $media, Context $context);
 
     /**
      * Process the media to create a variant

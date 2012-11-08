@@ -4,7 +4,8 @@ namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
-    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface;
+    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
+    Oryzone\Bundle\MediaStorageBundle\Context\Context;
 
 use Gaufrette\File;
 
@@ -22,7 +23,7 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function prepare(Media $media, File $file = NULL)
+    public function prepare(Media $media, Context $context)
     {
         // nothing to do
     }

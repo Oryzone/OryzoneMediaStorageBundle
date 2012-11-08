@@ -14,6 +14,13 @@ class CdnFactory implements \IteratorAggregate
 
     /**
      * @var array $cdns
+     *
+     * Must follow this structure
+     * array(
+     *      'cdnName' => array(
+     *          'cdnType' =>  array( <options> )
+     *      )
+     * )
      */
     protected $cdns;
 

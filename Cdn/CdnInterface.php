@@ -8,6 +8,14 @@ use Oryzone\Bundle\MediaStorageBundle\Model\Media,
 interface CdnInterface
 {
     /**
+     * Sets an array of options
+     *
+     * @param  array $options
+     * @return mixed
+     */
+    public function setOptions($options);
+
+    /**
      * Retrieves the public url of the media on the current CDN
      *
      * @param  \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media

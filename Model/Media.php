@@ -63,9 +63,10 @@ abstract class Media
     /**
      * Constructor
      */
-    public function __construct($content = NULL)
+    public function __construct($content = NULL, $contextName = NULL)
     {
         $this->content = $content;
+        $this->context = $contextName;
         $this->createdAt = $this->modifiedAt = new \DateTime();
     }
 

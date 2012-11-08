@@ -23,10 +23,12 @@ Requirements (basic concepts)
 * Media entity should be abstract and should work both in ODM and ORM contexts
 * Each media entity should have an array that holds metadata (width, height, source, gps coords, author, version, etc...)
 * Each media has a given type (image, video, text document, etc...)
+* Each media may have **variants** (e.g. default, big, small, hi-res, long, short, subtitled, censored, etc...)
+* **Variants** are structured as a tree with a 'default' variant on the root and other variants as child.
+* Each child in the variant tree is builded from the file resulting by its parent variant
 * Each media type is managed by a **Provider**.
-* Each provide defines a ``process`` method (e.g. used to resize or optimize pictures) to convert original file to various media variants
+* Each provide defines a ``process`` method (e.g. used to resize or optimize pictures) to convert original file to various media **variants**
 * **Process method** can be called **instantly** (when the media is created - ``instant`` mode), **on-demand** (the first time a media variant is requested - ``lazy`` mode), **deferred** (pushed in a queue and processed asynchronously - ``queue`` mode)
-* Each media may have variants (e.g. default, big, small, hi-res, long, short, subtitled, censored, etc...)
 * Media files can be references to external files/resources (youtube/vimeo/scribd/slideshare/etc...)
 * Media is stored to a given filesystem and located through a CDN configuration
 * Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (``img``, ``video``, ``embed``, etc...)
@@ -71,7 +73,7 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
                   adapter:    product_pictures_adapter
 
   oryzone_media_storage:
-      db_driver: doctrine_orm
+      db_driver: orm
       namingStrategies:
           default:  oryzone_media_storage.namingStrategies.slugged
       providers:
@@ -81,7 +83,7 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
           vimeo:    oryzone_media_storage.providers.vimeo
       cdns:
           avatars:
-                local: { path: 'images/pictures/' }
+                local: { path: '/images/pictures/' }
           products_pictures:
                 remote: { base_url: 'http://productpics.s3.amazonaws.com/' }
       contexts:
@@ -96,19 +98,19 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
                   square:
                       process: { width: 50, height: 50, mode: crop, format: jpg, quality: 90 }
                       mode: instant
-                      from: default
+                      parent: default
                   small:
                       process: { width: 100, resizeMode: proportional, format: jpg, quality: 60 }
                       mode: instant
-                      from: default
+                      parent: default
                   medium:
                       process: { width: 300, resizeMode: proportional, format: jpg, quality: 60 }
                       mode: instant
-                      from: default
+                      parent: default
                   large:
                       process: { width: 500, resizeMode: proportional, format: jpg, quality: 70 }
                       mode: instant
-                      from: default
+                      parent: default
           product_picture:
               provider: image
               filesystem: product_pictures
@@ -212,16 +214,16 @@ ProviderInterface
 Create a new Media
 ==================
 
-Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of the ``User`` class.
+Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of the ``User`` class. ``Avatar`` class
+automatically sets its context to ``avatar``
 N.B. ``User`` class mapping with ``avatar`` should have set the option ``cascade=all``.
 
 .. code-block:: php
 
   $path = 'path/to/file.jpg';
 
-  $avatar = new Avatar();
+  $avatar = new Avatar($path);
   $avatar->setName('Super Mario\'s profile picture');
-  $avatar->setContent($path);
 
   $user->setAvatar( $avatar );
 
