@@ -66,16 +66,77 @@ class Configuration implements ConfigurationInterface
     protected function addDefaults(ArrayNodeDefinition $root)
     {
         $root->children()
+            ->scalarNode('defaultCdn')
+            ->defaultValue($this->defaultCdn)
+        ->end();
+
+        $root->children()
+            ->scalarNode('defaultContext')
+            ->defaultNull()
+        ->end();
+
+        $root->children()
+            ->scalarNode('defaultFilesystem')
+            ->defaultNull()
+        ->end();
+
+        $root->children()
+            ->scalarNode('defaultProvider')
+            ->defaultValue($this->defaultProvider)
+        ->end();
+
+        $root->children()
             ->scalarNode('defaultNamingStrategy')
             ->defaultValue($this->defaultNamingStrategy)
         ->end();
-        $root->children()
-        ->scalarNode('defaultProvider')
-        ->defaultValue($this->defaultProvider)
+    }
+
+    protected function addCdns(ArrayNodeDefinition $root)
+    {
+        $root
+            ->children()
+                ->arrayNode('cdns')
+                    ->useAttributeAsKey('name')
+                    ->prototype('variable')->end()
+                ->end()
+            ->end()
         ->end();
-        $root->children()
-            ->scalarNode('defaultCdn')
-            ->defaultValue($this->defaultCdn)
+    }
+
+    protected function addContexts(ArrayNodeDefinition $root)
+    {
+        $root
+            ->children()
+                ->arrayNode('contexts')
+                    ->useAttributeAsKey('name')
+                    ->prototype('array')
+                        ->children()
+                            ->scalarNode('provider')->defaultNull()->end()
+                            ->scalarNode('filesystem')->defaultNull()->end()
+                            ->scalarNode('cdn')->defaultNull()->end()
+                            ->scalarNode('namingStrategy')->defaultNull()->end()
+                            ->arrayNode('variants')
+                                ->useAttributeAsKey('name')
+                                ->prototype('array')
+                                    ->children()
+                                        ->scalarNode('parent')->defaultNull()->end()
+                                        ->scalarNode('mode')
+                                            ->defaultValue('instant')
+                                            ->validate()
+                                                ->ifNotInArray(array('instant', 'lazy', 'queue'))
+                                                ->thenInvalid('Invalid variant mode "%s". Allowed values: "instant", "lazy" or "queue"')
+                                            ->end()
+                                        ->end()
+                                        ->arrayNode('process')
+                                            ->prototype('variable')->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
         ->end();
     }
 
@@ -84,7 +145,7 @@ class Configuration implements ConfigurationInterface
         $root
         ->children()
             ->arrayNode('namingStrategies')
-                ->useAttributeAsKey('id')
+                ->useAttributeAsKey('name')
                 ->prototype('scalar')->end()
                 ->defaultValue($this->defaultNamingStrategies)
             ->end()
@@ -96,27 +157,12 @@ class Configuration implements ConfigurationInterface
         $root
         ->children()
             ->arrayNode('providers')
-                ->useAttributeAsKey('id')
+                ->useAttributeAsKey('name')
                 ->prototype('scalar')->end()
                 ->defaultValue($this->defaultProviders)
             ->end()
         ->end();
     }
 
-    protected function addCdns(ArrayNodeDefinition $root)
-    {
-        $root
-        ->children()
-            ->arrayNode('cdns')
-                ->useAttributeAsKey('id')
-                ->prototype('array')->end()
-                ->defaultValue($this->defaultCdns)
-            ->end()
-        ->end();
-    }
 
-    protected function addContexts(ArrayNodeDefinition $root)
-    {
-
-    }
 }

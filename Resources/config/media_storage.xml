@@ -47,6 +47,11 @@
             <argument type="service" id="knp_gaufrette.filesystem_map" />
             <argument type="service" id="oryzone_media_storage.provider_factory" />
             <argument type="service" id="oryzone_media_storage.naming_strategy_factory" />
+            <argument>%oryzone_media_storage.default_cdn%</argument>
+            <argument>%oryzone_media_storage.default_context%</argument>
+            <argument>%oryzone_media_storage.default_filesystem%</argument>
+            <argument>%oryzone_media_storage.default_provider%</argument>
+            <argument>%oryzone_media_storage.default_naming_strategy%</argument>
         </service>
     </services>
 

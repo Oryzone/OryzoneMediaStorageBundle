@@ -36,9 +36,34 @@ class MediaStorage implements MediaStorageInterface
     protected $providerFactory;
 
     /**
-     * @var NamingStrategy\NamingStrategyFactory $
+     * @var NamingStrategy\NamingStrategyFactory $namingStrategyFactory
      */
     protected $namingStrategyFactory;
+
+    /**
+     * @var null|string $defaultCdn
+     */
+    protected $defaultCdn;
+
+    /**
+     * @var null|string $defaultContext
+     */
+    protected $defaultContext;
+
+    /**
+     * @var null|string $defaultFilesystem
+     */
+    protected $defaultFilesystem;
+
+    /**
+     * @var null|string $defaultProvider
+     */
+    protected $defaultProvider;
+
+    /**
+     * @var null|string $defaultNamingStrategy
+     */
+    protected $defaultNamingStrategy;
 
     /**
      * Constructor
@@ -48,15 +73,27 @@ class MediaStorage implements MediaStorageInterface
      * @param \Knp\Bundle\GaufretteBundle\FilesystemMap $filesystemMap
      * @param Provider\ProviderFactory                  $providerFactory
      * @param NamingStrategy\NamingStrategyFactory      $namingStrategyFactory
+     * @param string|null                               $defaultCdn
+     * @param string|null                               $defaultContext
+     * @param string|null                               $defaultFilesystem
+     * @param string|null                               $defaultProvider
+     * @param string|null                               $defaultNamingStrategy
      */
     public function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap,
-                         ProviderFactory $providerFactory, NamingStrategyFactory $namingStrategyFactory)
+                                ProviderFactory $providerFactory, NamingStrategyFactory $namingStrategyFactory,
+                                $defaultCdn = NULL, $defaultContext = NULL, $defaultFilesystem = NULL,
+                                $defaultProvider = NULL, $defaultNamingStrategy = NULL)
     {
         $this->cdnFactory = $cdnFactory;
         $this->contextFactory = $contextFactory;
         $this->filesystemMap = $filesystemMap;
         $this->providerFactory = $providerFactory;
         $this->namingStrategyFactory = $namingStrategyFactory;
+        $this->defaultCdn = $defaultCdn;
+        $this->defaultContext = $defaultContext;
+        $this->defaultFilesystem = $defaultFilesystem;
+        $this->defaultProvider = $defaultProvider;
+        $this->defaultNamingStrategy = $defaultNamingStrategy;
     }
 
     /**
