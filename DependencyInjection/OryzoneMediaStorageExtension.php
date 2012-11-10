@@ -39,7 +39,6 @@ class OryzoneMediaStorageExtension extends Extension
 
         $container->setParameter('oryzone_media_storage.cdn_factory.cdns', $config['cdns']);
         $container->setParameter('oryzone_media_storage.context_factory.contexts', $config['contexts']);
-        $container->setParameter('oryzone_media_storage.provider_factory.providers', $config['providers']);
         $container->setParameter('oryzone_media_storage.naming_strategy_factory.naming_strategies', $config['namingStrategies']);
 
         $container->setParameter('oryzone_media_storage.default_cdn', $config['defaultCdn']);

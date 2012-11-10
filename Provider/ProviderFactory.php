@@ -13,20 +13,30 @@ class ProviderFactory implements \IteratorAggregate
     protected $container;
 
     /**
-     * @var array $providers
+     * @var array $aliases
      */
-    protected $providers;
+    protected $aliases;
 
     /**
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array                                                     $providers
      */
-    public function __construct(ContainerInterface $container, $providers = array())
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->providers = $providers;
+        $this->aliases = array();
+    }
+
+    /**
+     * Add a service alias
+     *
+     * @param $serviceName
+     * @param $alias
+     */
+    public function addAlias($serviceName, $alias)
+    {
+        $this->aliases[$alias] = $serviceName;
     }
 
     /**
@@ -39,10 +49,10 @@ class ProviderFactory implements \IteratorAggregate
      */
     public function get($providerName)
     {
-        if(!array_key_exists($providerName, $this->providers))
+        if(!array_key_exists($providerName, $this->aliases))
             throw new \InvalidArgumentException(sprintf('The provider "%s" has not been defined', $providerName));
 
-        $serviceName = $this->providers[$providerName];
+        $serviceName = $this->aliases[$providerName];
 
         if(!$this->container->has($serviceName))
             throw new InvalidConfigurationException(sprintf('The service "%s" associated to the provider "%s" is not defined in the dependency injection container', $serviceName, $providerName));
@@ -59,7 +69,7 @@ class ProviderFactory implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->providers);
+        return new \ArrayIterator($this->aliases);
     }
 
 }

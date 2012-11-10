@@ -9,7 +9,9 @@
 
     <services>
         <!-- oryzone_media_storage.providers.file -->
-        <service id="oryzone_media_storage.providers.file" class="%oryzone_media_storage.providers.file.class%"/>
+        <service id="oryzone_media_storage.providers.file" class="%oryzone_media_storage.providers.file.class%">
+            <tag name="oryzone_media_storage_provider" alias="file"/>
+        </service>
     </services>
 
 </container>

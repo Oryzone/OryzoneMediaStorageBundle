@@ -8,7 +8,8 @@ use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
     Oryzone\Bundle\MediaStorageBundle\Context\ContextFactory,
     Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory,
     Oryzone\Bundle\MediaStorageBundle\NamingStrategy\NamingStrategyFactory,
-    Oryzone\Bundle\MediaStorageBundle\Model\Media;
+    Oryzone\Bundle\MediaStorageBundle\Model\Media,
+    Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
 /**
  * Base media storage class
@@ -97,14 +98,112 @@ class MediaStorage implements MediaStorageInterface
     }
 
     /**
+     * Loads a cdn with a given name
+     *
+     * @param string|null $name if <code>NULL</code> will load the default cdn
+     * @return Cdn\CdnInterface
+     * @throws Exception\InvalidArgumentException
+     */
+    protected function getCdn($name = NULL)
+    {
+        if(!$name)
+        {
+            if(!$this->defaultCdn)
+                throw new InvalidArgumentException('Trying to load the default CDN but a it has not been set');
+            $name = $this->defaultCdn;
+        }
+
+        return $this->cdnFactory->get($name);
+    }
+
+    /**
+     * Loads a context with a given name
+     *
+     * @param string|null $name if <code>NULL</code> will load the default context
+     * @return Context\ContextInterface
+     * @throws Exception\InvalidArgumentException
+     */
+    protected function getContext($name = NULL)
+    {
+        if(!$name)
+        {
+            if(!$this->defaultContext)
+                throw new InvalidArgumentException('Trying to load the default Context but it has not been set');
+
+            $name = $this->defaultContext;
+        }
+
+        return $this->contextFactory->get($name);
+    }
+
+    /**
+     * Loads a filesystem with a given filesystem
+     *
+     * @param string|null $name if <code>NULL</code> will load the default filesystem
+     * @return \Gaufrette\Filesystem
+     * @throws Exception\InvalidArgumentException
+     */
+    protected function getFilesystem($name = NULL)
+    {
+        if(!$name)
+        {
+            if(!$this->defaultFilesystem)
+                throw new InvalidArgumentException('Trying to load the default Filesystem but it has not been set');
+
+            $name = $this->defaultFilesystem;
+        }
+
+        return $this->filesystemMap->get($name);
+    }
+
+    /**
+     * Loads a provider with a given name
+     *
+     * @param string|null $name if <code>NULL</code> will load the default provider
+     * @return Provider\ProviderInterface
+     * @throws Exception\InvalidArgumentException
+     */
+    protected function getProvider($name = NULL)
+    {
+        if(!$name)
+        {
+            if(!$this->defaultProvider)
+                throw new InvalidArgumentException('Trying to load the default Provider but it has not been set');
+
+            $name = $this->defaultProvider;
+        }
+
+        return $this->providerFactory->get($name);
+    }
+
+    /**
+     * Loads a naming strategy with a given name
+     *
+     * @param string|null $name
+     * @return NamingStrategy\NamingStrategyInterface
+     * @throws Exception\InvalidArgumentException
+     */
+    protected function getNamingStrategy($name = NULL)
+    {
+        if(!$name)
+        {
+            if(!$this->defaultNamingStrategy)
+                throw new InvalidArgumentException('Trying to load the default Naming strategy but it has not been set');
+
+            $name = $this->defaultNamingStrategy;
+        }
+
+        return $this->namingStrategyFactory->get($name);
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function prepareMedia(Media $media, $isUpdate = false)
     {
-        // TODO: Implement prepareMedia() method.
-        //W.I.P.
-        //$provider = $this->providerFactory->get($media->getProvider());
-        //$provider->prepare($media);
+        $provider = $this->getProvider($media->getProvider());
+        $context = $this->getContext($media->getContent());
+        $provider->prepare($media, $context);
     }
 
     /**

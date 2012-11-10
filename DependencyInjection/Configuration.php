@@ -19,9 +19,6 @@ class Configuration implements ConfigurationInterface
     );
 
     protected $defaultProvider = 'file';
-    protected $defaultProviders = array(
-        'file' => 'oryzone_media_storage.providers.file'
-    );
 
     protected $defaultCdn = 'media_local';
     protected $defaultCdns = array(
@@ -43,7 +40,6 @@ class Configuration implements ConfigurationInterface
         $this->addDbDriver($rootNode);
         $this->addDefaults($rootNode);
         $this->addNamingStrategies($rootNode);
-        $this->addProviders($rootNode);
         $this->addCdns($rootNode);
         $this->addContexts($rootNode);
 
@@ -148,18 +144,6 @@ class Configuration implements ConfigurationInterface
                 ->useAttributeAsKey('name')
                 ->prototype('scalar')->end()
                 ->defaultValue($this->defaultNamingStrategies)
-            ->end()
-        ->end();
-    }
-
-    protected function addProviders(ArrayNodeDefinition $root)
-    {
-        $root
-        ->children()
-            ->arrayNode('providers')
-                ->useAttributeAsKey('name')
-                ->prototype('scalar')->end()
-                ->defaultValue($this->defaultProviders)
             ->end()
         ->end();
     }

@@ -12,6 +12,8 @@ use Gaufrette\File;
 class FileProvider extends Provider
 {
 
+    protected $name = 'file';
+
     /**
      * {@inheritDoc}
      */
