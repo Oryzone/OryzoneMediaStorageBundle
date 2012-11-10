@@ -10,8 +10,9 @@ interface CdnInterface
     /**
      * Sets an array of options
      *
-     * @param  array $options
+     * @param  array                                                                 $options
      * @return mixed
+     * @throws \Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException if the options array is not valid
      */
     public function setOptions($options);
 

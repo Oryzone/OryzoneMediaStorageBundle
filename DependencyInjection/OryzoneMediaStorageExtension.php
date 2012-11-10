@@ -28,6 +28,12 @@ class OryzoneMediaStorageExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $toLoad = array('cdns.xml', 'naming_strategies.xml', 'providers.xml', 'media_storage.xml', 'orm.xml');
+        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        foreach($toLoad as $file)
+            $loader->load($file);
+
+        // sets parameters from global config
         $dbDriver = $config['db_driver'];
         $container->setParameter('oryzone_media_storage.listener.doctrine.adapter.class', $this->adapterMap[$dbDriver]);
 
@@ -41,11 +47,5 @@ class OryzoneMediaStorageExtension extends Extension
         $container->setParameter('oryzone_media_storage.default_filesystem', $config['defaultFilesystem']);
         $container->setParameter('oryzone_media_storage.default_provider', $config['defaultProvider']);
         $container->setParameter('oryzone_media_storage.default_naming_strategy', $config['defaultNamingStrategy']);
-
-        $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('naming_strategies.xml');
-        $loader->load('providers.xml');
-        $loader->load('media_storage.xml');
-        $loader->load('orm.xml');
     }
 }

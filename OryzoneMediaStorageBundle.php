@@ -17,8 +17,17 @@
  */
 namespace Oryzone\Bundle\MediaStorageBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\Bundle,
+    Symfony\Component\DependencyInjection\ContainerBuilder;
+
+use Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\CdnCompilerPass;
 
 class OryzoneMediaStorageBundle extends Bundle
 {
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new CdnCompilerPass());
+    }
 }

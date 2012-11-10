@@ -25,6 +25,20 @@ class CdnFactory implements \IteratorAggregate
     protected $cdns;
 
     /**
+     * Array containing aliases for cdn services
+     *
+     * E.g.
+     *
+     * array(
+     *  'remote'    => 'oryzone_media_storage.cdns.remote',
+     *  'local'     => 'oryzone_media_storage.cdns.local'
+     * )
+     *
+     * @var array $cdnAliases
+     */
+    protected $cdnAliases;
+
+    /**
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -34,6 +48,18 @@ class CdnFactory implements \IteratorAggregate
     {
         $this->container = $container;
         $this->cdns = $cdns;
+        $this->cdnAliases = array();
+    }
+
+    /**
+     * Adds a service alias
+     *
+     * @param string $serviceName the name of the service in the DIC
+     * @param string $alias       the alias
+     */
+    public function addAlias($serviceName, $alias)
+    {
+        $this->cdnAliases[$alias] = $serviceName;
     }
 
     /**
@@ -48,7 +74,16 @@ class CdnFactory implements \IteratorAggregate
         if(!array_key_exists($cdnName, $this->cdns))
             throw new \InvalidArgumentException(sprintf('The cdn "%s" has not been defined', $cdnName));
 
-        $serviceName = $this->cdns[$cdnName];
+        $cdn = $this->cdns[$cdnName];
+        reset($cdn);
+        $cdnPlainArray = each($cdn);
+        $cdnAlias = $cdnPlainArray['key'];
+        $cdnOptions = $cdnPlainArray['value'];
+
+        if(!isset($this->cdnAliases[$cdnAlias]))
+            throw new InvalidConfigurationException(sprintf('No CDN service defined with the alias "%s". Your confiuration has: %s', $cdnAlias, json_encode($cdn)));
+
+        $serviceName = $this->cdnAliases[$cdnAlias];
 
         if(!$this->container->has($serviceName))
             throw new InvalidConfigurationException(sprintf('The service "%s" associated to the cdn "%s" is not defined in the dependency injection container', $serviceName, $cdnName));
@@ -56,6 +91,8 @@ class CdnFactory implements \IteratorAggregate
         $service = $this->container->get($serviceName);
         if(!$service instanceof CdnInterface)
             throw new InvalidConfigurationException(sprintf('The service "%s" associated with the cdn "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface"', $serviceName, $cdnName));
+
+        $service->setOptions($cdnOptions);
 
         return $service;
     }
