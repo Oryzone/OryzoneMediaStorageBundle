@@ -17,15 +17,13 @@ class ProviderCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (false === $container->hasDefinition(self::PROVIDER_FACTORY_SERVICE))
-        {
+        if (false === $container->hasDefinition(self::PROVIDER_FACTORY_SERVICE)) {
             return;
         }
 
         $definition = $container->getDefinition(self::PROVIDER_FACTORY_SERVICE);
 
-        foreach ($container->findTaggedServiceIds(self::PROVIDER_SERVICES_TAG) as $id => $attributes)
-        {
+        foreach ($container->findTaggedServiceIds(self::PROVIDER_SERVICES_TAG) as $id => $attributes) {
             if(!isset($attributes[0]['alias']))
                 throw new InvalidConfigurationException(sprintf('Service "%s" lacks of mandatory "alias" attribute for service tagged as "%s"', $id, self::PROVIDER_SERVICES_TAG));
 

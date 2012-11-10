@@ -31,8 +31,8 @@ class ProviderFactory implements \IteratorAggregate
     /**
      * Add a service alias
      *
-     * @param $serviceName
-     * @param $alias
+     * @param string $serviceName
+     * @param string $alias
      */
     public function addAlias($serviceName, $alias)
     {

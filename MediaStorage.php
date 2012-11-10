@@ -100,14 +100,13 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a cdn with a given name
      *
-     * @param string|null $name if <code>NULL</code> will load the default cdn
+     * @param  string|null                        $name if <code>NULL</code> will load the default cdn
      * @return Cdn\CdnInterface
      * @throws Exception\InvalidArgumentException
      */
     protected function getCdn($name = NULL)
     {
-        if(!$name)
-        {
+        if (!$name) {
             if(!$this->defaultCdn)
                 throw new InvalidArgumentException('Trying to load the default CDN but a it has not been set');
             $name = $this->defaultCdn;
@@ -119,14 +118,13 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a context with a given name
      *
-     * @param string|null $name if <code>NULL</code> will load the default context
+     * @param  string|null                        $name if <code>NULL</code> will load the default context
      * @return Context\ContextInterface
      * @throws Exception\InvalidArgumentException
      */
     protected function getContext($name = NULL)
     {
-        if(!$name)
-        {
+        if (!$name) {
             if(!$this->defaultContext)
                 throw new InvalidArgumentException('Trying to load the default Context but it has not been set');
 
@@ -139,14 +137,13 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a filesystem with a given filesystem
      *
-     * @param string|null $name if <code>NULL</code> will load the default filesystem
+     * @param  string|null                        $name if <code>NULL</code> will load the default filesystem
      * @return \Gaufrette\Filesystem
      * @throws Exception\InvalidArgumentException
      */
     protected function getFilesystem($name = NULL)
     {
-        if(!$name)
-        {
+        if (!$name) {
             if(!$this->defaultFilesystem)
                 throw new InvalidArgumentException('Trying to load the default Filesystem but it has not been set');
 
@@ -159,14 +156,13 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a provider with a given name
      *
-     * @param string|null $name if <code>NULL</code> will load the default provider
+     * @param  string|null                        $name if <code>NULL</code> will load the default provider
      * @return Provider\ProviderInterface
      * @throws Exception\InvalidArgumentException
      */
     protected function getProvider($name = NULL)
     {
-        if(!$name)
-        {
+        if (!$name) {
             if(!$this->defaultProvider)
                 throw new InvalidArgumentException('Trying to load the default Provider but it has not been set');
 
@@ -179,14 +175,13 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a naming strategy with a given name
      *
-     * @param string|null $name
+     * @param  string|null                            $name
      * @return NamingStrategy\NamingStrategyInterface
      * @throws Exception\InvalidArgumentException
      */
     protected function getNamingStrategy($name = NULL)
     {
-        if(!$name)
-        {
+        if (!$name) {
             if(!$this->defaultNamingStrategy)
                 throw new InvalidArgumentException('Trying to load the default Naming strategy but it has not been set');
 

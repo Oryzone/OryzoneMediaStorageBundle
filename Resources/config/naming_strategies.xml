@@ -9,7 +9,9 @@
 
     <services>
         <!-- oryzone_media_storage.naming_strategies.slugged -->
-        <service id="oryzone_media_storage.naming_strategies.slugged" class="%oryzone_media_storage.naming_strategies.slugged.class%"/>
+        <service id="oryzone_media_storage.naming_strategies.slugged" class="%oryzone_media_storage.naming_strategies.slugged.class%">
+            <tag name="oryzone_media_storage_naming_strategy" alias="slugged"/>
+        </service>
     </services>
 
 </container>

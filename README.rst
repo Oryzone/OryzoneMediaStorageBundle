@@ -74,8 +74,6 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
 
   oryzone_media_storage:
       db_driver: orm
-      namingStrategies:
-          default:  oryzone_media_storage.namingStrategies.slugged
       cdns:
           avatars:
                 local: { path: '/images/pictures/' }

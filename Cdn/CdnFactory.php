@@ -36,7 +36,7 @@ class CdnFactory implements \IteratorAggregate
      *
      * @var array $cdnAliases
      */
-    protected $cdnAliases;
+    protected $aliases;
 
     /**
      * Constructor
@@ -48,7 +48,7 @@ class CdnFactory implements \IteratorAggregate
     {
         $this->container = $container;
         $this->cdns = $cdns;
-        $this->cdnAliases = array();
+        $this->aliases = array();
     }
 
     /**
@@ -59,7 +59,7 @@ class CdnFactory implements \IteratorAggregate
      */
     public function addAlias($serviceName, $alias)
     {
-        $this->cdnAliases[$alias] = $serviceName;
+        $this->aliases[$alias] = $serviceName;
     }
 
     /**
@@ -80,10 +80,10 @@ class CdnFactory implements \IteratorAggregate
         $cdnAlias = $cdnPlainArray['key'];
         $cdnOptions = $cdnPlainArray['value'];
 
-        if(!isset($this->cdnAliases[$cdnAlias]))
+        if(!isset($this->aliases[$cdnAlias]))
             throw new InvalidConfigurationException(sprintf('No CDN service defined with the alias "%s". Your confiuration has: %s', $cdnAlias, json_encode($cdn)));
 
-        $serviceName = $this->cdnAliases[$cdnAlias];
+        $serviceName = $this->aliases[$cdnAlias];
 
         if(!$this->container->has($serviceName))
             throw new InvalidConfigurationException(sprintf('The service "%s" associated to the cdn "%s" is not defined in the dependency injection container', $serviceName, $cdnName));

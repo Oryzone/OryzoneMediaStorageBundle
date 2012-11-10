@@ -11,7 +11,6 @@
         <parameter key="oryzone_media_storage.context_factory.contexts" type="collection"/>
         <parameter key="oryzone_media_storage.provider_factory.class">Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory</parameter>
         <parameter key="oryzone_media_storage.naming_strategy_factory.class">Oryzone\Bundle\MediaStorageBundle\NamingStrategy\NamingStrategyFactory</parameter>
-        <parameter key="oryzone_media_storage.naming_strategy_factory.naming_strategies" type="collection"/>
     </parameters>
 
     <services>
@@ -35,7 +34,6 @@
         <!-- oryzone_media_storage.naming_strategy_factory -->
         <service id="oryzone_media_storage.naming_strategy_factory" class="%oryzone_media_storage.naming_strategy_factory.class%">
             <argument type="service" id="service_container"/>
-            <argument>%oryzone_media_storage.naming_strategy_factory.naming_strategies%</argument>
         </service>
 
         <!-- oryzone_media_storage -->

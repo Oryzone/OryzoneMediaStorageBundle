@@ -15,18 +15,28 @@ class NamingStrategyFactory implements \IteratorAggregate
     /**
      * @var array $namingStrategies
      */
-    protected $namingStrategies;
+    protected $aliases;
 
     /**
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
-     * @param array                                                     $namingStrategies
      */
-    public function __construct(ContainerInterface $container, $namingStrategies = array())
+    public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->namingStrategies = $namingStrategies;
+        $this->aliases = array();
+    }
+
+    /**
+     * Adds a service alias
+     *
+     * @param string $serviceName
+     * @param string $alias
+     */
+    public function addAlias($serviceName, $alias)
+    {
+        $this->aliases[$alias] = $serviceName;
     }
 
     /**
@@ -39,10 +49,10 @@ class NamingStrategyFactory implements \IteratorAggregate
      */
     public function get($namingStrategyName)
     {
-        if(!array_key_exists($namingStrategyName, $this->namingStrategies))
+        if(!array_key_exists($namingStrategyName, $this->aliases))
             throw new \InvalidArgumentException(sprintf('The naming strategy "%s" has not been defined', $namingStrategyName));
 
-        $serviceName = $this->namingStrategies[$namingStrategyName];
+        $serviceName = $this->aliases[$namingStrategyName];
 
         if(!$this->container->has($serviceName))
             throw new InvalidConfigurationException(sprintf('The service "%s" associated to the naming strategy "%s" is not defined in the dependency injection container', $serviceName, $namingStrategyName));
@@ -59,7 +69,7 @@ class NamingStrategyFactory implements \IteratorAggregate
      */
     public function getIterator()
     {
-        return new \ArrayIterator($this->namingStrategies);
+        return new \ArrayIterator($this->aliases);
     }
 
 }

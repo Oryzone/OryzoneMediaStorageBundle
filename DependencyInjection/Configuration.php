@@ -14,9 +14,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
 class Configuration implements ConfigurationInterface
 {
     protected $defaultNamingStrategy = 'slugged';
-    protected $defaultNamingStrategies = array(
-        'slugged' => 'oryzone_media_storage.namingStrategies.slugged'
-    );
 
     protected $defaultProvider = 'file';
 
@@ -39,7 +36,6 @@ class Configuration implements ConfigurationInterface
 
         $this->addDbDriver($rootNode);
         $this->addDefaults($rootNode);
-        $this->addNamingStrategies($rootNode);
         $this->addCdns($rootNode);
         $this->addContexts($rootNode);
 
@@ -132,18 +128,6 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-            ->end()
-        ->end();
-    }
-
-    protected function addNamingStrategies(ArrayNodeDefinition $root)
-    {
-        $root
-        ->children()
-            ->arrayNode('namingStrategies')
-                ->useAttributeAsKey('name')
-                ->prototype('scalar')->end()
-                ->defaultValue($this->defaultNamingStrategies)
             ->end()
         ->end();
     }
