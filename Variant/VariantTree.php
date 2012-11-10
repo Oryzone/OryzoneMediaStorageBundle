@@ -89,9 +89,10 @@ class VariantTree implements \IteratorAggregate
     protected function visitForIterator()
     {
         $visit = array();
-        $this->visit(function(VariantNode $node, $level) use (&$visit){
+        $this->visit(function(VariantNode $node, $level) use (&$visit) {
             $visit[] = $node->getContent();
         });
+
         return $visit;
     }
 

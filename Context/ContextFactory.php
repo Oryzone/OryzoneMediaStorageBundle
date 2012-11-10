@@ -21,6 +21,13 @@ class ContextFactory implements \IteratorAggregate
     protected $contexts;
 
     /**
+     * Mostly used for caching purposes
+     *
+     * @var array $instances
+     */
+    protected $instances;
+
+    /**
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -30,6 +37,7 @@ class ContextFactory implements \IteratorAggregate
     {
         $this->container = $container;
         $this->contexts = $contexts;
+        $instances = array();
     }
 
     /**
@@ -42,11 +50,16 @@ class ContextFactory implements \IteratorAggregate
      */
     public function get($contextName)
     {
+        if(isset($instances[$contextName]))
+            return $instances[$contextName];
+
         if(!array_key_exists($contextName, $this->contexts))
             throw new \InvalidArgumentException(sprintf('The context "%s" has not been defined', $contextName));
 
         $c = $this->contexts[$contextName];
         $context = new Context($contextName, $c['provider'], $c['filesystem'], $c['cdn'], $c['variants']);
+
+        $instances[$contextName] = $context;
 
         return $context;
     }

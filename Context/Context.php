@@ -97,8 +97,7 @@ class Context implements ContextInterface
     public function buildVariantTree()
     {
         $tree = new VariantTree();
-        foreach($this->variants as $name => $v)
-        {
+        foreach ($this->variants as $name => $v) {
             $variant = new Variant();
             $variant->setName($name);
             $variant->setMode($v['mode']);
