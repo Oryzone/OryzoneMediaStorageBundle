@@ -6,6 +6,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Symfony\Component\Config\Definition\ConfigurationInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
+use Oryzone\Bundle\MediaStorageBundle\Variant\Variant;
+
 /**
  * This is the class that validates and merges configuration from your app/config files
  *
@@ -60,6 +62,7 @@ class Configuration implements ConfigurationInterface
         $root->children()
             ->scalarNode('defaultCdn')
             ->defaultValue($this->defaultCdn)
+            ->end()
         ->end();
 
         $root->children()
@@ -115,8 +118,8 @@ class Configuration implements ConfigurationInterface
                                         ->scalarNode('mode')
                                             ->defaultValue('instant')
                                             ->validate()
-                                                ->ifNotInArray(array('instant', 'lazy', 'queue'))
-                                                ->thenInvalid('Invalid variant mode "%s". Allowed values: "instant", "lazy" or "queue"')
+                                                ->ifNotInArray(array_keys(Variant::$VARIANT_MODE_MAP))
+                                                ->thenInvalid('Invalid variant mode "%s". Allowed values: '. json_encode(array_keys(Variant::$VARIANT_MODE_MAP)))
                                             ->end()
                                         ->end()
                                         ->arrayNode('process')

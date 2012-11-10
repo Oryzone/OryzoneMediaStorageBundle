@@ -5,6 +5,8 @@ namespace Oryzone\Bundle\MediaStorageBundle\Context;
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
+use Oryzone\Bundle\MediaStorageBundle\Context\Context;
+
 class ContextFactory implements \IteratorAggregate
 {
 
@@ -43,16 +45,10 @@ class ContextFactory implements \IteratorAggregate
         if(!array_key_exists($contextName, $this->contexts))
             throw new \InvalidArgumentException(sprintf('The context "%s" has not been defined', $contextName));
 
-        $serviceName = $this->contexts[$contextName];
+        $c = $this->contexts[$contextName];
+        $context = new Context($contextName, $c['provider'], $c['filesystem'], $c['cdn'], $c['variants']);
 
-        if(!$this->container->has($serviceName))
-            throw new InvalidConfigurationException(sprintf('The service "%s" associated to the context "%s" is not defined in the dependency injection container', $serviceName, $contextName));
-
-        $service = $this->container->get($serviceName);
-        if(!$service instanceof ContextInterface)
-            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the context "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\Provider\ContextInterface"', $serviceName, $contextName));
-
-        return $service;
+        return $context;
     }
 
     /**

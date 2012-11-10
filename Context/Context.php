@@ -2,6 +2,9 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Context;
 
+use Oryzone\Bundle\MediaStorageBundle\Variant\VariantTree,
+    Oryzone\Bundle\MediaStorageBundle\Variant\Variant;
+
 class Context implements ContextInterface
 {
 
@@ -86,5 +89,23 @@ class Context implements ContextInterface
     public function getVariants()
     {
         return $this->variants;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildVariantTree()
+    {
+        $tree = new VariantTree();
+        foreach($this->variants as $name => $v)
+        {
+            $variant = new Variant();
+            $variant->setName($name);
+            $variant->setMode($v['mode']);
+            $variant->setOptions($v['process']);
+            $tree->addNode($variant, $v['parent']);
+        }
+
+        return $tree;
     }
 }

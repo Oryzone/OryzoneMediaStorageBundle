@@ -2,8 +2,21 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Variant;
 
+use Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
+
 class Variant implements VariantInterface
 {
+    /**
+     * Maps variant mode constants to identificative strings
+     *
+     * @var array
+     */
+    public static $VARIANT_MODE_MAP = array(
+        'instant'   => self::MODE_INSTANT,
+        'lazy'      => self::MODE_LAZY,
+        'queue'     => self::MODE_QUEUE
+    );
+
     /**
      * @var string $name
      */
@@ -126,6 +139,18 @@ class Variant implements VariantInterface
      */
     public function setMode($mode)
     {
+        if(is_int($mode))
+        {
+            if(!in_array($mode, self::$VARIANT_MODE_MAP))
+                throw new InvalidArgumentException(sprintf('Variant mode "%s" is not supported', $mode));
+        }
+        elseif(is_string($mode))
+        {
+            if(!array_key_exists($mode, self::$VARIANT_MODE_MAP))
+                throw new InvalidArgumentException(sprintf('Variant mode "%s" is not supported', $mode));
+
+            $mode = self::$VARIANT_MODE_MAP[$mode];
+        }
         $this->mode = $mode;
     }
 

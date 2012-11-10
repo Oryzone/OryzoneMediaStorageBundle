@@ -103,8 +103,10 @@ class MediaStorage implements MediaStorageInterface
      * @param  string|null                        $name if <code>NULL</code> will load the default cdn
      * @return Cdn\CdnInterface
      * @throws Exception\InvalidArgumentException
+     *
+     * @return \Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface
      */
-    protected function getCdn($name = NULL)
+    public function getCdn($name = NULL)
     {
         if (!$name) {
             if(!$this->defaultCdn)
@@ -121,8 +123,10 @@ class MediaStorage implements MediaStorageInterface
      * @param  string|null                        $name if <code>NULL</code> will load the default context
      * @return Context\ContextInterface
      * @throws Exception\InvalidArgumentException
+     *
+     * @return \Oryzone\Bundle\MediaStorageBundle\Context\ContextInterface
      */
-    protected function getContext($name = NULL)
+    public function getContext($name = NULL)
     {
         if (!$name) {
             if(!$this->defaultContext)
@@ -140,8 +144,10 @@ class MediaStorage implements MediaStorageInterface
      * @param  string|null                        $name if <code>NULL</code> will load the default filesystem
      * @return \Gaufrette\Filesystem
      * @throws Exception\InvalidArgumentException
+     *
+     * @return \Gaufrette\Filesystem
      */
-    protected function getFilesystem($name = NULL)
+    public function getFilesystem($name = NULL)
     {
         if (!$name) {
             if(!$this->defaultFilesystem)
@@ -159,8 +165,10 @@ class MediaStorage implements MediaStorageInterface
      * @param  string|null                        $name if <code>NULL</code> will load the default provider
      * @return Provider\ProviderInterface
      * @throws Exception\InvalidArgumentException
+     *
+     * @return \Oryzone\Bundle\MediaStorageBundle\Provider\ProviderInterface
      */
-    protected function getProvider($name = NULL)
+    public function getProvider($name = NULL)
     {
         if (!$name) {
             if(!$this->defaultProvider)
@@ -175,11 +183,12 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a naming strategy with a given name
      *
-     * @param  string|null                            $name
-     * @return NamingStrategy\NamingStrategyInterface
+     * @param  string|null                        $name
      * @throws Exception\InvalidArgumentException
+     *
+     * @return NamingStrategy\NamingStrategyInterface
      */
-    protected function getNamingStrategy($name = NULL)
+    public function getNamingStrategy($name = NULL)
     {
         if (!$name) {
             if(!$this->defaultNamingStrategy)
@@ -197,7 +206,11 @@ class MediaStorage implements MediaStorageInterface
     public function prepareMedia(Media $media, $isUpdate = false)
     {
         $provider = $this->getProvider($media->getProvider());
+        if(!$media->getProvider())
+            $media->setProvider($provider->getName());
         $context = $this->getContext($media->getContent());
+        if(!$media->getContext())
+            $media->setContext($context->getName());
         $provider->prepare($media, $context);
     }
 
@@ -206,7 +219,9 @@ class MediaStorage implements MediaStorageInterface
      */
     public function saveMedia(Media $media)
     {
-        // TODO: Implement saveMedia() method.
+        $provider = $this->getProvider($media->getProvider());
+        $context = $this->getContext($media->getContext());
+
     }
 
     /**
