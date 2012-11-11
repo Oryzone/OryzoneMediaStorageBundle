@@ -142,12 +142,8 @@ class Variant implements VariantInterface
         if (is_int($mode)) {
             if(!in_array($mode, self::$VARIANT_MODE_MAP))
                 throw new InvalidArgumentException(sprintf('Variant mode "%s" is not supported', $mode));
-        } elseif (is_string($mode)) {
-            if(!array_key_exists($mode, self::$VARIANT_MODE_MAP))
-                throw new InvalidArgumentException(sprintf('Variant mode "%s" is not supported', $mode));
-
-            $mode = self::$VARIANT_MODE_MAP[$mode];
         }
+
         $this->mode = $mode;
     }
 

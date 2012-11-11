@@ -39,4 +39,11 @@ interface ContextInterface
      * @return string
      */
     public function getVariants();
+
+    /**
+     * Builds the variant tree used for processing
+     *
+     * @return \Oryzone\Bundle\MediaStorageBundle\Variant\VariantTree
+     */
+    public function buildVariantTree();
 }

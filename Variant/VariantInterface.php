@@ -114,13 +114,6 @@ interface VariantInterface
     public function getError();
 
     /**
-     * Builds the variant tree used for processing
-     *
-     * @return \Oryzone\Bundle\MediaStorageBundle\Variant\VariantTree
-     */
-    public function buildVariantTree();
-
-    /**
      * Serializes the object to an array
      *
      * @return array

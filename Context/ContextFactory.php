@@ -51,6 +51,7 @@ class ContextFactory implements \IteratorAggregate
     public function get($contextName)
     {
         if(isset($instances[$contextName]))
+
             return $instances[$contextName];
 
         if(!array_key_exists($contextName, $this->contexts))
