@@ -24,9 +24,17 @@ class MongoDBAdapter implements AdapterInterface
     {
         $obj = $this->getObjectFromArgs($e);
 
-        $dm = $e->getDocumentManager();
-        $uow = $dm->getUnitOfWork();
-        $metadata = $dm->getClassMetadata(get_class($obj));
+        $manager = $this->getManagerFromArgs($e);
+        $uow = $manager->getUnitOfWork();
+        $metadata = $manager->getClassMetadata(get_class($obj));
         $uow->recomputeSingleDocumentChangeSet($metadata, $obj);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getManagerFromArgs(EventArgs $e)
+    {
+        return $e->getDocumentManager();
     }
 }

@@ -7,7 +7,7 @@ use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Context\Context;
 
-use Gaufrette\File;
+use Symfony\Component\HttpFoundation\File\File;
 
 interface ProviderInterface
 {
@@ -62,16 +62,16 @@ interface ProviderInterface
     public function prepare(Media $media, Context $context);
 
     /**
-     * Process the media to create a variant
+     * Process the media to create a variant. Should return a <code>File</code> instance referring
+     * the resulting file
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
      * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param \Gaufrette\File|null                                        $origin
-     * @param \Gaufrette\File|null                                        $destination
+     * @param \Symfony\Component\HttpFoundation\File\File                 $source
      *
-     * @return mixed
+     * @return File|null
      */
-    public function process(Media $media, VariantInterface $variant, File $origin = NULL, File $destination = NULL);
+    public function process(Media $media, VariantInterface $variant, File $source = NULL);
 
     /**
      * Renders a variant to HTML code. Useful for twig (or other template engines) integrations

@@ -4,12 +4,21 @@ namespace Oryzone\Bundle\MediaStorageBundle;
 
 use Knp\Bundle\GaufretteBundle\FilesystemMap;
 
+use Gaufrette\StreamMode,
+    Gaufrette\FileStream\Local;
+
+use Symfony\Component\HttpFoundation\File\File;
+
 use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
     Oryzone\Bundle\MediaStorageBundle\Context\ContextFactory,
     Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory,
+    Oryzone\Bundle\MediaStorageBundle\Provider\ProviderInterface,
     Oryzone\Bundle\MediaStorageBundle\NamingStrategy\NamingStrategyFactory,
     Oryzone\Bundle\MediaStorageBundle\Model\Media,
-    Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
+    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
+    Oryzone\Bundle\MediaStorageBundle\Variant\VariantNode,
+    Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException,
+    Oryzone\Bundle\MediaStorageBundle\Exception\VariantProcessingException;
 
 /**
  * Base media storage class
@@ -95,6 +104,59 @@ class MediaStorage implements MediaStorageInterface
         $this->defaultFilesystem = $defaultFilesystem;
         $this->defaultProvider = $defaultProvider;
         $this->defaultNamingStrategy = $defaultNamingStrategy;
+    }
+
+    /**
+     * Creates a Gaufrette File instance from a source.
+     * Source may be a string (of a path) an instance of SPL <code>File</code> or
+     * <code>Symfony\Component\HttpFoundation\File\UploadedFile</code>
+     *
+     * @param Model\Media $media
+     * @param Variant\VariantInterface $variant
+     * @throws Exception\VariantProcessingException
+     *
+     * @return File
+     */
+    protected function createFileInstance(Media $media, VariantInterface $variant)
+    {
+        $source = $media->getContent();
+
+        if(is_string($source) && is_file($source))
+            return new File($source);
+
+        elseif(is_object($source) && $source instanceof File)
+            return $source;
+
+        throw new VariantProcessingException(
+            sprintf('cannot load file for media "%s", variant "%s"', $media, $variant->getName()), $media, $variant);
+    }
+
+    /**
+     * @param File $file
+     * @param string $filename
+     * @param \Gaufrette\Filesystem $filesystem
+     *
+     * @return string
+     */
+    protected function storeFile(File $file, $filename, \Gaufrette\Filesystem $filesystem)
+    {
+        $extension = $file->getExtension();
+        $filename .= '.'.$extension;
+
+        $src = new Local($file->getPathname());
+        $dst = $filesystem->getAdapter()->createFileStream($filename, $filesystem);
+
+        $src->open(new StreamMode('rb+'));
+        $dst->open(new StreamMode('ab+'));
+
+        while (!$src->eof()) {
+            $data    = $src->read(100000);
+            $written = $dst->write($data);
+        }
+        $dst->close();
+        $src->close();
+
+        return $filename;
     }
 
     /**
@@ -222,7 +284,65 @@ class MediaStorage implements MediaStorageInterface
         $provider = $this->getProvider($media->getProvider());
         $context = $this->getContext($media->getContext());
         $variantsTree = $context->buildVariantTree();
+        $filesystem = $this->getFilesystem($context->getFilesystemName());
+        $namingStrategy = $this->getNamingStrategy($context->getNamingStrategyName());
 
+        $generatedFiles = array();
+
+        $variantsTree->visit(
+            function(VariantNode $node, $level)
+                use ($provider, $context, $media, $filesystem, $namingStrategy, &$generatedFiles)
+            {
+                $variant = $node->getContent();
+                $parent = $node->getParent() ? $node->getParent()->getContent() : NULL;
+                $media->addVariant($variant);
+
+                $file = NULL;
+                if($provider->getContentType() == ProviderInterface::CONTENT_TYPE_FILE)
+                {
+                    if($parent)
+                    {
+                        // checks if the parent file has been generated in a previous step
+                        if(isset($generatedFiles[$parent->getName()]))
+                            $file = $generatedFiles[$parent->getName()];
+                        else
+                        {
+                            //otherwise try to read the file from the storage if the variant is ready
+                            //TODO
+
+                            throw new VariantProcessingException(
+                                sprintf('Cannot load parent variant ("%s") file for variant "%s" of media "%s"', $parent->getName(), $variant->getName(), $media),
+                                $media, $variant);
+                        }
+
+                    }
+                    else
+                        $file = $this->createFileInstance($media, $variant);
+                }
+
+
+
+                switch ($variant->getMode())
+                {
+                    case VariantInterface::MODE_INSTANT:
+                        $result = $provider->process($media, $variant, $file);
+                        if($result)
+                            $this->storeFile($result, $namingStrategy->generateName($media, $variant, $filesystem), $filesystem);
+                        break;
+
+                    case VariantInterface::MODE_LAZY:
+                        // TODO
+                        break;
+
+                    case VariantInterface::MODE_QUEUE:
+                        // TODO
+                        break;
+                }
+            }
+        );
+
+
+        return TRUE; // marks the media as updated
     }
 
     /**

@@ -7,7 +7,7 @@ use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
     Oryzone\Bundle\MediaStorageBundle\Context\Context;
 
-use Gaufrette\File;
+use Symfony\Component\HttpFoundation\File\File;
 
 class FileProvider extends Provider
 {
@@ -33,12 +33,10 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function process(Media $media, VariantInterface $variant, File $origin = NULL, File $destination = NULL)
+    public function process(Media $media, VariantInterface $variant, File $source = NULL)
     {
-        //TODO find a reliable way to read mime type from a gaufrette file
-        //$media->setMetadata($variant->getName().'.contentType', mime_content_type($origin));
-        $media->setMetadata($variant->getName().'.size', $origin->getSize());
-        $destination->setContent($origin->getContent());
+        $media->setMetadata($variant->getName().'.size', $source->getSize());
+        return $source;
     }
 
     /**

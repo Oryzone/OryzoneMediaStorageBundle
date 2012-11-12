@@ -2,6 +2,8 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Model;
 
+use Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface;
+
 abstract class Media
 {
     /**
@@ -71,6 +73,8 @@ abstract class Media
     }
 
     /**
+     * Set content
+     *
      * @param mixed $content
      */
     public function setContent($content)
@@ -79,7 +83,9 @@ abstract class Media
     }
 
     /**
-     * @return mixed
+     * Get content
+     *
+     * @return mixed|null
      */
     public function getContent()
     {
@@ -87,6 +93,8 @@ abstract class Media
     }
 
     /**
+     * Set context
+     *
      * @param string $context
      */
     public function setContext($context)
@@ -95,6 +103,8 @@ abstract class Media
     }
 
     /**
+     * Get context
+     *
      * @return string
      */
     public function getContext()
@@ -103,6 +113,8 @@ abstract class Media
     }
 
     /**
+     * Set created at
+     *
      * @param \DateTime $createdAt
      */
     public function setCreatedAt($createdAt)
@@ -111,6 +123,8 @@ abstract class Media
     }
 
     /**
+     * get created at
+     *
      * @return \DateTime
      */
     public function getCreatedAt()
@@ -119,6 +133,8 @@ abstract class Media
     }
 
     /**
+     * Set metadata
+     *
      * @param array $metadata
      */
     public function setMetadata($metadata)
@@ -127,6 +143,8 @@ abstract class Media
     }
 
     /**
+     * Get metadata
+     *
      * @return array
      */
     public function getMetadata()
@@ -167,6 +185,8 @@ abstract class Media
     }
 
     /**
+     * Set modified at
+     *
      * @param \DateTime $modifiedAt
      */
     public function setModifiedAt($modifiedAt)
@@ -175,6 +195,8 @@ abstract class Media
     }
 
     /**
+     * Get modified at
+     *
      * @return \DateTime
      */
     public function getModifiedAt()
@@ -183,6 +205,8 @@ abstract class Media
     }
 
     /**
+     * Set name
+     *
      * @param string $name
      */
     public function setName($name)
@@ -191,6 +215,8 @@ abstract class Media
     }
 
     /**
+     * Get name
+     *
      * @return string
      */
     public function getName()
@@ -199,6 +225,8 @@ abstract class Media
     }
 
     /**
+     * Set provider
+     *
      * @param string $provider
      */
     public function setProvider($provider)
@@ -207,6 +235,8 @@ abstract class Media
     }
 
     /**
+     * Get provider
+     *
      * @return string
      */
     public function getProvider()
@@ -215,30 +245,24 @@ abstract class Media
     }
 
     /**
-     * @param array $variants
-     */
-    public function setVariants($variants)
-    {
-        $this->variants = $variants;
-    }
-
-    /**
-     * @return array
-     */
-    public function getVariants()
-    {
-        return $this->variants;
-    }
-
-    /**
-     * Checks if the media has a given variant
+     * Checks if the current media has a variant with a given name
      *
-     * @param  string $variantName
+     * @param  string $name
      * @return bool
      */
-    public function hasVariant($variantName)
+    public function hasVariant($name)
     {
-        return array_key_exists($variantName, $this->variants);
+        return array_key_exists($name, $this->variants);
+    }
+
+    /**
+     * Set a variant with a given name
+     *
+     * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
+     */
+    public function addVariant(VariantInterface $variant)
+    {
+        $this->variants[$variant->getName()] = $variant->toArray();
     }
 
     /**
@@ -256,5 +280,25 @@ abstract class Media
         }
 
         return false;
+    }
+
+    /**
+     * Set variants
+     *
+     * @param array $variants
+     */
+    public function setVariants($variants)
+    {
+        $this->variants = $variants;
+    }
+
+    /**
+     * Get variants
+     *
+     * @return array
+     */
+    public function getVariants()
+    {
+        return $this->variants;
     }
 }

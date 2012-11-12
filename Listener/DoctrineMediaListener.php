@@ -66,7 +66,16 @@ class DoctrineMediaListener
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media)
-            $this->mediaStorage->saveMedia($object);
+        {
+            $updated = $this->mediaStorage->saveMedia($object);
+
+            if($updated)
+            {
+                $manager = $this->adapter->getManagerFromArgs($eventArgs);
+                $manager->persist($object);
+                $manager->flush();
+            }
+        }
     }
 
     /**
@@ -77,7 +86,16 @@ class DoctrineMediaListener
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media)
-            $this->mediaStorage->updateMedia($object);
+        {
+            $updated = $this->mediaStorage->updateMedia($object);
+
+            if($updated)
+            {
+                $manager = $this->adapter->getManagerFromArgs($eventArgs);
+                $manager->persist($object);
+                $manager->flush();
+            }
+        }
     }
 
     /**

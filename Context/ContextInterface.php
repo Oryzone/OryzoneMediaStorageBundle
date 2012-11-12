@@ -34,6 +34,13 @@ interface ContextInterface
     public function getCdnName();
 
     /**
+     * Get the name of the associated naming strategy
+     *
+     * @return string
+     */
+    public function getNamingStrategyName();
+
+    /**
      * Get the raw array of variants
      *
      * @return string
