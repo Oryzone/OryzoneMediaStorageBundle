@@ -221,6 +221,7 @@ class MediaStorage implements MediaStorageInterface
     {
         $provider = $this->getProvider($media->getProvider());
         $context = $this->getContext($media->getContext());
+        $variantsTree = $context->buildVariantTree();
 
     }
 

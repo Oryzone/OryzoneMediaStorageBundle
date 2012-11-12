@@ -34,6 +34,13 @@ class Context implements ContextInterface
     protected $variants;
 
     /**
+     * Used to cache the latest generated tree
+     *
+     * @var VariantTree $lastTree
+     */
+    private $lastTree;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -96,6 +103,10 @@ class Context implements ContextInterface
      */
     public function buildVariantTree()
     {
+        if($this->lastTree)
+
+            return $this->lastTree;
+
         $tree = new VariantTree();
         foreach ($this->variants as $name => $v) {
             $variant = new Variant();
@@ -104,6 +115,8 @@ class Context implements ContextInterface
             $variant->setOptions($v['process']);
             $tree->addNode($variant, $v['parent']);
         }
+
+        $this->lastTree = $tree;
 
         return $tree;
     }
