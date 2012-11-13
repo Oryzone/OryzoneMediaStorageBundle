@@ -17,9 +17,9 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function supports(Media $media, File $file = NULL)
+    public function supportsFile(File $file)
     {
-        return ($file != NULL && $file->exists());
+        return ($file->exists());
     }
 
     /**

@@ -43,12 +43,11 @@ interface ProviderInterface
     /**
      * Checks if the current provider supports a given Media
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param \Gaufrette\File|null                           $file
+     * @param \Symfony\Component\HttpFoundation\File\File                           $file
      *
      * @return boolean
      */
-    public function supports(Media $media, File $file = NULL);
+    public function supportsFile(File $file);
 
     /**
      * Executed each time a media is about to be saved, before the process method
