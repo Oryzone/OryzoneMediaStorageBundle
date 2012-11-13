@@ -301,4 +301,13 @@ abstract class Media
     {
         return $this->variants;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString()
+    {
+        return sprintf('Media (%s) - %s', get_class($this), $this->name);
+    }
+
 }

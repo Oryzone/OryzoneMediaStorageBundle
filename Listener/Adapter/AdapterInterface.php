@@ -23,7 +23,7 @@ interface AdapterInterface
     /**
      * Get the manager from the event arguments
      *
-     * @param \Doctrine\Common\EventArgs $e
+     * @param  \Doctrine\Common\EventArgs $e
      * @return ObjectManager
      */
     public function getManagerFromArgs(EventArgs $e);

@@ -21,11 +21,11 @@ class VariantProcessingException extends MediaStorageException
     /**
      * Constructor
      *
-     * @param string $message
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @param string                                                      $message
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
      * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param int $code
-     * @param \Exception $previous
+     * @param int                                                         $code
+     * @param \Exception                                                  $previous
      */
     public function __construct($message = "", Media $media, VariantInterface $variant, $code = 0, \Exception $previous = null)
     {

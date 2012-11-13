@@ -32,6 +32,12 @@ interface VariantInterface
     const STATUS_ERROR = 5;
 
     /**
+     * Status used to mark an invalidated variant (useful when variants are generated on demand an you want to regenerate
+     * the variant the next time it's requested)
+     */
+    const STATUS_INVALIDATED = 6;
+
+    /**
      * Mode used when the variant should be processed instantaneously
      */
     const MODE_INSTANT = 0;
@@ -54,12 +60,26 @@ interface VariantInterface
     public function getName();
 
     /**
+     * Sets name
+     *
+     * @param string $name
+     */
+    public function setName($name);
+
+    /**
      * Get the filename of the file associated with the variant
      * Used if the variant is stored as a file
      *
      * @return string
      */
     public function getFilename();
+
+    /**
+     * Sets filename
+     *
+     * @param string $filename
+     */
+    public function setFilename($filename);
 
     /**
      * Get the content type (mime type) of the file associated with the variant
@@ -70,6 +90,13 @@ interface VariantInterface
     public function getContentType();
 
     /**
+     * Sets contentType
+     *
+     * @param string $contentType
+     */
+    public function setContentType($contentType);
+
+    /**
      * Get the array of options to use (or used) for processing
      *
      * @return array
@@ -77,13 +104,25 @@ interface VariantInterface
     public function getOptions();
 
     /**
+     * Sets options
+     *
+     * @param array $options
+     */
+    public function setOptions($options);
+
+    /**
      * Get the processing mode.
-     * Should not be serialized (because, if necessary, the current state should be enough to give an
-     * idea of the processing mode used)
      *
      * @return int
      */
     public function getMode();
+
+    /**
+     * Sets mode
+     *
+     * @param int $mode
+     */
+    public function setMode($mode);
 
     /**
      * Get the current variant status
@@ -91,6 +130,13 @@ interface VariantInterface
      * @return int
      */
     public function getStatus();
+
+    /**
+     * Sets the status
+     *
+     * @param int $status
+     */
+    public function setStatus($status);
 
     /**
      * Returns <code>TRUE</code> if the current variant has been successfully processed and it's ready to be used
@@ -112,6 +158,11 @@ interface VariantInterface
      * @return string
      */
     public function getError();
+
+    /**
+     * Invalidates the current variant
+     */
+    public function invalidate();
 
     /**
      * Serializes the object to an array

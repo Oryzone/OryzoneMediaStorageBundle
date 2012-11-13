@@ -65,12 +65,10 @@ class DoctrineMediaListener
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
-        if ($object instanceof Media)
-        {
+        if ($object instanceof Media) {
             $updated = $this->mediaStorage->saveMedia($object);
 
-            if($updated)
-            {
+            if ($updated) {
                 $manager = $this->adapter->getManagerFromArgs($eventArgs);
                 $manager->persist($object);
                 $manager->flush();
@@ -85,12 +83,10 @@ class DoctrineMediaListener
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
-        if ($object instanceof Media)
-        {
+        if ($object instanceof Media) {
             $updated = $this->mediaStorage->updateMedia($object);
 
-            if($updated)
-            {
+            if ($updated) {
                 $manager = $this->adapter->getManagerFromArgs($eventArgs);
                 $manager->persist($object);
                 $manager->flush();

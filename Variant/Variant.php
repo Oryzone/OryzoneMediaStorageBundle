@@ -202,6 +202,14 @@ class Variant implements VariantInterface
     /**
      * {@inheritDoc}
      */
+    public function invalidate()
+    {
+        $this->status = self::STATUS_INVALIDATED;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function toArray()
     {
         $data = array(
@@ -209,6 +217,7 @@ class Variant implements VariantInterface
             'filename'      => $this->filename,
             'contentType'   => $this->contentType,
             'options'       => $this->options,
+            'mode'          => $this->mode,
             'status'        => $this->status
         );
 
@@ -232,6 +241,8 @@ class Variant implements VariantInterface
             $variant->setContentType($array['contentType']);
         if(isset($array['options']))
             $variant->setOptions($array['options']);
+        if(isset($array['mode']))
+            $variant->setStatus($array['mode']);
         if(isset($array['status']))
             $variant->setStatus($array['status']);
         if(isset($array['error']))

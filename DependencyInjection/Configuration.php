@@ -28,6 +28,14 @@ class Configuration implements ConfigurationInterface
         )
     );
 
+    protected $defaultVariants = array(
+        'default' => array(
+            'parent' => NULL,
+            'process' => NULL,
+            'mode' => Variant::MODE_INSTANT
+        )
+    );
+
     /**
      * {@inheritDoc}
      */
@@ -111,6 +119,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('cdn')->defaultNull()->end()
                             ->scalarNode('namingStrategy')->defaultNull()->end()
                             ->arrayNode('variants')
+                                ->defaultValue($this->defaultVariants)
                                 ->useAttributeAsKey('name')
                                 ->prototype('array')
                                     ->children()

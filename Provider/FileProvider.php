@@ -35,7 +35,8 @@ class FileProvider extends Provider
      */
     public function process(Media $media, VariantInterface $variant, File $source = NULL)
     {
-        $media->setMetadata($variant->getName().'.size', $source->getSize());
+        $media->setMetadataValue($variant->getName().'.size', $source->getSize());
+
         return $source;
     }
 

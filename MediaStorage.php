@@ -111,8 +111,8 @@ class MediaStorage implements MediaStorageInterface
      * Source may be a string (of a path) an instance of SPL <code>File</code> or
      * <code>Symfony\Component\HttpFoundation\File\UploadedFile</code>
      *
-     * @param Model\Media $media
-     * @param Variant\VariantInterface $variant
+     * @param  Model\Media                          $media
+     * @param  Variant\VariantInterface             $variant
      * @throws Exception\VariantProcessingException
      *
      * @return File
@@ -121,10 +121,14 @@ class MediaStorage implements MediaStorageInterface
     {
         $source = $media->getContent();
 
-        if(is_string($source) && is_file($source))
-            return new File($source);
+        if (is_string($source)) {
+            if(!is_file($source))
+                throw new VariantProcessingException(
+                    sprintf('Cannot load file "%s" for media "%s", variant "%s". File not found.', $source, $media, $variant->getName()), $media, $variant);
 
-        elseif(is_object($source) && $source instanceof File)
+            return new File($source);
+        } elseif(is_object($source) && $source instanceof File)
+
             return $source;
 
         throw new VariantProcessingException(
@@ -132,13 +136,14 @@ class MediaStorage implements MediaStorageInterface
     }
 
     /**
-     * @param File $file
-     * @param string $filename
+     * @param File                  $file
+     * @param string                $filename
      * @param \Gaufrette\Filesystem $filesystem
+     * @param Variant\VariantInterface $variant
      *
      * @return string
      */
-    protected function storeFile(File $file, $filename, \Gaufrette\Filesystem $filesystem)
+    protected function storeFile(File $file, $filename, \Gaufrette\Filesystem $filesystem, VariantInterface $variant)
     {
         $extension = $file->getExtension();
         $filename .= '.'.$extension;
@@ -155,6 +160,10 @@ class MediaStorage implements MediaStorageInterface
         }
         $dst->close();
         $src->close();
+
+        $variant->setFilename($filename);
+        $variant->setContentType($file->getMimeType());
+        $variant->setStatus(VariantInterface::STATUS_READY);
 
         return $filename;
     }
@@ -270,7 +279,7 @@ class MediaStorage implements MediaStorageInterface
         $provider = $this->getProvider($media->getProvider());
         if(!$media->getProvider())
             $media->setProvider($provider->getName());
-        $context = $this->getContext($media->getContent());
+        $context = $this->getContext($media->getContext());
         if(!$media->getContext())
             $media->setContext($context->getName());
         $provider->prepare($media, $context);
@@ -298,15 +307,12 @@ class MediaStorage implements MediaStorageInterface
                 $media->addVariant($variant);
 
                 $file = NULL;
-                if($provider->getContentType() == ProviderInterface::CONTENT_TYPE_FILE)
-                {
-                    if($parent)
-                    {
+                if ($provider->getContentType() == ProviderInterface::CONTENT_TYPE_FILE) {
+                    if ($parent) {
                         // checks if the parent file has been generated in a previous step
                         if(isset($generatedFiles[$parent->getName()]))
                             $file = $generatedFiles[$parent->getName()];
-                        else
-                        {
+                        else {
                             //otherwise try to read the file from the storage if the variant is ready
                             //TODO
 
@@ -315,19 +321,17 @@ class MediaStorage implements MediaStorageInterface
                                 $media, $variant);
                         }
 
-                    }
-                    else
+                    } else
                         $file = $this->createFileInstance($media, $variant);
                 }
 
-
-
-                switch ($variant->getMode())
-                {
+                switch ($variant->getMode()) {
                     case VariantInterface::MODE_INSTANT:
                         $result = $provider->process($media, $variant, $file);
-                        if($result)
-                            $this->storeFile($result, $namingStrategy->generateName($media, $variant, $filesystem), $filesystem);
+                        if ($result) {
+                            $name = $namingStrategy->generateName($media, $variant, $filesystem);
+                            $this->storeFile($result, $name, $filesystem, $variant);
+                        }
                         break;
 
                     case VariantInterface::MODE_LAZY:
@@ -338,9 +342,11 @@ class MediaStorage implements MediaStorageInterface
                         // TODO
                         break;
                 }
+
+                //updates the variant in the media (to store the new values)
+                $media->addVariant($variant);
             }
         );
-
 
         return TRUE; // marks the media as updated
     }
