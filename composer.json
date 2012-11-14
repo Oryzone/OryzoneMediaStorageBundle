@@ -24,6 +24,9 @@
     "symfony/framework-bundle": "2.1.*",
     "knplabs/knp-gaufrette-bundle": "master"
   },
+  "suggest": {
+    "imagine/Imagine": "*"
+  },
   "autoload": {
     "psr-0": { "Oryzone\\Bundle\\MediaStorageBundle": "" }
   },
