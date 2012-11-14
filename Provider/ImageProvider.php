@@ -8,13 +8,20 @@ use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
-    Oryzone\Bundle\MediaStorageBundle\Exception\VariantProcessingException;
+    Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException,
+    Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
 class ImageProvider extends Provider
 {
 
+    /**
+     * @var string $tempDir
+     */
     protected $tempDir;
 
+    /**
+     * @var \Imagine\Image\ImagineInterface $imagine
+     */
     protected $imagine;
 
     /**
@@ -27,10 +34,44 @@ class ImageProvider extends Provider
         'image/png'
     );
 
-    public function __construct($tempDir, Imagine\Image\ImagineInterface $imagine = NULL)
+    /**
+     * Constructor
+     *
+     * @param string $tempDir
+     * @param \Imagine\Image\ImagineInterface $imagine
+     */
+    public function __construct($tempDir, \Imagine\Image\ImagineInterface $imagine = NULL)
     {
+        $this->checkTempDir($tempDir);
         $this->tempDir = $tempDir;
         $this->imagine = $imagine;
+    }
+
+    /**
+     * Verifies if the temp directory exists and it tries to generate it otherwise
+     *
+     * @param string $tempDir
+     * @throws \Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException
+     */
+    protected function checkTempDir($tempDir)
+    {
+        if(!is_dir($tempDir))
+        {
+            if(file_exists($tempDir))
+                throw new InvalidArgumentException(
+                    sprintf('Cannot generate temp folder "%s" for the ImageProvider. A file with the same path already exists', $tempDir));
+
+            $filesystem = new \Symfony\Component\Filesystem\Filesystem();
+            try
+            {
+                $filesystem->mkdir($tempDir);
+            }
+            catch(\Symfony\Component\Filesystem\Exception\IOException $e)
+            {
+                throw new InvalidArgumentException(
+                    sprintf('Unable to create temp folder "%s" for the ImageProvider', $tempDir));
+            }
+        }
     }
 
     /**
@@ -57,15 +98,17 @@ class ImageProvider extends Provider
         $options = $variant->getOptions();
         if (is_array($options) && !empty($options)) {
             if($this->imagine == NULL)
-                throw new VariantProcessingException(sprintf('Cannot process image "%s": Imagine Bundle (avalanche123/imagine-bundle) not installed or misconfigured', $media), $media, $variant);
+                throw new ProviderProcessException(sprintf('Cannot process image "%s": Imagine Bundle (avalanche123/imagine-bundle) not installed or misconfigured', $media), $media, $variant);
 
             $destFile = $this->tempDir . 'temp-' . $source->getFilename();
 
             /**
              * @var \Imagine\Image\ImageInterface $image
              */
-            $image = $this->imagine->open( $destFile );
-
+            $image = $this->imagine->open( $source );
+            $box = new \Imagine\Image\Box(200, 200);
+            $image->resize($box);
+            $image->save($destFile, array('quality' => 50));
 
             return new File($destFile);
         }
