@@ -43,7 +43,7 @@ interface ProviderInterface
     /**
      * Checks if the current provider supports a given Media
      *
-     * @param \Symfony\Component\HttpFoundation\File\File                           $file
+     * @param \Symfony\Component\HttpFoundation\File\File $file
      *
      * @return boolean
      */

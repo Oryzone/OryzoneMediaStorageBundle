@@ -17,8 +17,6 @@ class ImageProvider extends Provider
 
     protected $imagine;
 
-
-
     /**
      * @var array
      */
@@ -57,14 +55,22 @@ class ImageProvider extends Provider
     public function process(Media $media, VariantInterface $variant, File $source = NULL)
     {
         $options = $variant->getOptions();
-        if(!empty($options))
-        {
+        if (is_array($options) && !empty($options)) {
             if($this->imagine == NULL)
                 throw new VariantProcessingException(sprintf('Cannot process image "%s": Imagine Bundle not installed or misconfigured', $media), $media, $variant);
 
+            $destFile = $this->tempDir . 'temp-' . $source->getFilename();
+
+            /**
+             * @var \Imagine\Image\ImageInterface $image
+             */
+            $image = $this->imagine->open( $destFile );
 
 
+            return new File($destFile);
         }
+
+        return $source;
     }
 
     /**

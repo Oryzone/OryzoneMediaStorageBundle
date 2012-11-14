@@ -5,7 +5,7 @@ namespace Oryzone\Bundle\MediaStorageBundle;
 use Knp\Bundle\GaufretteBundle\FilesystemMap;
 
 use Gaufrette\StreamMode,
-    Gaufrette\FileStream\Local;
+    Gaufrette\Stream\Local;
 
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -136,9 +136,9 @@ class MediaStorage implements MediaStorageInterface
     }
 
     /**
-     * @param File                  $file
-     * @param string                $filename
-     * @param \Gaufrette\Filesystem $filesystem
+     * @param File                     $file
+     * @param string                   $filename
+     * @param \Gaufrette\Filesystem    $filesystem
      * @param Variant\VariantInterface $variant
      *
      * @return string
@@ -149,7 +149,9 @@ class MediaStorage implements MediaStorageInterface
         $filename .= '.'.$extension;
 
         $src = new Local($file->getPathname());
-        $dst = $filesystem->getAdapter()->createFileStream($filename, $filesystem);
+
+        //$dst = $filesystem->getAdapter()->createFileStream($filename, $filesystem);
+        $dst = $filesystem->createStream($filename);
 
         $src->open(new StreamMode('rb+'));
         $dst->open(new StreamMode('ab+'));
@@ -290,8 +292,8 @@ class MediaStorage implements MediaStorageInterface
      */
     public function saveMedia(Media $media)
     {
-        $provider = $this->getProvider($media->getProvider());
         $context = $this->getContext($media->getContext());
+        $provider = $this->getProvider($context->getProviderName());
         $variantsTree = $context->buildVariantTree();
         $filesystem = $this->getFilesystem($context->getFilesystemName());
         $namingStrategy = $this->getNamingStrategy($context->getNamingStrategyName());
@@ -329,6 +331,7 @@ class MediaStorage implements MediaStorageInterface
                     case VariantInterface::MODE_INSTANT:
                         $result = $provider->process($media, $variant, $file);
                         if ($result) {
+                            $generatedFiles[$variant->getName()] = $result;
                             $name = $namingStrategy->generateName($media, $variant, $filesystem);
                             $this->storeFile($result, $name, $filesystem, $variant);
                         }
