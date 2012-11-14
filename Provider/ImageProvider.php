@@ -57,7 +57,7 @@ class ImageProvider extends Provider
         $options = $variant->getOptions();
         if (is_array($options) && !empty($options)) {
             if($this->imagine == NULL)
-                throw new VariantProcessingException(sprintf('Cannot process image "%s": Imagine Bundle not installed or misconfigured', $media), $media, $variant);
+                throw new VariantProcessingException(sprintf('Cannot process image "%s": Imagine Bundle (avalanche123/imagine-bundle) not installed or misconfigured', $media), $media, $variant);
 
             $destFile = $this->tempDir . 'temp-' . $source->getFilename();
 
