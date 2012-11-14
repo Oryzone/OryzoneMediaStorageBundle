@@ -7,10 +7,17 @@ use Symfony\Component\HttpFoundation\File\File;
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
-    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface;
+    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
+    Oryzone\Bundle\MediaStorageBundle\Exception\VariantProcessingException;
 
 class ImageProvider extends Provider
 {
+
+    protected $tempDir;
+
+    protected $imagine;
+
+
 
     /**
      * @var array
@@ -21,6 +28,12 @@ class ImageProvider extends Provider
         'image/jpeg',
         'image/png'
     );
+
+    public function __construct($tempDir, Imagine\Image\ImagineInterface $imagine = NULL)
+    {
+        $this->tempDir = $tempDir;
+        $this->imagine = $imagine;
+    }
 
     /**
      * {@inheritDoc}
@@ -43,7 +56,15 @@ class ImageProvider extends Provider
      */
     public function process(Media $media, VariantInterface $variant, File $source = NULL)
     {
-        // TODO: Implement process() method.
+        $options = $variant->getOptions();
+        if(!empty($options))
+        {
+            if($this->imagine == NULL)
+                throw new VariantProcessingException(sprintf('Cannot process image "%s": Imagine Bundle not installed or misconfigured', $media), $media, $variant);
+
+
+
+        }
     }
 
     /**

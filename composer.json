@@ -25,7 +25,7 @@
     "knplabs/knp-gaufrette-bundle": "master"
   },
   "suggest": {
-    "imagine/Imagine": "*"
+    "avalanche123/imagine-bundle": "*"
   },
   "autoload": {
     "psr-0": { "Oryzone\\Bundle\\MediaStorageBundle": "" }
