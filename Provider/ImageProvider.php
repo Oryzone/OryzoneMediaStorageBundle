@@ -158,6 +158,11 @@ class ImageProvider extends Provider
     public function process(Media $media, VariantInterface $variant, File $source = NULL)
     {
         $options = $variant->getOptions();
+        $result = $source;
+        list($originalWidth, $originalHeight) = getimagesize($source->getPathName());
+        $width = $originalWidth;
+        $height = $originalHeight;
+
         if (is_array($options) && !empty($options)) {
             if($this->imagine == NULL)
                 throw new ProviderProcessException(sprintf('Cannot process image "%s": Imagine Bundle (avalanche123/imagine-bundle) not installed or misconfigured', $media), $media, $variant);
@@ -172,7 +177,6 @@ class ImageProvider extends Provider
              */
             $image = $this->imagine->open( $source );
 
-            list($originalWidth, $originalHeight) = getimagesize($source->getPathName());
             $width = $options['width'];
             $height = $options['height'];
 
@@ -200,10 +204,15 @@ class ImageProvider extends Provider
 
             $image->save($destFile, array('quality' => $options['quality']));
 
-            return new File($destFile);
+            $result = new File($destFile);
         }
 
-        return $source;
+        //set metadata
+        $media->setMetadataValue($variant->getName().'.size', $result->getSize());
+        $media->setMetadataValue($variant->getName().'.width', $width);
+        $media->setMetadataValue($variant->getName().'.height', $height);
+
+        return $result;
     }
 
     /**
