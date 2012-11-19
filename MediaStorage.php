@@ -374,7 +374,7 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
-    public function getPath(Media $media)
+    public function getPath(Media $media, $variant = NULL, $options = array())
     {
         // TODO: Implement getPath() method.
     }
@@ -382,8 +382,16 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
-    public function getUrl(Media $media)
+    public function getUrl(Media $media, $variant = NULL, $options = array())
     {
         // TODO: Implement getUrl() method.
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function render(Media $media, $variant = NULL, $options = array())
+    {
+        // TODO: implement render() method.
     }
 }

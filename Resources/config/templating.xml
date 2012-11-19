@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.templating.helper.class">Oryzone\Bundle\MediaStorageBundle\Templating\Helper\MediaStorageHelper</parameter>
+        <parameter key="oryzone_media_storage.twig.extension.class">Oryzone\Bundle\MediaStorageBundle\Twig\Extension\MediaStorageExtension</parameter>
+    </parameters>
+
+    <services>
+        <!-- php templating helper -->
+        <service id="oryzone_media_storage.templating.helper" class="%oryzone_media_storage.templating.helper.class%">
+            <argument type="service" id="oryzone_media_storage"/>
+            <tag name="templating.helper" alias="oryzone_media_storage_helper" />
+        </service>
+
+        <!-- twig extension -->
+        <service id="oryzone_media_storage.twig.extension" class="%oryzone_media_storage.twig.extension.class%">
+            <argument type="service" id="oryzone_media_storage.templating.helper"/>
+            <tag name="twig.extension" alias="oryzone_media_storage_twig_extension" />
+        </service>
+
+    </services>
+
+</container>
+

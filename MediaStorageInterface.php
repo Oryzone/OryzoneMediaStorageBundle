@@ -43,16 +43,32 @@ interface MediaStorageInterface
     /**
      * Get the local path of a media file (if any)
      *
-     * @param  Model\Media $media
-     * @return mixed
+     * @param  Model\Media      $media
+     * @param  string|null      $variant
+     * @param  array            $options
+     *
+     * @return string
      */
-    public function getPath(Media $media);
+    public function getPath(Media $media, $variant = NULL, $options = array());
 
     /**
      * Get the url of a media file (if any)
      *
      * @param  Model\Media $media
+     * @param  string|null      $variant
+     * @param  array            $options
+     *
+     * @return string
+     */
+    public function getUrl(Media $media, $variant = NULL, $options = array());
+
+    /**
+     * Renders a given media
+     *
+     * @param Model\Media $media
+     * @param null $variant
+     * @param array $options
      * @return mixed
      */
-    public function getUrl(Media $media);
+    public function render(Media $media, $variant = NULL, $options = array());
 }
