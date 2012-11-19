@@ -48,6 +48,7 @@
             <argument>%oryzone_media_storage.default_filesystem%</argument>
             <argument>%oryzone_media_storage.default_provider%</argument>
             <argument>%oryzone_media_storage.default_naming_strategy%</argument>
+            <argument>%oryzone_media_storage.default_variant%</argument>
         </service>
     </services>
 

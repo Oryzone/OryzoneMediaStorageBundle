@@ -76,6 +76,11 @@ class MediaStorage implements MediaStorageInterface
     protected $defaultNamingStrategy;
 
     /**
+     * @var null|string $defaultVariant
+     */
+    protected $defaultVariant;
+
+    /**
      * Constructor
      *
      * @param Cdn\CdnFactory                            $cdnFactory
@@ -88,11 +93,12 @@ class MediaStorage implements MediaStorageInterface
      * @param string|null                               $defaultFilesystem
      * @param string|null                               $defaultProvider
      * @param string|null                               $defaultNamingStrategy
+     * @param string|null                               $defaultVariant
      */
     public function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap,
                                 ProviderFactory $providerFactory, NamingStrategyFactory $namingStrategyFactory,
                                 $defaultCdn = NULL, $defaultContext = NULL, $defaultFilesystem = NULL,
-                                $defaultProvider = NULL, $defaultNamingStrategy = NULL)
+                                $defaultProvider = NULL, $defaultNamingStrategy = NULL, $defaultVariant = NULL)
     {
         $this->cdnFactory = $cdnFactory;
         $this->contextFactory = $contextFactory;
@@ -104,6 +110,7 @@ class MediaStorage implements MediaStorageInterface
         $this->defaultFilesystem = $defaultFilesystem;
         $this->defaultProvider = $defaultProvider;
         $this->defaultNamingStrategy = $defaultNamingStrategy;
+        $this->defaultVariant = $defaultVariant;
     }
 
     /**

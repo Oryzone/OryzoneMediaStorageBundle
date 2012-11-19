@@ -92,6 +92,11 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('defaultNamingStrategy')
             ->defaultValue($this->defaultNamingStrategy)
         ->end();
+
+        $root->children()
+            ->scalarNode('defaultVariant')
+            ->defaultNull()
+        ->end();
     }
 
     protected function addCdns(ArrayNodeDefinition $root)

@@ -45,5 +45,6 @@ class OryzoneMediaStorageExtension extends Extension
         $container->setParameter('oryzone_media_storage.default_filesystem', $config['defaultFilesystem']);
         $container->setParameter('oryzone_media_storage.default_provider', $config['defaultProvider']);
         $container->setParameter('oryzone_media_storage.default_naming_strategy', $config['defaultNamingStrategy']);
+        $container->setParameter('oryzone_media_storage.default_variant', $config['defaultVariant']);
     }
 }
