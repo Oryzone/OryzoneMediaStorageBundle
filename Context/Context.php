@@ -116,6 +116,14 @@ class Context implements ContextInterface
     /**
      * {@inheritDoc}
      */
+    public function hasVariant($variantName)
+    {
+        return array_key_exists($variantName, $this->variants);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function buildVariantTree()
     {
         if($this->lastTree)

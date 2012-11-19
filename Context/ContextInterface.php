@@ -48,6 +48,15 @@ interface ContextInterface
     public function getVariants();
 
     /**
+     * Checks if the current context has a given variant
+     *
+     * @param string $variantName the name of the variant
+     *
+     * @return bool
+     */
+    public function hasVariant($variantName);
+
+    /**
      * Builds the variant tree used for processing
      *
      * @return \Oryzone\Bundle\MediaStorageBundle\Variant\VariantTree

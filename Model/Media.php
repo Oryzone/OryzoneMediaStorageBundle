@@ -2,7 +2,9 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Model;
 
-use Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface;
+use Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
+    Oryzone\Bundle\MediaStorageBundle\Variant\Variant,
+    Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
 abstract class Media
 {
@@ -300,6 +302,21 @@ abstract class Media
     public function getVariants()
     {
         return $this->variants;
+    }
+
+    /**
+     * Creates a <code>Variant</code> instance for a given variant
+     *
+     * @param $variantName
+     * @return \Oryzone\Bundle\MediaStorageBundle\Variant\Variant|\Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface
+     * @throws \Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException
+     */
+    public function getVariantInstance($variantName)
+    {
+        if(!array_key_exists($variantName, $this->variants))
+            throw new InvalidArgumentException(sprintf('media "%s" has no variant named "%s" ', $this, $variantName));
+
+        return Variant::fromArray($this->variants[$variantName]);
     }
 
     /**

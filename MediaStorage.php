@@ -263,10 +263,11 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Loads a naming strategy with a given name
      *
-     * @param  string|null                        $name
+     * @param null $name
      * @throws Exception\InvalidArgumentException
+     * @param  string|null                        $name
      *
-     * @return NamingStrategy\NamingStrategyInterface
+     * @return \Oryzone\Bundle\MediaStorageBundle\NamingStrategy\NamingStrategyInterface
      */
     public function getNamingStrategy($name = NULL)
     {
@@ -278,6 +279,26 @@ class MediaStorage implements MediaStorageInterface
         }
 
         return $this->namingStrategyFactory->get($name);
+    }
+
+    /**
+     * Get the name of a variant (fallbacks to default if null is given)
+     *
+     * @param string|null $name
+     * @return null|string
+     * @throws Exception\InvalidArgumentException
+     */
+    public function getVariant($name = NULL)
+    {
+        if($name == NULL)
+        {
+            if(!$this->defaultVariant)
+                throw new InvalidArgumentException('Trying to use the default variant but it has not been set');
+
+            $name = $this->defaultVariant;
+        }
+
+        return $name;
     }
 
     /**
@@ -399,6 +420,12 @@ class MediaStorage implements MediaStorageInterface
      */
     public function render(Media $media, $variant = NULL, $options = array())
     {
-        // TODO: implement render() method.
+        if($variant === NULL)
+            $variant = $this->defaultVariant;
+
+        $context = $this->getContext($media->getContext());
+        $provider = $this->getProvider($context->getProviderName());
+
+        return $provider->render($media, $media->getVariantInstance($variant), $this->getCdn($context->getCdnName()), $options);
     }
 }
