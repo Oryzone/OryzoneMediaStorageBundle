@@ -19,6 +19,19 @@ abstract class Provider implements ProviderInterface
     protected $name;
 
     /**
+     * @var array
+     */
+    protected $tempFiles;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tempFiles = array();
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getName()
@@ -33,5 +46,26 @@ abstract class Provider implements ProviderInterface
     {
         return self::$contentType;
     }
+
+    /**
+     * Adds a file to the list of temp files generated
+     *
+     * @param string $file
+     */
+    protected function addTempFile($file)
+    {
+        $this->tempFiles[] = $file;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeTempFiles()
+    {
+        foreach($this->tempFiles as $file)
+            if(file_exists($file))
+                unlink($file);
+    }
+
 
 }

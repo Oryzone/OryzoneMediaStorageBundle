@@ -84,4 +84,9 @@ interface ProviderInterface
      */
     public function render(Media $media, VariantInterface $variant, CdnInterface $cdn = NULL, $options = array());
 
+    /**
+     * Removes any temp file stored by the current provider instance
+     */
+    public function removeTempFiles();
+
 }

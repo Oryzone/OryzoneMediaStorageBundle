@@ -204,6 +204,7 @@ class ImageProvider extends Provider
 
             $image->save($destFile, array('quality' => $options['quality']));
 
+            $this->addTempFile($destFile);
             $result = new File($destFile);
         }
 

@@ -351,6 +351,7 @@ class MediaStorage implements MediaStorageInterface
             }
         );
 
+        $provider->removeTempFiles();
         return TRUE; // marks the media as updated
     }
 
