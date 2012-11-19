@@ -30,22 +30,9 @@ class MediaStorageExtension extends \Twig_Extension
     {
         return array
         (
-            'mediaPath' => new \Twig_Filter_Method($this, 'mediaPath'),
-            'urlPath'   => new \Twig_Filter_Method($this, 'urlPath'),
-            'render'    => new \Twig_Filter_Method($this, 'render', array( 'is_safe' => array('html')) )
-        );
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getFunctions()
-    {
-        return array
-        (
-            'mediaPath' => new \Twig_Filter_Method($this, 'mediaPath'),
-            'urlPath'   => new \Twig_Filter_Method($this, 'urlPath'),
-            'render'    => new \Twig_Filter_Method($this, 'render', array( 'is_safe' => array('html')) )
+            'mediaPath'     => new \Twig_Filter_Method($this, 'mediaPath'),
+            'mediaUrl'      => new \Twig_Filter_Method($this, 'mediaUrl'),
+            'mediaRender'   => new \Twig_Filter_Method($this, 'mediaRender', array( 'is_safe' => array('html')) )
         );
     }
 
@@ -83,7 +70,7 @@ class MediaStorageExtension extends \Twig_Extension
      * @param array $options
      * @return string
      */
-    public function render(Media $media, $variant = NULL, $options = array())
+    public function mediaRender(Media $media, $variant = NULL, $options = array())
     {
         return $this->helper->render($media, $variant, $options);
     }
