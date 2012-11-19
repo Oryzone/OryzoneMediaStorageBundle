@@ -221,6 +221,26 @@ class ImageProvider extends Provider
      */
     public function render(Media $media, VariantInterface $variant, CdnInterface $cdn = NULL, $options = array())
     {
-        // TODO: Implement render() method.
+        $url = $cdn->getUrl($media, $variant);
+        $widthKey = $variant->getName() . '.width';
+        $heightKey = $variant->getName() . '.height';
+
+        $attributes = array(
+            'title' => $media->getName(),
+            'width' => $media->getMetadataValue($widthKey),
+            'height'=> $media->getMetadataValue($heightKey)
+        );
+
+        if(isset($options['attributes']))
+            $attributes = array_merge($attributes, $options['attributes']);
+
+        $htmlAttributes = '';
+        if(isset($options['attributes']))
+            foreach($attributes as $key => $value)
+                if($value !== NULL)
+                    $htmlAttributes .= $key . '="' . $value . '" ';
+
+        return sprintf('<img src="%s" %s/>',
+            $url, $htmlAttributes);
     }
 }

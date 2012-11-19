@@ -57,7 +57,8 @@ class FileProvider extends Provider
         $htmlAttributes = '';
         if(isset($options['attributes']))
             foreach($attributes as $key => $value)
-                $htmlAttributes .= $key . '="' . $value . '" ';
+                if($value !== NULL)
+                    $htmlAttributes .= $key . '="' . $value . '" ';
 
         return sprintf('<a href="%s" %s>%s</a>',
                             $url, $htmlAttributes, $media->getName());
