@@ -101,7 +101,7 @@ class DoctrineMediaListener
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
-        if (!$object instanceof Media)
+        if ($object instanceof Media)
             $this->mediaStorage->removeMedia($object);
     }
 

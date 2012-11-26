@@ -396,7 +396,17 @@ class MediaStorage implements MediaStorageInterface
      */
     public function removeMedia(Media $media)
     {
-        // TODO: Implement removeMedia() method.
+        //TODO make removal of physical files asynchronous (optionally)
+
+        $context = $this->getContext($media->getContext());
+        $filesystem = $this->getFilesystem($context->getFilesystemName());
+
+        foreach($media->getVariants() as $name => $value)
+        {
+            $variant = $media->getVariantInstance($name);
+            if($variant->isReady())
+                $filesystem->delete($variant->getFilename());
+        }
     }
 
     /**
