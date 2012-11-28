@@ -397,7 +397,6 @@ class MediaStorage implements MediaStorageInterface
     public function removeMedia(Media $media)
     {
         //TODO make removal of physical files asynchronous (optionally)
-
         $context = $this->getContext($media->getContext());
         $filesystem = $this->getFilesystem($context->getFilesystemName());
 
@@ -412,17 +411,12 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
-    public function getPath(Media $media, $variant = NULL, $options = array())
-    {
-        // TODO: Implement getPath() method.
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getUrl(Media $media, $variant = NULL, $options = array())
     {
-        // TODO: Implement getUrl() method.
+        $context = $this->getContext($media->getContext());
+        $cdn = $this->getCdn($context->getCdnName());
+        $variant = $media->getVariantInstance($variant);
+        return $cdn->getUrl($media, $variant, $options);
     }
 
     /**
@@ -435,7 +429,12 @@ class MediaStorage implements MediaStorageInterface
 
         $context = $this->getContext($media->getContext());
         $provider = $this->getProvider($context->getProviderName());
+        $variantInstance = $media->getVariantInstance($variant);
 
-        return $provider->render($media, $media->getVariantInstance($variant), $this->getCdn($context->getCdnName()), $options);
+        $urlOptions = array();
+        if(isset($options['_url']))
+            $urlOptions = $options['_url'];
+
+        return $provider->render($media, $variantInstance, $this->getUrl($media, $variant, $urlOptions), $options);
     }
 }

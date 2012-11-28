@@ -3,7 +3,6 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
-    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Context\Context;
 
@@ -77,12 +76,12 @@ interface ProviderInterface
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
      * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param \Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface         $cdn
+     * @param string|null                                                 $url
      * @param array                                                       $options
      *
      * @return string
      */
-    public function render(Media $media, VariantInterface $variant, CdnInterface $cdn = NULL, $options = array());
+    public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array());
 
     /**
      * Removes any temp file stored by the current provider instance

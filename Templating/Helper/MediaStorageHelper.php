@@ -28,14 +28,6 @@ class MediaStorageHelper extends Helper implements MediaStorageHelperInterface
     /**
      * {@inheritDoc}
      */
-    public function path(Media $media, $variant = NULL, $options = array())
-    {
-        return $this->mediaStorage->getPath($media, $variant, $options);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function url(Media $media, $variant = NULL, $options = array())
     {
         return $this->mediaStorage->getUrl($media, $variant, $options);

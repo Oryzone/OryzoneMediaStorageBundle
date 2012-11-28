@@ -8,7 +8,6 @@ use Oryzone\Bundle\MediaStorageBundle\Model\Media,
 
 class RemoteCdn implements CdnInterface
 {
-
     /**
      * @var string $baseUrl
      */
@@ -17,18 +16,18 @@ class RemoteCdn implements CdnInterface
     /**
      * {@inheritDoc}
      */
-    public function setOptions($options)
+    public function setConfiguration($configuration)
     {
-        if(!isset($options['base_url']))
+        if(!isset($configuration['base_url']))
             throw new InvalidArgumentException('Missing mandatory "base_url" option');
 
-        $this->baseUrl = $options['base_url'];
+        $this->baseUrl = $configuration['base_url'];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUrl(Media $media, VariantInterface $variant)
+    public function getUrl(Media $media, VariantInterface $variant, $options = array())
     {
         return $this->baseUrl . $variant->getFilename();
     }

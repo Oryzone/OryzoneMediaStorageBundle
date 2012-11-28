@@ -8,17 +8,6 @@ interface MediaStorageHelperInterface
 {
 
     /**
-     * Gets the path of a given media variant
-     *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param string|null $variant
-     * @param  array            $options
-     *
-     * @return string
-     */
-    public function path(Media $media, $variant = NULL, $options = array());
-
-    /**
      * Gets the url of a given media variant
      *
      * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media

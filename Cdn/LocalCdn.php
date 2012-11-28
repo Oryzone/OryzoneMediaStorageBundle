@@ -16,19 +16,36 @@ class LocalCdn implements CdnInterface
     /**
      * {@inheritDoc}
      */
-    public function setOptions($options)
+    public function setConfiguration($configuration)
     {
-        if(!isset($options['path']))
+        if(!isset($configuration['path']))
             throw new InvalidArgumentException('Missing mandatory "path" option');
 
-        $this->path = $options['path'];
+        $this->path = $configuration['path'];
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUrl(Media $media, VariantInterface $variant)
+    public function getUrl(Media $media, VariantInterface $variant, $options = array())
     {
-        return $this->path . $variant->getFilename();
+        $url = $this->path . $variant->getFilename();
+
+        if(isset($options['absolute']) && $options['absolute'])
+        {
+            if(isset($options['domain']))
+                $domain = $options['domain'];
+            else
+                $domain = $_SERVER['HTTP_HOST'];
+
+            if(isset($options['protocol']))
+                $protocol = $options['protocol'];
+            else
+                $protocol = isset($_SERVER['HTTPS']) ? 'https' : 'http';
+
+            $url = sprintf('%s://%s/%s', $protocol, $domain, ltrim($url, '/'));
+        }
+
+        return $url;
     }
 }

@@ -7,8 +7,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
-    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
-    Oryzone\Bundle\MediaStorageBundle\Context\ContextInterface,
     Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException,
     Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
@@ -219,9 +217,8 @@ class ImageProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function render(Media $media, VariantInterface $variant, CdnInterface $cdn = NULL, $options = array())
+    public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array())
     {
-        $url = $cdn->getUrl($media, $variant);
         $widthKey = $variant->getName() . '.width';
         $heightKey = $variant->getName() . '.height';
 

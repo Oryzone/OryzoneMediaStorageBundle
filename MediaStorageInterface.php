@@ -41,17 +41,6 @@ interface MediaStorageInterface
     public function removeMedia(Media $media);
 
     /**
-     * Get the local path of a media file (if any)
-     *
-     * @param  Model\Media      $media
-     * @param  string|null      $variant
-     * @param  array            $options
-     *
-     * @return string
-     */
-    public function getPath(Media $media, $variant = NULL, $options = array());
-
-    /**
      * Get the url of a media file (if any)
      *
      * @param  Model\Media $media

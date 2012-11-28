@@ -30,23 +30,9 @@ class MediaStorageExtension extends \Twig_Extension
     {
         return array
         (
-            'mediaPath'     => new \Twig_Filter_Method($this, 'mediaPath'),
             'mediaUrl'      => new \Twig_Filter_Method($this, 'mediaUrl'),
             'mediaRender'   => new \Twig_Filter_Method($this, 'mediaRender', array( 'is_safe' => array('html')) )
         );
-    }
-
-    /**
-     * Get media path
-     *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
-     * @param null $variant
-     * @param array $options
-     * @return string
-     */
-    public function mediaPath(Media $media, $variant = NULL, $options = array())
-    {
-        return $this->helper->path($media, $variant, $options);
     }
 
     /**

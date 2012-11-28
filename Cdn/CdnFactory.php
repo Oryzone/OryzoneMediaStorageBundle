@@ -78,7 +78,7 @@ class CdnFactory implements \IteratorAggregate
         reset($cdn);
         $cdnPlainArray = each($cdn);
         $cdnAlias = $cdnPlainArray['key'];
-        $cdnOptions = $cdnPlainArray['value'];
+        $cdnConfiguration = $cdnPlainArray['value'];
 
         if(!isset($this->aliases[$cdnAlias]))
             throw new InvalidConfigurationException(sprintf('No CDN service defined with the alias "%s". Your confiuration has: %s', $cdnAlias, json_encode($cdn)));
@@ -92,7 +92,7 @@ class CdnFactory implements \IteratorAggregate
         if(!$service instanceof CdnInterface)
             throw new InvalidConfigurationException(sprintf('The service "%s" associated with the cdn "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface"', $serviceName, $cdnName));
 
-        $service->setOptions($cdnOptions);
+        $service->setConfiguration($cdnConfiguration);
 
         return $service;
     }

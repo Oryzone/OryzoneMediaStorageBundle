@@ -4,7 +4,6 @@ namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
-    Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface,
     Oryzone\Bundle\MediaStorageBundle\Context\Context;
 
 use Symfony\Component\HttpFoundation\File\File;
@@ -43,9 +42,8 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function render(Media $media, VariantInterface $variant, CdnInterface $cdn = NULL, $options = array())
+    public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array())
     {
-        $url = $cdn->getUrl($media, $variant);
         $sizeKey = $variant->getName() . '.size';
 
         $attributes = array(
