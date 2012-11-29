@@ -206,10 +206,10 @@ class ImageProvider extends Provider
             $result = new File($destFile);
         }
 
-        //set metadata
-        $media->setMetadataValue($variant->getName().'.size', $result->getSize());
-        $media->setMetadataValue($variant->getName().'.width', $width);
-        $media->setMetadataValue($variant->getName().'.height', $height);
+        //set variant metadata
+        $variant->setMetaValue('size', $result->getSize());
+        $variant->setMetaValue('width', $width);
+        $variant->setMetaValue('height', $height);
 
         return $result;
     }
@@ -219,13 +219,10 @@ class ImageProvider extends Provider
      */
     public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array())
     {
-        $widthKey = $variant->getName() . '.width';
-        $heightKey = $variant->getName() . '.height';
-
         $attributes = array(
             'title' => $media->getName(),
-            'width' => $media->getMetadataValue($widthKey),
-            'height'=> $media->getMetadataValue($heightKey)
+            'width' => $variant->getMetaValue('width'),
+            'height'=> $variant->getMetaValue('height')
         );
 
         if(isset($options['attributes']))

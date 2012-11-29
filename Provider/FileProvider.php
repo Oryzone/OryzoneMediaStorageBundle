@@ -34,8 +34,7 @@ class FileProvider extends Provider
      */
     public function process(Media $media, VariantInterface $variant, File $source = NULL)
     {
-        $media->setMetadataValue($variant->getName().'.size', $source->getSize());
-
+        $variant->setMetaValue('size', $source->getSize());
         return $source;
     }
 
@@ -44,10 +43,8 @@ class FileProvider extends Provider
      */
     public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array())
     {
-        $sizeKey = $variant->getName() . '.size';
-
         $attributes = array(
-            'title' => $media->getName(). ' ('. $media->getMetadataValue($sizeKey) . ')'
+            'title' => $media->getName(). ' ('. $variant->getMetaValue('size') . ')'
         );
         if(isset($options['attributes']))
             $attributes = array_merge($attributes, $options['attributes']);

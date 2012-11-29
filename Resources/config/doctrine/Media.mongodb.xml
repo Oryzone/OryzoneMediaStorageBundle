@@ -14,7 +14,7 @@
 
         <field name="variants" column="variants" type="array" />
 
-        <field name="metadata" column="metadata" type="array" />
+        <field name="meta" column="meta" type="array" />
 
         <field name="createdAt" column="createdAt" type="datetime"/>
 

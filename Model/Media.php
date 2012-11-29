@@ -46,9 +46,9 @@ abstract class Media
     /**
      * Structured array of metadata
      *
-     * @var array $metadata
+     * @var array $meta
      */
-    protected $metadata;
+    protected $meta;
 
     /**
      * Media creation date
@@ -136,23 +136,23 @@ abstract class Media
     }
 
     /**
-     * Set metadata
+     * Set metadata array
      *
-     * @param array $metadata
+     * @param array $meta
      */
-    public function setMetadata($metadata)
+    public function setMeta($meta)
     {
-        $this->metadata = $metadata;
+        $this->meta = $meta;
     }
 
     /**
-     * Get metadata
+     * Get metadata array
      *
      * @return array
      */
-    public function getMetadata()
+    public function getMeta()
     {
-        return $this->metadata;
+        return $this->meta;
     }
 
     /**
@@ -164,11 +164,11 @@ abstract class Media
      *
      * @return mixed|null
      */
-    public function getMetadataValue($key, $default = NULL)
+    public function getMetaValue($key, $default = NULL)
     {
-        if(is_array($this->metadata) && isset($this->metadata[$key]))
+        if(is_array($this->meta) && isset($this->meta[$key]))
 
-            return $this->metadata[$key];
+            return $this->meta[$key];
 
         return $default;
     }
@@ -179,12 +179,12 @@ abstract class Media
      * @param string $key
      * @param mixed  $value
      */
-    public function setMetadataValue($key, $value)
+    public function setMetaValue($key, $value)
     {
-        if(!is_array($this->metadata))
-            $this->metadata = array();
+        if(!is_array($this->meta))
+            $this->meta = array();
 
-        $this->metadata[$key] = $value;
+        $this->meta[$key] = $value;
     }
 
     /**

@@ -82,6 +82,39 @@ interface VariantInterface
     public function setFilename($filename);
 
     /**
+     * Sets the whole array of metadata for the variant
+     *
+     * @param array $meta
+     * @return mixed
+     */
+    public function setMeta($meta);
+
+    /**
+     * Get the whole array of metadata related to the variant
+     *
+     * @return array
+     */
+    public function getMeta();
+
+    /**
+     * Set a value for a specific metadata
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return mixed
+     */
+    public function setMetaValue($key, $value);
+
+    /**
+     * Get
+     *
+     * @param string $key
+     * @param mixed|null $default a default value in case the given key is not present
+     * @return mixed
+     */
+    public function getMetaValue($key, $default = NULL);
+
+    /**
      * Get the content type (mime type) of the file associated with the variant
      * Used if the variant is stored as a file
      *

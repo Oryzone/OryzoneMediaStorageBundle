@@ -28,6 +28,11 @@ class Variant implements VariantInterface
     protected $filename;
 
     /**
+     * @var array $meta
+     */
+    protected $meta;
+
+    /**
      * @var string $contentType
      */
     protected $contentType;
@@ -61,9 +66,7 @@ class Variant implements VariantInterface
     }
 
     /**
-     * Set the name
-     *
-     * @param string $name
+     * {@inheritDoc}
      */
     public function setName($name)
     {
@@ -79,13 +82,49 @@ class Variant implements VariantInterface
     }
 
     /**
-     * Set the filename
-     *
-     * @param string $filename
+     * {@inheritDoc}
      */
     public function setFilename($filename)
     {
         $this->filename = $filename;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setMetaValue($key, $value)
+    {
+        if(!is_array($this->meta))
+            $this->meta = array();
+
+        $this->meta[$key] = $value;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMetaValue($key, $default = NULL)
+    {
+        if(isset($this->meta[$key]))
+            return $this->meta[$key];
+
+        return $default;
     }
 
     /**
@@ -133,9 +172,7 @@ class Variant implements VariantInterface
     }
 
     /**
-     * Set the mode
-     *
-     * @param int $mode
+     * {@inheritDoc}
      */
     public function setMode($mode)
     {
@@ -221,6 +258,9 @@ class Variant implements VariantInterface
             'status'        => $this->status
         );
 
+        if(!empty($this->meta))
+            $data['meta'] = $this->meta;
+
         if($this->hasError())
             $data['error'] = $this->error;
 
@@ -233,20 +273,22 @@ class Variant implements VariantInterface
     public static function fromArray($array)
     {
         $variant = new Variant();
-        if(isset($array['name']))
+        if( isset($array['name']) )
             $variant->setName($array['name']);
-        if(isset($array['filename']))
+        if( isset($array['filename']) )
             $variant->setFilename($array['filename']);
-        if(isset($array['contentType']))
+        if( isset($array['contentType']) )
             $variant->setContentType($array['contentType']);
-        if(isset($array['options']))
+        if( isset($array['options']) )
             $variant->setOptions($array['options']);
-        if(isset($array['mode']))
+        if( isset($array['mode']) )
             $variant->setStatus($array['mode']);
-        if(isset($array['status']))
+        if( isset($array['status']) )
             $variant->setStatus($array['status']);
-        if(isset($array['error']))
+        if( isset($array['error']) )
             $variant->setError($array['error']);
+        if( isset($array['meta']) && is_array($array['meta']) && !empty($array['meta']) )
+            $variant->setMeta($array['meta']);
 
         return $variant;
     }
