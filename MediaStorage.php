@@ -7,7 +7,8 @@ use Knp\Bundle\GaufretteBundle\FilesystemMap;
 use Gaufrette\StreamMode,
     Gaufrette\Stream\Local;
 
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\File,
+    Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
     Oryzone\Bundle\MediaStorageBundle\Context\ContextFactory,
@@ -18,13 +19,21 @@ use Oryzone\Bundle\MediaStorageBundle\Cdn\CdnFactory,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantNode,
     Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException,
-    Oryzone\Bundle\MediaStorageBundle\Exception\VariantProcessingException;
+    Oryzone\Bundle\MediaStorageBundle\Exception\VariantProcessingException,
+    Oryzone\Bundle\MediaStorageBundle\Event\MediaEvents,
+    Oryzone\Bundle\MediaStorageBundle\Event\MediaEvent;
+
 
 /**
  * Base media storage class
  */
 class MediaStorage implements MediaStorageInterface
 {
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
+     */
+    protected $eventDispatcher;
+
     /**
      * @var Cdn\CdnFactory $cdnFactory
      */
@@ -83,6 +92,7 @@ class MediaStorage implements MediaStorageInterface
     /**
      * Constructor
      *
+     * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      * @param Cdn\CdnFactory                            $cdnFactory
      * @param Context\ContextFactory                    $contextFactory
      * @param \Knp\Bundle\GaufretteBundle\FilesystemMap $filesystemMap
@@ -95,11 +105,13 @@ class MediaStorage implements MediaStorageInterface
      * @param string|null                               $defaultNamingStrategy
      * @param string|null                               $defaultVariant
      */
-    public function __construct(CdnFactory $cdnFactory, ContextFactory $contextFactory, FilesystemMap $filesystemMap,
+    public function __construct(EventDispatcherInterface $eventDispatcher, CdnFactory $cdnFactory,
+                                ContextFactory $contextFactory, FilesystemMap $filesystemMap,
                                 ProviderFactory $providerFactory, NamingStrategyFactory $namingStrategyFactory,
                                 $defaultCdn = NULL, $defaultContext = NULL, $defaultFilesystem = NULL,
                                 $defaultProvider = NULL, $defaultNamingStrategy = NULL, $defaultVariant = NULL)
     {
+        $this->eventDispatcher = $eventDispatcher;
         $this->cdnFactory = $cdnFactory;
         $this->contextFactory = $contextFactory;
         $this->filesystemMap = $filesystemMap;
@@ -312,6 +324,9 @@ class MediaStorage implements MediaStorageInterface
      */
     protected function processMedia(Media $media, $isUpdate = FALSE)
     {
+        $mediaEvent = new MediaEvent($media, $this);
+        $this->eventDispatcher->dispatch(MediaEvents::BEFORE_PROCESS, $mediaEvent);
+
         $context = $this->getContext($media->getContext());
         $provider = $this->getProvider($context->getProviderName());
         $variantsTree = $context->buildVariantTree();
@@ -379,6 +394,8 @@ class MediaStorage implements MediaStorageInterface
         );
 
         $provider->removeTempFiles();
+
+        $this->eventDispatcher->dispatch(MediaEvents::AFTER_PROCESS, $mediaEvent);
         return TRUE; // marks the media as updated
     }
 
@@ -387,6 +404,8 @@ class MediaStorage implements MediaStorageInterface
      */
     public function prepareMedia(Media $media, $isUpdate = false)
     {
+        $mediaEvent = new MediaEvent($media, $this);
+        $this->eventDispatcher->dispatch(MediaEvents::BEFORE_PREPARE, $mediaEvent);
         $provider = $this->getProvider($media->getProvider());
         if(!$media->getProvider())
             $media->setProvider($provider->getName());
@@ -394,6 +413,7 @@ class MediaStorage implements MediaStorageInterface
         if(!$media->getContext())
             $media->setContext($context->getName());
         $provider->prepare($media, $context);
+        $this->eventDispatcher->dispatch(MediaEvents::AFTER_PREPARE, $mediaEvent);
     }
 
     /**
@@ -401,7 +421,11 @@ class MediaStorage implements MediaStorageInterface
      */
     public function saveMedia(Media $media)
     {
-        return $this->processMedia($media);
+        $mediaEvent = new MediaEvent($media, $this);
+        $this->eventDispatcher->dispatch(MediaEvents::BEFORE_SAVE, $mediaEvent);
+        $result = $this->processMedia($media);
+        $this->eventDispatcher->dispatch(MediaEvents::AFTER_SAVE, $mediaEvent);
+        return $result;
     }
 
     /**
@@ -409,10 +433,16 @@ class MediaStorage implements MediaStorageInterface
      */
     public function updateMedia(Media $media)
     {
+        $result = FALSE;
         if($media->getContent() !== NULL)
-            return $this->processMedia($media, TRUE);
+        {
+            $mediaEvent = new MediaEvent($media, $this);
+            $this->eventDispatcher->dispatch(MediaEvents::BEFORE_UPDATE, $mediaEvent);
+            $result = $this->processMedia($media, TRUE);
+            $this->eventDispatcher->dispatch(MediaEvents::AFTER_UPDATE, $mediaEvent);
+        }
 
-        return FALSE;
+        return $result;
     }
 
     /**
@@ -421,6 +451,9 @@ class MediaStorage implements MediaStorageInterface
     public function removeMedia(Media $media)
     {
         //TODO make removal of physical files asynchronous (optionally)
+        $mediaEvent = new MediaEvent($media, $this);
+        $this->eventDispatcher->dispatch(MediaEvents::BEFORE_REMOVE, $mediaEvent);
+
         $context = $this->getContext($media->getContext());
         $filesystem = $this->getFilesystem($context->getFilesystemName());
 
@@ -430,6 +463,8 @@ class MediaStorage implements MediaStorageInterface
             if($variant->isReady() && $filesystem->has($variant->getFilename()))
                 $filesystem->delete($variant->getFilename());
         }
+
+        $this->eventDispatcher->dispatch(MediaEvents::AFTER_REMOVE, $mediaEvent);
     }
 
     /**

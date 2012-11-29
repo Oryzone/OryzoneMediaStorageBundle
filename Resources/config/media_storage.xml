@@ -38,6 +38,7 @@
 
         <!-- oryzone_media_storage -->
         <service id="oryzone_media_storage" class="%oryzone_media_storage.class%">
+            <argument type="service" id="event_dispatcher" />
             <argument type="service" id="oryzone_media_storage.cdn_factory" />
             <argument type="service" id="oryzone_media_storage.context_factory" />
             <argument type="service" id="knp_gaufrette.filesystem_map" />

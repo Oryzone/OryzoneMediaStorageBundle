@@ -43,10 +43,8 @@ class DoctrineMediaListener
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if($object instanceof Media)
         {
-            //TODO put custom event here
             $this->mediaStorage->prepareMedia($object);
             $this->mediaStorage->saveMedia($object);
-            //TODO put custom event here
         }
     }
 
@@ -58,11 +56,9 @@ class DoctrineMediaListener
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media) {
-            //TODO put custom event here
             $this->mediaStorage->prepareMedia($object, TRUE);
             $this->mediaStorage->updateMedia($object);
             $this->adapter->recomputeChangeSet($eventArgs);
-            //TODO put custom event here
         }
     }
 
@@ -75,9 +71,7 @@ class DoctrineMediaListener
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media)
         {
-            //TODO put custom event here
             $this->mediaStorage->removeMedia($object);
-            //TODO put custom event here
         }
     }
 
