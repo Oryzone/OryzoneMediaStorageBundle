@@ -40,9 +40,15 @@ class DoctrineMediaListener
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
+        var_dump('prePERSIST');
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if($object instanceof Media)
+        {
+            //TODO put custom event here
             $this->mediaStorage->prepareMedia($object);
+            $this->mediaStorage->saveMedia($object);
+            //TODO put custom event here
+        }
     }
 
     /**
@@ -51,10 +57,14 @@ class DoctrineMediaListener
      */
     public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
+        var_dump('preUPDATE');
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media) {
-            $this->mediaStorage->prepareMedia($object, true);
+            //TODO put custom event here
+            $this->mediaStorage->prepareMedia($object, TRUE);
+            $this->mediaStorage->updateMedia($object);
             $this->adapter->recomputeChangeSet($eventArgs);
+            //TODO put custom event here
         }
     }
 
@@ -64,15 +74,10 @@ class DoctrineMediaListener
      */
     public function postPersist(LifecycleEventArgs $eventArgs)
     {
+        var_dump('postPERSIST');
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media) {
-            $updated = $this->mediaStorage->saveMedia($object);
-
-            if ($updated) {
-                $manager = $this->adapter->getManagerFromArgs($eventArgs);
-                $manager->persist($object);
-                $manager->flush();
-            }
+            //TODO put custom event here
         }
     }
 
@@ -82,15 +87,10 @@ class DoctrineMediaListener
      */
     public function postUpdate(LifecycleEventArgs $eventArgs)
     {
+        var_dump('postUPDATE');
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media) {
-            $updated = $this->mediaStorage->updateMedia($object);
-
-            if ($updated) {
-                $manager = $this->adapter->getManagerFromArgs($eventArgs);
-                $manager->persist($object);
-                $manager->flush();
-            }
+            //TODO put custom event here
         }
     }
 
@@ -100,6 +100,7 @@ class DoctrineMediaListener
      */
     public function preRemove(LifecycleEventArgs $eventArgs)
     {
+        var_dump('preREMOVE');
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media)
             $this->mediaStorage->removeMedia($object);

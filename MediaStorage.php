@@ -302,23 +302,15 @@ class MediaStorage implements MediaStorageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Processes a given media
+     *
+     * @param Model\Media $media
+     * @param bool $isUpdate
+     *
+     * @throws Exception\VariantProcessingException
+     * @return bool
      */
-    public function prepareMedia(Media $media, $isUpdate = false)
-    {
-        $provider = $this->getProvider($media->getProvider());
-        if(!$media->getProvider())
-            $media->setProvider($provider->getName());
-        $context = $this->getContext($media->getContext());
-        if(!$media->getContext())
-            $media->setContext($context->getName());
-        $provider->prepare($media, $context);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function saveMedia(Media $media)
+    protected function processMedia(Media $media, $isUpdate = FALSE)
     {
         $context = $this->getContext($media->getContext());
         $provider = $this->getProvider($context->getProviderName());
@@ -330,10 +322,17 @@ class MediaStorage implements MediaStorageInterface
 
         $variantsTree->visit(
             function(VariantNode $node, $level)
-                use ($provider, $context, $media, $filesystem, $namingStrategy, &$generatedFiles)
+            use ($provider, $context, $media, $filesystem, $namingStrategy, &$generatedFiles, $isUpdate)
             {
                 $variant = $node->getContent();
                 $parent = $node->getParent() ? $node->getParent()->getContent() : NULL;
+                if($isUpdate && $media->hasVariant($variant->getName()))
+                {
+                    $existingVariant = $media->getVariantInstance($variant->getName());
+                    if($existingVariant->isReady())
+                        $filesystem->delete($existingVariant->getFilename());
+                    $media->removeVariant($variant->getName());
+                }
                 $media->addVariant($variant);
 
                 $file = NULL;
@@ -386,9 +385,34 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
+    public function prepareMedia(Media $media, $isUpdate = false)
+    {
+        $provider = $this->getProvider($media->getProvider());
+        if(!$media->getProvider())
+            $media->setProvider($provider->getName());
+        $context = $this->getContext($media->getContext());
+        if(!$media->getContext())
+            $media->setContext($context->getName());
+        $provider->prepare($media, $context);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function saveMedia(Media $media)
+    {
+        return $this->processMedia($media);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function updateMedia(Media $media)
     {
-        // TODO implement updateMedia() method
+        if($media->getContent() !== NULL)
+            return $this->processMedia($media, TRUE);
+
+        return FALSE;
     }
 
     /**
@@ -403,7 +427,7 @@ class MediaStorage implements MediaStorageInterface
         foreach($media->getVariants() as $name => $value)
         {
             $variant = $media->getVariantInstance($name);
-            if($variant->isReady())
+            if($variant->isReady() && $filesystem->has($variant->getFilename()))
                 $filesystem->delete($variant->getFilename());
         }
     }
