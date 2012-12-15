@@ -5,6 +5,7 @@ namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Context\Context;
+use Symfony\Component\Form\FormBuilderInterface;
 
 use Symfony\Component\HttpFoundation\File\File;
 
@@ -82,6 +83,23 @@ interface ProviderInterface
      * @return string
      */
     public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array());
+
+    /**
+     * Builds a form to handle the media
+     *
+     * @param \Symfony\Component\Form\FormBuilderInterface $formBuilder
+     * @param array $options
+     * @return mixed
+     */
+    public function buildMediaType(FormBuilderInterface $formBuilder, array $options = array());
+
+    /**
+     * Transforms a media (from a form)
+     *
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @return mixed
+     */
+    public function transform(Media $media);
 
     /**
      * Removes any temp file stored by the current provider instance

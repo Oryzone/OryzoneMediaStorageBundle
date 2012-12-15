@@ -2,9 +2,12 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
+use Symfony\Component\Form\FormBuilderInterface;
+
+use Oryzone\Bundle\MediaStorageBundle\Model\Media;
+
 abstract class Provider implements ProviderInterface
 {
-
     /**
      * Default content type (file).
      * Can be redefined in subclasses without the need to redefine the getContentType method
@@ -65,6 +68,31 @@ abstract class Provider implements ProviderInterface
         foreach($this->tempFiles as $file)
             if(file_exists($file))
                 unlink($file);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildMediaType(FormBuilderInterface $formBuilder, array $options = array())
+    {
+        $fieldTypes = array(
+            self::CONTENT_TYPE_FILE => 'file',
+            self::CONTENT_TYPE_INT => 'integer',
+            self::CONTENT_TYPE_STRING => 'text'
+        );
+
+        $formBuilder->add('content', $fieldTypes[self::$contentType]);
+    }
+
+    /**
+     * Transforms a media (from a form)
+     *
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @return mixed
+     */
+    public function transform(Media $media)
+    {
+        // does nothing
     }
 
 
