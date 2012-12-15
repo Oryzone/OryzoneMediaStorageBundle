@@ -449,10 +449,16 @@ class MediaStorage implements MediaStorageInterface
      */
     public function render(Media $media, $variant = NULL, $options = array())
     {
-        if($variant === NULL)
-            $variant = $this->defaultVariant;
-
         $context = $this->getContext($media->getContext());
+
+        if($variant === NULL)
+        {
+            if($context->getDefaultVariant() !== NULL)
+                $variant = $context->getDefaultVariant();
+            else
+                $variant = $this->defaultVariant;
+        }
+
         $provider = $this->getProvider($context->getProviderName());
         $variantInstance = $media->getVariantInstance($variant);
 

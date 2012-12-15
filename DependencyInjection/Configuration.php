@@ -95,7 +95,7 @@ class Configuration implements ConfigurationInterface
 
         $root->children()
             ->scalarNode('defaultVariant')
-            ->defaultNull()
+            ->defaultValue('default')
         ->end();
     }
 
@@ -123,6 +123,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('filesystem')->defaultNull()->end()
                             ->scalarNode('cdn')->defaultNull()->end()
                             ->scalarNode('namingStrategy')->defaultNull()->end()
+                            ->scalarNode('defaultVariant')->defaultNull()->end()
                             ->arrayNode('variants')
                                 ->defaultValue($this->defaultVariants)
                                 ->useAttributeAsKey('name')

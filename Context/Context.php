@@ -34,6 +34,11 @@ class Context implements ContextInterface
     protected $namingStrategyName;
 
     /**
+     * @var string $defaultVariant
+     */
+    protected $defaultVariant;
+
+    /**
      * @var array $variants
      */
     protected $variants;
@@ -54,8 +59,9 @@ class Context implements ContextInterface
      * @param string $cdnName
      * @param string $namingStrategyName
      * @param array  $variants
+     * @param string $defaultVariant
      */
-    public function __construct($name, $providerName, $filesystemName, $cdnName, $namingStrategyName, $variants = array())
+    public function __construct($name, $providerName, $filesystemName, $cdnName, $namingStrategyName, $variants = array(), $defaultVariant = 'default')
     {
         $this->cdnName = $cdnName;
         $this->filesystemName = $filesystemName;
@@ -63,6 +69,7 @@ class Context implements ContextInterface
         $this->providerName = $providerName;
         $this->namingStrategyName = $namingStrategyName;
         $this->variants = $variants;
+        $this->defaultVariant = $defaultVariant;
     }
 
     /**
@@ -103,6 +110,14 @@ class Context implements ContextInterface
     public function getNamingStrategyName()
     {
         return $this->namingStrategyName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getDefaultVariant()
+    {
+        return $this->defaultVariant;
     }
 
     /**

@@ -41,6 +41,13 @@ interface ContextInterface
     public function getNamingStrategyName();
 
     /**
+     * Get the name of the default variant
+     *
+     * @return string
+     */
+    public function getDefaultVariant();
+
+    /**
      * Get the raw array of variants
      *
      * @return string
