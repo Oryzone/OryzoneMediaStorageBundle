@@ -117,13 +117,4 @@ interface MediaStorageInterface
      */
     public function getNamingStrategy($name = NULL);
 
-    /**
-     * Get the name of a variant (fallbacks to default if null is given)
-     *
-     * @param string|null $name
-     * @return null|string
-     * @throws Exception\InvalidArgumentException
-     */
-    public function getVariant($name = NULL);
-
 }

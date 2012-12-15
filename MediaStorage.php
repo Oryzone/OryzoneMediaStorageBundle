@@ -264,22 +264,6 @@ class MediaStorage implements MediaStorageInterface
     }
 
     /**
-     * {@inheritDoc}
-     */
-    public function getVariant($name = NULL)
-    {
-        if($name == NULL)
-        {
-            if(!$this->defaultVariant)
-                throw new InvalidArgumentException('Trying to use the default variant but it has not been set');
-
-            $name = $this->defaultVariant;
-        }
-
-        return $name;
-    }
-
-    /**
      * Processes a given media
      *
      * @param Model\Media $media
