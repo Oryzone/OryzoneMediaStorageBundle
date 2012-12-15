@@ -66,6 +66,16 @@ class ContextFactory implements \IteratorAggregate
     }
 
     /**
+     * Gets all the available contexts
+     *
+     * @return array
+     */
+    public function getAvailableContexts()
+    {
+        return array_keys($this->contexts);
+    }
+
+    /**
      * @inheritDoc
      */
     public function getIterator()
