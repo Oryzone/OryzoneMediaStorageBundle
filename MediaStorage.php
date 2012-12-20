@@ -164,7 +164,7 @@ class MediaStorage implements MediaStorageInterface
      */
     protected function storeFile(File $file, $filename, \Gaufrette\Filesystem $filesystem, VariantInterface $variant)
     {
-        $extension = $file->getExtension();
+        $extension = $file->guessExtension();
         $filename .= '.'.$extension;
 
         $src = new Local($file->getPathname());
