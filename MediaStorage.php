@@ -356,10 +356,8 @@ class MediaStorage implements MediaStorageInterface
     {
         $mediaEvent = new MediaEvent($media, $this);
         $this->eventDispatcher->dispatch(MediaEvents::BEFORE_PREPARE, $mediaEvent);
-        $provider = $this->getProvider($media->getProvider());
-        if(!$media->getProvider())
-            $media->setProvider($provider->getName());
         $context = $this->getContext($media->getContext());
+        $provider = $this->getProvider($context->getProviderName());
         if(!$media->getContext())
             $media->setContext($context->getName());
         $provider->prepare($media, $context);

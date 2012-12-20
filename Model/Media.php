@@ -30,13 +30,6 @@ abstract class Media
     protected $context;
 
     /**
-     * The name of the provider
-     *
-     * @var string $provider
-     */
-    protected $provider;
-
-    /**
      * Structured array of available variants
      *
      * @var array $variants
@@ -225,26 +218,6 @@ abstract class Media
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set provider
-     *
-     * @param string $provider
-     */
-    public function setProvider($provider)
-    {
-        $this->provider = $provider;
-    }
-
-    /**
-     * Get provider
-     *
-     * @return string
-     */
-    public function getProvider()
-    {
-        return $this->provider;
     }
 
     /**
