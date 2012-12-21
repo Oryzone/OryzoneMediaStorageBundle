@@ -43,11 +43,11 @@ interface ProviderInterface
     /**
      * Checks if the current provider supports a given Media
      *
-     * @param \Symfony\Component\HttpFoundation\File\File $file
+     * @param mixed $content
      *
      * @return boolean
      */
-    public function supportsFile(File $file);
+    public function validateContent($content);
 
     /**
      * Executed each time a media is about to be saved, before the process method

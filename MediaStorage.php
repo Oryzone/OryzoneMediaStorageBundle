@@ -3,6 +3,7 @@
 namespace Oryzone\Bundle\MediaStorageBundle;
 
 use Knp\Bundle\GaufretteBundle\FilesystemMap;
+use Oryzone\Bundle\MediaStorageBundle\Exception\InvalidContentException;
 
 use Gaufrette\StreamMode,
     Gaufrette\Stream\Local;
@@ -284,6 +285,11 @@ class MediaStorage implements MediaStorageInterface
         $namingStrategy = $this->getNamingStrategy($context->getNamingStrategyName());
 
         $generatedFiles = array();
+
+        if( !$provider->validateContent($media->getContent()) )
+            throw new InvalidContentException(sprintf('Invalid content of type "%s" for media "%s" detected by "%s" provider',
+                    gettype($media->getContent())?get_class($media->getContent()):gettype($media->getContent()), $media, $provider),
+                $provider, $media);
 
         $variantsTree->visit(
             function(VariantNode $node, $level)

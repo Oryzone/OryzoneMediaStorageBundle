@@ -137,9 +137,13 @@ class ImageProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function supportsFile(File $file)
+    public function validateContent($content)
     {
-        return in_array($file->getMimeType(), self::$SUPPORTED_TYPES);
+        if(is_string($content))
+            $content = new File($content);
+
+        return ($content instanceof File && $content->isFile() &&
+            in_array($content->getMimeType(), self::$SUPPORTED_TYPES));
     }
 
     /**
@@ -147,7 +151,7 @@ class ImageProvider extends Provider
      */
     public function prepare(Media $media, Context $context)
     {
-        // TODO: Implement prepare() method.
+        // nothing to do
     }
 
     /**

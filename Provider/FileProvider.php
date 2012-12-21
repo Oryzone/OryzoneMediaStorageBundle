@@ -16,9 +16,12 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
-    public function supportsFile(File $file)
+    public function validateContent($content)
     {
-        return ($file->exists());
+        if(is_string($content))
+            $content = new File($content);
+        
+        return ($content instanceof File && $content->isFile());
     }
 
     /**
