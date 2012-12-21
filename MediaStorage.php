@@ -288,7 +288,7 @@ class MediaStorage implements MediaStorageInterface
 
         if( !$provider->validateContent($media->getContent()) )
             throw new InvalidContentException(sprintf('Invalid content of type "%s" for media "%s" detected by "%s" provider',
-                    gettype($media->getContent())?get_class($media->getContent()):gettype($media->getContent()), $media, $provider),
+                    gettype($media->getContent()=='object')?get_class($media->getContent()):gettype($media->getContent()), $media, $provider),
                 $provider, $media);
 
         $variantsTree->visit(

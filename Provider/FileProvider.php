@@ -20,7 +20,7 @@ class FileProvider extends Provider
     {
         if(is_string($content))
             $content = new File($content);
-        
+
         return ($content instanceof File && $content->isFile());
     }
 
