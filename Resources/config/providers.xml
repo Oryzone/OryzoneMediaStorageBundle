@@ -29,7 +29,7 @@
             <argument>%oryzone_media_storage.providers.youtube.tempDir%</argument>
             <argument type="service" id="imagine" on-invalid="ignore"/>
             <argument type="service" id="buzz" on-invalid="ignore"/>
-            <tag name="oryzone_media_storage_provider" alias="image"/>
+            <tag name="oryzone_media_storage_provider" alias="youtube"/>
         </service>
 
     </services>

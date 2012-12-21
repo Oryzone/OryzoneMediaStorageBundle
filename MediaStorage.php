@@ -286,11 +286,6 @@ class MediaStorage implements MediaStorageInterface
 
         $generatedFiles = array();
 
-        if( !$provider->validateContent($media->getContent()) )
-            throw new InvalidContentException(sprintf('Invalid content of type "%s" for media "%s" detected by "%s" provider',
-                    gettype($media->getContent()=='object')?get_class($media->getContent()):gettype($media->getContent()), $media, $provider),
-                $provider, $media);
-
         $variantsTree->visit(
             function(VariantNode $node, $level)
             use ($provider, $context, $media, $filesystem, $namingStrategy, &$generatedFiles, $isUpdate)
@@ -366,6 +361,12 @@ class MediaStorage implements MediaStorageInterface
         $provider = $this->getProvider($context->getProviderName());
         if(!$media->getContext())
             $media->setContext($context->getName());
+
+        if( !$provider->validateContent($media->getContent()) )
+            throw new InvalidContentException(sprintf('Invalid content of type "%s" for media "%s" detected by "%s" provider',
+                    gettype($media->getContent())=='object'?get_class($media->getContent()):gettype($media->getContent()).'('.$media->getContent().')', $media, $provider->getName()),
+                $provider, $media);
+
         $provider->prepare($media, $context);
         $this->eventDispatcher->dispatch(MediaEvents::AFTER_PREPARE, $mediaEvent);
     }

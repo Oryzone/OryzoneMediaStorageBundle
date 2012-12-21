@@ -12,6 +12,7 @@ use Oryzone\Bundle\MediaStorageBundle\Model\Media,
 
 class ImageProvider extends Provider
 {
+    protected $name = 'image';
 
     /**
      * @var string $tempDir
@@ -61,6 +62,7 @@ class ImageProvider extends Provider
      */
     public function __construct($tempDir, \Imagine\Image\ImagineInterface $imagine = NULL)
     {
+        parent::__construct();
         $this->checkTempDir($tempDir);
         $this->tempDir = $tempDir;
         $this->imagine = $imagine;

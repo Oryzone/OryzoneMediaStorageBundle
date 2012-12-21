@@ -10,8 +10,15 @@ use Symfony\Component\HttpFoundation\File\File;
 
 class FileProvider extends Provider
 {
-
     protected $name = 'file';
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      * {@inheritDoc}

@@ -2,15 +2,21 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Form\FormBuilderInterface;
+
+use Buzz\Browser;
+
+use Imagine\Image\ImagineInterface;
 
 use Oryzone\Bundle\MediaStorageBundle\Provider\Provider,
     Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
-    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface;
+    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
+    Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException;
 
-class YoutubeProvider extends Provider
+class YoutubeProvider extends ImageProvider
 {
+    protected $name = 'youtube';
 
     /**
      * Regex to validate youtube video urls
@@ -24,11 +30,51 @@ class YoutubeProvider extends Provider
      */
     const VALIDATION_REGEX_ID = '%^[^"&?/ ]{11}$%i';
 
-    protected $tempDir;
+    /**
+     * Url scheme to retrieve video data
+     * @const string API_URL
+     */
+    const API_URL = 'http://gdata.youtube.com/feeds/api/videos/%s';
 
-    protected $imagine;
+    /**
+     * Canonical url scheme to watch youtube video
+     * @const string CANONICAL_URL
+     */
+    const CANONICAL_URL = 'http://www.youtube.com/?v=%s';
 
+    /**
+     * Url scheme for the video preview image
+     * @const string PREVIEW_IMAGE_URL
+     */
+    const PREVIEW_IMAGE_URL = 'http://img.youtube.com/vi/%s/0.jpg';
+
+    /**
+     * @var \Buzz\Client\AbstractClient $buzz
+     */
     protected $buzz;
+
+    /**
+     * Constructor
+     *
+     * @param $tempDir
+     * @param \Imagine\Image\ImagineInterface $imagine
+     * @param \Buzz\Browser $buzz
+     */
+    public function __construct($tempDir, ImagineInterface $imagine, Browser $buzz)
+    {
+        parent::__construct($tempDir, $imagine);
+        $this->buzz = $buzz;
+    }
+
+    protected function downloadFile($url, $destination)
+    {
+        $fp = fopen($destination, 'w');
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_exec($ch);
+        curl_close($ch);
+        fclose($fp);
+    }
 
     /**
      * {@inheritDoc}
@@ -52,41 +98,79 @@ class YoutubeProvider extends Provider
 
         if($id !== NULL)
         {
-            // TODO make request to youtube to get metadata
+            $apiUrl = sprintf(self::API_URL, $id);
+            $videoUrl = sprintf(self::CANONICAL_URL, $id);
+            $previewImageUrl = sprintf(self::PREVIEW_IMAGE_URL, $id);
 
-            // Store id into the metadata
+            /**
+             * @var \Buzz\Message\Response $response
+             */
+            $response = $this->buzz->get($apiUrl);
 
-            // download the preview and set it as content
+            if($response->isClientError() || $response->isServerError())
+                throw new ProviderProcessException(sprintf('Cannot Youtube find video "%s"', $videoUrl), $this, $media);
+
+            $previewImageFile = sprintf('%syoutube_preview_%s.jpg', $this->tempDir, $id);
+            $this->addTempFile($previewImageFile);
+            if(!file_exists($previewImageFile))
+                $this->downloadFile($previewImageUrl, $previewImageFile);
+
+            $media->setContent($previewImageFile);
+
+            //parse youtube metadata
+            $title = NULL;
+            $description = NULL;
+            $tags = NULL;
+
+            $doc = new \DOMDocument();
+            $doc->loadXML($response->getContent());
+
+            $xpath = new \DOMXpath($doc);
+            $xpath->registerNamespace('a', 'http://www.w3.org/2005/Atom');
+
+            // title
+            $elements = $xpath->query('/a:entry/a:title');
+            if (!is_null($elements) && $elements->length > 0)
+                $title = $elements->item(0)->nodeValue;
+
+            //description
+            $elements = $xpath->query('/a:entry/a:content');
+            if (!is_null($elements) && $elements->length > 0)
+                $description = $elements->item(0)->nodeValue;
+
+            //tags
+            $elements = $xpath->query('(/a:entry/a:category/@term)[position()>1]');
+            if(!is_null($elements) && $elements->length > 0)
+            {
+                $tags = array();
+                foreach($elements as $element)
+                    $tags[] = $element->nodeValue;
+            }
+
+            $media->setMetaValue('id', $id);
+            if($title)
+                $media->setMetaValue('title', $title);
+            if($description)
+                $media->setMetaValue('description', $description);
+            if($tags)
+                $media->setMetaValue('tags', $tags);
         }
     }
 
     /**
-     * Process the media to create a variant. Should return a <code>File</code> instance referring
-     * the resulting file
-     *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
-     * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param \Symfony\Component\HttpFoundation\File\File                 $source
-     *
-     * @return File|null
-     */
-    public function process(Media $media, VariantInterface $variant, File $source = NULL)
-    {
-        // TODO: Implement process() method.
-    }
-
-    /**
-     * Renders a variant to HTML code. Useful for twig (or other template engines) integrations
-     *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media              $media
-     * @param \Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface $variant
-     * @param string|null                                                 $url
-     * @param array                                                       $options
-     *
-     * @return string
+     * {@inheritDoc}
      */
     public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array())
     {
-        // TODO: Implement render() method.
+        // TODO: change this
+        return parent::render($media, $variant, $url, $options);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function buildMediaType(FormBuilderInterface $formBuilder, array $options = array())
+    {
+        $formBuilder->add('content', 'text');
     }
 }
