@@ -238,7 +238,7 @@ class ImageProvider extends Provider
         if(isset($options['attributes']))
             foreach($attributes as $key => $value)
                 if($value !== NULL)
-                    $htmlAttributes .= $key . '="' . $value . '" ';
+                    $htmlAttributes .= $key . ($value !== '' ?('="' . $value. '"'):'') . ' ';
 
         return sprintf('<img src="%s" %s/>',
             $url, $htmlAttributes);

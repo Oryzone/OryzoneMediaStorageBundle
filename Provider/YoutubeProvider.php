@@ -3,6 +3,7 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
 use Buzz\Browser;
 
@@ -162,8 +163,43 @@ class YoutubeProvider extends ImageProvider
      */
     public function render(Media $media, VariantInterface $variant, $url = NULL, $options = array())
     {
-        // TODO: change this
-        return parent::render($media, $variant, $url, $options);
+        $defaultOptions = array(
+            'mode' => 'image',
+            'attributes' => array(
+
+                'video' => array(
+                    'width' => $variant->getMetaValue('width', 420),
+                    'height'=> $variant->getMetaValue('height', 315),
+                    'frameborder' => 0,
+                    'allowfullscreen' => ''
+                ),
+
+                'image' => array(
+                    'title' => $media->getName(),
+                    'width' => $variant->getMetaValue('width', 420),
+                    'height'=> $variant->getMetaValue('height', 315),
+                )
+
+            )
+        );
+
+        $options = array_merge($defaultOptions, $options);
+
+        if($options['mode'] != 'video' && $options['mode'] != 'image')
+            throw new InvalidArgumentException(sprintf('Invalid mode "%s" to render a Youtube Video. Allowed values: "image", "video"', $options['mode']) );
+
+        $htmlAttributes = '';
+        if(isset($options['attributes']))
+            foreach($options['attributes'][$options['mode']] as $key => $value)
+                if($value !== NULL)
+                    $htmlAttributes .= $key . ($value !== '' ?('="' . $value. '"'):'') . ' ';
+
+        if($options['mode'] == 'video')
+            $code = sprintf('<iframe src="http://www.youtube.com/embed/%s" %s></iframe>', $media->getMetaValue('id'), $htmlAttributes);
+        else
+            $code = sprintf('<img src="%s" %s/>', $url, $htmlAttributes);
+
+        return $code;
     }
 
     /**
