@@ -7,8 +7,10 @@
         <parameter key="oryzone_media_storage.providers.file.class">Oryzone\Bundle\MediaStorageBundle\Provider\FileProvider</parameter>
         <parameter key="oryzone_media_storage.providers.image.class">Oryzone\Bundle\MediaStorageBundle\Provider\ImageProvider</parameter>
         <parameter key="oryzone_media_storage.providers.youtube.class">Oryzone\Bundle\MediaStorageBundle\Provider\YoutubeProvider</parameter>
+        <parameter key="oryzone_media_storage.providers.vimeo.class">Oryzone\Bundle\MediaStorageBundle\Provider\VimeoProvider</parameter>
         <parameter key="oryzone_media_storage.providers.image.tempDir">%kernel.cache_dir%/Oryzone/MediaStorage/temp/</parameter>
         <parameter key="oryzone_media_storage.providers.youtube.tempDir">%kernel.cache_dir%/Oryzone/MediaStorage/temp/</parameter>
+        <parameter key="oryzone_media_storage.providers.vimeo.tempDir">%kernel.cache_dir%/Oryzone/MediaStorage/temp/</parameter>
     </parameters>
 
     <services>
@@ -30,6 +32,14 @@
             <argument type="service" id="imagine" on-invalid="ignore"/>
             <argument type="service" id="buzz" on-invalid="ignore"/>
             <tag name="oryzone_media_storage_provider" alias="youtube"/>
+        </service>
+
+        <!-- oryzone_media_storage.providers.vimeo -->
+        <service id="oryzone_media_storage.providers.vimeo" class="%oryzone_media_storage.providers.vimeo.class%">
+            <argument>%oryzone_media_storage.providers.vimeo.tempDir%</argument>
+            <argument type="service" id="imagine" on-invalid="ignore"/>
+            <argument type="service" id="buzz" on-invalid="ignore"/>
+            <tag name="oryzone_media_storage_provider" alias="vimeo"/>
         </service>
 
     </services>

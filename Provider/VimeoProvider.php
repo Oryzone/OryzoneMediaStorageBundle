@@ -2,48 +2,39 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
-
-use Oryzone\Bundle\MediaStorageBundle\Provider\Provider,
-    Oryzone\Bundle\MediaStorageBundle\Model\Media,
+use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
+    Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
-    Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException;
+    Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
-class YoutubeProvider extends VideoServiceProvider
+class VimeoProvider extends VideoServiceProvider
 {
-    protected $name = 'youtube';
+    protected $name = 'vimeo';
 
     /**
-     * Regex to validate youtube video urls
+     * Regex for validating vimeo urls
      * @const string VALIDATION_REGEX_URL
      */
-    const VALIDATION_REGEX_URL = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i';
+    const VALIDATION_REGEX_URL = '%^https?://(?:www\.)?vimeo\.com/(?:m/)?(\d+)(?:.*)?$%i';
 
     /**
-     * Regex to validate youtube ids
+     * Regex for validating vimeo ids
      * @const string VALIDATION_REGEX_ID
      */
-    const VALIDATION_REGEX_ID = '%^[^"&?/ ]{11}$%i';
+    const VALIDATION_REGEX_ID = '%^\d+$%';
 
     /**
-     * Url scheme to retrieve video data
+     * Api url schema
      * @const string API_URL
      */
-    const API_URL = 'http://gdata.youtube.com/feeds/api/videos/%s';
+    const API_URL = 'http://vimeo.com/api/v2/video/%s.xml';
 
     /**
-     * Canonical url scheme to watch youtube video
+     * Canonical url schema
      * @const string CANONICAL_URL
      */
-    const CANONICAL_URL = 'http://www.youtube.com/?v=%s';
-
-    /**
-     * Url scheme for the video preview image
-     * @const string PREVIEW_IMAGE_URL
-     */
-    const PREVIEW_IMAGE_URL = 'http://img.youtube.com/vi/%s/0.jpg';
+    const CANONICAL_URL = 'http://vimeo.com/%s';
 
     /**
      * {@inheritDoc}
@@ -69,7 +60,6 @@ class YoutubeProvider extends VideoServiceProvider
         {
             $apiUrl = sprintf(self::API_URL, $id);
             $videoUrl = sprintf(self::CANONICAL_URL, $id);
-            $previewImageUrl = sprintf(self::PREVIEW_IMAGE_URL, $id);
 
             /**
              * @var \Buzz\Message\Response $response
@@ -77,16 +67,9 @@ class YoutubeProvider extends VideoServiceProvider
             $response = $this->buzz->get($apiUrl);
 
             if($response->isClientError() || $response->isServerError())
-                throw new ProviderProcessException(sprintf('Cannot find Youtube video "%s"', $videoUrl), $this, $media);
+                throw new ProviderProcessException(sprintf('Cannot find Vimeo video "%s"', $videoUrl), $this, $media);
 
-            $previewImageFile = sprintf('%syoutube_preview_%s.jpg', $this->tempDir, $id);
-            $this->addTempFile($previewImageFile);
-            if(!file_exists($previewImageFile))
-                $this->downloadFile($previewImageUrl, $previewImageFile, $media);
-
-            $media->setContent($previewImageFile);
-
-            //parse youtube metadata
+            //parse vimeo metadata
             $title = NULL;
             $description = NULL;
             $tags = NULL;
@@ -95,26 +78,37 @@ class YoutubeProvider extends VideoServiceProvider
             $doc->loadXML($response->getContent());
 
             $xpath = new \DOMXpath($doc);
-            $xpath->registerNamespace('a', 'http://www.w3.org/2005/Atom');
 
-            // title
-            $elements = $xpath->query('/a:entry/a:title');
+            //preview image
+            $elements = $xpath->query('/videos/video/thumbnail_large');
+            if(is_null($elements) || $elements->length == 0)
+                throw new ProviderProcessException(sprintf('Cannot find preview image for Vimeo video "%s"', $videoUrl), $this, $media);
+
+            $previewImageUrl = $elements->item(0)->nodeValue;
+            $previewImageFile = sprintf('%svimeo_preview_%s.jpg', $this->tempDir, $id);
+            $this->addTempFile($previewImageFile);
+            if(!file_exists($previewImageFile))
+                $this->downloadFile($previewImageUrl, $previewImageFile, $media);
+            $media->setContent($previewImageFile);
+
+            $title = NULL;
+            $description = NULL;
+            $tags = NULL;
+
+            //title
+            $elements = $xpath->query('/videos/video/title');
             if (!is_null($elements) && $elements->length > 0)
                 $title = $elements->item(0)->nodeValue;
 
             //description
-            $elements = $xpath->query('/a:entry/a:content');
+            $elements = $xpath->query('/videos/video/description');
             if (!is_null($elements) && $elements->length > 0)
-                $description = $elements->item(0)->nodeValue;
+                $description = strip_tags($elements->item(0)->nodeValue);
 
             //tags
-            $elements = $xpath->query('(/a:entry/a:category/@term)[position()>1]');
+            $elements = $xpath->query('/videos/video/tags');
             if(!is_null($elements) && $elements->length > 0)
-            {
-                $tags = array();
-                foreach($elements as $element)
-                    $tags[] = $element->nodeValue;
-            }
+                $tags = explode(", ", $elements->item(0)->nodeValue);
 
             $media->setMetaValue('id', $id);
             if($title)
@@ -149,7 +143,9 @@ class YoutubeProvider extends VideoServiceProvider
                         'width' => $variant->getMetaValue('width', 420),
                         'height'=> $variant->getMetaValue('height', 315),
                         'frameborder' => 0,
-                        'allowfullscreen' => ''
+                        'allowfullscreen' => '',
+                        'webkitAllowFullScreen' => '',
+                        'mozallowfullscreen' => ''
                     ), $options['attributes']);
                 break;
 
@@ -171,7 +167,7 @@ class YoutubeProvider extends VideoServiceProvider
                     $htmlAttributes .= $key . ($value !== '' ?('="' . $value. '"'):'') . ' ';
 
         if($options['mode'] == 'video')
-            $code = sprintf('<iframe src="http://www.youtube.com/embed/%s" %s></iframe>', $media->getMetaValue('id'), $htmlAttributes);
+            $code = sprintf('<iframe src="http://player.vimeo.com/video/%s" %s></iframe>', $media->getMetaValue('id'), $htmlAttributes);
         else
             $code = sprintf('<img src="%s" %s/>', $url, $htmlAttributes);
 
