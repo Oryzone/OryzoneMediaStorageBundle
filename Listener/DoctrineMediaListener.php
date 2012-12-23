@@ -2,7 +2,7 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Listener;
 
-use Doctrine\ORM\Event\LifecycleEventArgs,
+use Doctrine\Common\EventArgs,
     Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface,
@@ -35,10 +35,10 @@ class DoctrineMediaListener
     }
 
     /**
-     * @param  \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param \Doctrine\Common\EventArgs $eventArgs
      * @return bool
      */
-    public function prePersist(LifecycleEventArgs $eventArgs)
+    public function prePersist(EventArgs $eventArgs)
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if($object instanceof Media)
@@ -49,10 +49,10 @@ class DoctrineMediaListener
     }
 
     /**
-     * @param  \Doctrine\ORM\Event\PreUpdateEventArgs $eventArgs
+     * @param \Doctrine\Common\EventArgs $eventArgs
      * @return bool
      */
-    public function preUpdate(PreUpdateEventArgs $eventArgs)
+    public function preUpdate(EventArgs $eventArgs)
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media) {
@@ -63,10 +63,10 @@ class DoctrineMediaListener
     }
 
     /**
-     * @param  \Doctrine\ORM\Event\LifecycleEventArgs $eventArgs
+     * @param \Doctrine\Common\EventArgs $eventArgs
      * @return bool
      */
-    public function preRemove(LifecycleEventArgs $eventArgs)
+    public function preRemove(EventArgs $eventArgs)
     {
         $object = $this->adapter->getObjectFromArgs($eventArgs);
         if ($object instanceof Media)

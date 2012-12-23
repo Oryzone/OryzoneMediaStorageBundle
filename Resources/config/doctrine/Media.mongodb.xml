@@ -10,13 +10,13 @@
 
         <field name="context" column="context" type="string" length="255" />
 
-        <field name="variants" column="variants" type="array" />
+        <field name="variants" column="variants" type="hash" />
 
-        <field name="meta" column="meta" type="array" />
+        <field name="meta" column="meta" type="hash" />
 
-        <field name="createdAt" column="createdAt" type="datetime"/>
+        <field name="createdAt" column="createdAt" type="date"/>
 
-        <field name="modifiedAt" column="modifiedAt" type="datetime"/>
+        <field name="modifiedAt" column="modifiedAt" type="date"/>
 
     </mapped-superclass>
 
