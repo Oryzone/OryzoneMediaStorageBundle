@@ -57,6 +57,9 @@ class MediaType extends AbstractType
             'context'  => $options['context'],
         )));
 
+        if($options['showName'])
+            $builder->add('name', 'text', array('data' => $options['name']));
+
         $provider->buildMediaType($builder, $options);
     }
 
@@ -67,7 +70,9 @@ class MediaType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => $this->class,
-            'context'    => null
+            'context'    => null,
+            'name'      => '',
+            'showName'  => TRUE
         ));
     }
 
