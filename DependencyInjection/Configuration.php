@@ -57,9 +57,10 @@ class Configuration implements ConfigurationInterface
         $root
         ->children()
             ->scalarNode('db_driver')
+                ->defaultValue('auto')
                 ->validate()
-                    ->ifNotInArray(array('orm', 'mongodb'))
-                    ->thenInvalid('Invalid database driver "%s". Allowed values: "orm", "mongodb"')
+                    ->ifNotInArray(array('orm', 'mongodb', 'auto'))
+                    ->thenInvalid('Invalid database driver "%s". Allowed values: "orm", "mongodb", "auto"')
                 ->end()
             ->end()
         ->end();

@@ -5,10 +5,22 @@
 
     <parameters>
         <parameter key="oryzone_media_storage.listener.doctrine.class">Oryzone\Bundle\MediaStorageBundle\Listener\DoctrineMediaListener</parameter>
+        <parameter key="oryzone_media_storage.listener.doctrine.adapter.orm.class">Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\ORM\DoctrineORMAdapter</parameter>
+        <parameter key="oryzone_media_storage.listener.doctrine.adapter.mongodb.class">Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\ODM\MongoDB\MongoDBAdapter</parameter>
+        <parameter key="oryzone_media_storage.listener.doctrine.adapter.auto.class">Oryzone\Bundle\MediaStorageBundle\Listener\Adapter\AutoAdapter</parameter>
     </parameters>
 
     <services>
-        <service id="oryzone_media_storage.listener.doctrine.adapter" class="%oryzone_media_storage.listener.doctrine.adapter.class%" public="false" />
+        <service id="oryzone_media_storage.listener.doctrine.adapter.orm" class="%oryzone_media_storage.listener.doctrine.adapter.orm.class%" />
+        <service id="oryzone_media_storage.listener.doctrine.adapter.mongodb" class="%oryzone_media_storage.listener.doctrine.adapter.mongodb.class%" />
+
+        <service id="oryzone_media_storage.listener.doctrine.adapter.auto" class="%oryzone_media_storage.listener.doctrine.adapter.auto.class%">
+            <argument type="service" id="service_container"/>
+            <argument type="collection">
+                <argument key="Doctrine\ORM\Event\LifecycleEventArgs">oryzone_media_storage.listener.doctrine.adapter.orm</argument>
+                <argument key="Doctrine\ODM\MongoDB\Event\LifecycleEventArgs">oryzone_media_storage.listener.doctrine.adapter.mongodb</argument>
+            </argument>
+        </service>
 
         <service id="oryzone_media_storage.listener.doctrine" class="%oryzone_media_storage.listener.doctrine.class%">
             <argument type="service" id="oryzone_media_storage" />
