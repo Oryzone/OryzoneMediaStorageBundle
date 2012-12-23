@@ -19,8 +19,8 @@ class SluggedNamingStrategy extends NamingStrategy
             throw new InvalidArgumentException('The given media has no name');
 
         $name = self::urlize($media->getName());
-        $uid = uniqid('_'.$variant->getName());
+        $uid = uniqid('-');
 
-        return $name.$uid;
+        return $name.$uid.'_'.$variant->getName();
     }
 }
