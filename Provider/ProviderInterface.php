@@ -41,6 +41,15 @@ interface ProviderInterface
     public function getContentType();
 
     /**
+     * Detects if the current content is a new one (used in case of update)
+     *
+     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     *
+     * @return boolean
+     */
+    public function hasChangedContent(Media $media);
+
+    /**
      * Checks if the current provider supports a given Media
      *
      * @param mixed $content

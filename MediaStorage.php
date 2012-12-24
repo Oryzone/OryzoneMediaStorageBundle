@@ -355,20 +355,28 @@ class MediaStorage implements MediaStorageInterface
      */
     public function prepareMedia(Media $media, $isUpdate = false)
     {
-        $mediaEvent = new MediaEvent($media, $this);
-        $this->eventDispatcher->dispatch(MediaEvents::BEFORE_PREPARE, $mediaEvent);
         $context = $this->getContext($media->getContext());
         $provider = $this->getProvider($context->getProviderName());
-        if(!$media->getContext())
-            $media->setContext($context->getName());
 
-        if( !$provider->validateContent($media->getContent()) )
-            throw new InvalidContentException(sprintf('Invalid content of type "%s" for media "%s" detected by "%s" provider',
-                    gettype($media->getContent())=='object'?get_class($media->getContent()):gettype($media->getContent()).'('.$media->getContent().')', $media, $provider->getName()),
-                $provider, $media);
+        if(!$isUpdate || $isUpdate && $provider->hasChangedContent($media))
+        {
+            $mediaEvent = new MediaEvent($media, $this);
+            $this->eventDispatcher->dispatch(MediaEvents::BEFORE_PREPARE, $mediaEvent);
 
-        $provider->prepare($media, $context);
-        $this->eventDispatcher->dispatch(MediaEvents::AFTER_PREPARE, $mediaEvent);
+            if(!$media->getContext())
+                $media->setContext($context->getName());
+
+            if( !$provider->validateContent($media->getContent()) )
+                throw new InvalidContentException(sprintf('Invalid content of type "%s" for media "%s" detected by "%s" provider',
+                        gettype($media->getContent())=='object'?get_class($media->getContent()):gettype($media->getContent()).'('.$media->getContent().')', $media, $provider->getName()),
+                    $provider, $media);
+
+            $provider->prepare($media, $context);
+            $this->eventDispatcher->dispatch(MediaEvents::AFTER_PREPARE, $mediaEvent);
+            return TRUE;
+        }
+
+        return FALSE;
     }
 
     /**
@@ -378,9 +386,8 @@ class MediaStorage implements MediaStorageInterface
     {
         $mediaEvent = new MediaEvent($media, $this);
         $this->eventDispatcher->dispatch(MediaEvents::BEFORE_SAVE, $mediaEvent);
-        $result = $this->processMedia($media);
+        $this->processMedia($media);
         $this->eventDispatcher->dispatch(MediaEvents::AFTER_SAVE, $mediaEvent);
-        return $result;
     }
 
     /**
@@ -388,16 +395,10 @@ class MediaStorage implements MediaStorageInterface
      */
     public function updateMedia(Media $media)
     {
-        $result = FALSE;
-        if($media->getContent() !== NULL)
-        {
-            $mediaEvent = new MediaEvent($media, $this);
-            $this->eventDispatcher->dispatch(MediaEvents::BEFORE_UPDATE, $mediaEvent);
-            $result = $this->processMedia($media, TRUE);
-            $this->eventDispatcher->dispatch(MediaEvents::AFTER_UPDATE, $mediaEvent);
-        }
-
-        return $result;
+        $mediaEvent = new MediaEvent($media, $this);
+        $this->eventDispatcher->dispatch(MediaEvents::BEFORE_UPDATE, $mediaEvent);
+        $this->processMedia($media, TRUE);
+        $this->eventDispatcher->dispatch(MediaEvents::AFTER_UPDATE, $mediaEvent);
     }
 
     /**

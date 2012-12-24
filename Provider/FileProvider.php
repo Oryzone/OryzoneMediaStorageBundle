@@ -23,6 +23,14 @@ class FileProvider extends Provider
     /**
      * {@inheritDoc}
      */
+    public function hasChangedContent(Media $media)
+    {
+        return ($media->getContent() != NULL && $media->getMetaValue('id') !== md5_file($media->getContent()));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function validateContent($content)
     {
         if(is_string($content))
@@ -36,7 +44,7 @@ class FileProvider extends Provider
      */
     public function prepare(Media $media, Context $context)
     {
-        // nothing to do
+        $media->setMetaValue('id', md5_file($media->getContent()));
     }
 
     /**

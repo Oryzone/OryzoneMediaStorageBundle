@@ -47,9 +47,6 @@ class MediaType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if(!isset($options['context']))
-            throw new InvalidArgumentException('missing mandatory "context" option');
-
         $context = $this->mediaStorage->getContext($options['context']);
         $provider = $this->mediaStorage->getProvider($context->getProviderName());
 
@@ -58,7 +55,7 @@ class MediaType extends AbstractType
         )));
 
         if($options['showName'])
-            $builder->add('name', 'text', array('data' => $options['name']));
+            $builder->add('name', 'text', isset($options['name']) ? array('data' => $options['name']) : array());
 
         $provider->buildMediaType($builder, $options);
     }
@@ -68,12 +65,14 @@ class MediaType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => $this->class,
-            'context'    => null,
-            'name'      => '',
-            'showName'  => TRUE
-        ));
+        $resolver->setRequired(array('context'))
+                 ->setOptional(array('name', 'showName', 'edit'))
+                 ->setDefaults(array(
+                        'data_class' => $this->class,
+                        'context'    => null,
+                        'showName'  => TRUE,
+                        'edit'      => FALSE
+                 ));
     }
 
     /**

@@ -64,6 +64,10 @@ abstract class VideoServiceProvider extends ImageProvider
      */
     public function buildMediaType(FormBuilderInterface $formBuilder, array $options = array())
     {
-        $formBuilder->add('content', 'text');
+        $fieldOptions = array();
+        if(isset($options['edit']) && $options['edit'] == TRUE)
+            $fieldOptions = array('required' => FALSE);
+
+        $formBuilder->add('content', 'text', $fieldOptions);
     }
 }

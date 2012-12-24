@@ -21,6 +21,11 @@ class AutoAdapter implements AdapterInterface
     protected $adaptersMap;
 
     /**
+     * @var array $cache
+     */
+    protected $cache;
+
+    /**
      * Constructor
      *
      * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -30,6 +35,7 @@ class AutoAdapter implements AdapterInterface
     {
         $this->container = $container;
         $this->adaptersMap = $adaptersMap;
+        $this->cache = array();
     }
 
     /**
@@ -42,11 +48,28 @@ class AutoAdapter implements AdapterInterface
      */
     protected function getAdapter(EventArgs $e)
     {
+        $adapterService = NULL;
         $eventClass = get_class($e);
-        if(!isset($this->adaptersMap[$eventClass]))
-            throw new InvalidArgumentException(sprintf('Can\'t find appropriate adapter for event of class "%s". Probably you haven\'t added the adapters mapping record on the AutoAdapter configuration', $eventClass));
 
-        return $this->container->get($this->adaptersMap[$eventClass]);
+        if(isset($this->cache[$eventClass]))
+            return $this->cache[$eventClass];
+
+        foreach($this->adaptersMap as $mappedClass => $service)
+        {
+            if($e instanceof $mappedClass)
+            {
+                $adapterService = $service;
+                break;
+            }
+        }
+
+        if($adapterService == NULL)
+            throw new InvalidArgumentException(sprintf('Can\'t find appropriate adapter for event of class "%s". You must add this class (or a subclass) in the adapters mapping for the AutoAdapter configuration', $eventClass));
+
+        $adapter = $this->container->get($adapterService);
+        $this->cache[$eventClass] = $adapter;
+
+        return $adapter;
     }
 
     /**

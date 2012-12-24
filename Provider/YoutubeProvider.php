@@ -46,6 +46,31 @@ class YoutubeProvider extends VideoServiceProvider
     const PREVIEW_IMAGE_URL = 'http://img.youtube.com/vi/%s/0.jpg';
 
     /**
+     * Tries to extract the video id from a string (generally the media content)
+     *
+     * @param $content
+     * @return string|NULL
+     */
+    protected function getIdFromContent($content)
+    {
+        $id = NULL;
+        if( preg_match(self::VALIDATION_REGEX_URL, $content, $matches) )
+            $id = $matches[1];
+        else if( preg_match(self::VALIDATION_REGEX_ID, $content, $matches) )
+            $id = $matches[0];
+
+        return $id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasChangedContent(Media $media)
+    {
+        return ($media->getContent() != NULL && $this->getIdFromContent($media) !== $media->getMetaValue('id'));
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function validateContent($content)
@@ -59,11 +84,7 @@ class YoutubeProvider extends VideoServiceProvider
      */
     public function prepare(Media $media, Context $context)
     {
-        $id = NULL;
-        if( preg_match(self::VALIDATION_REGEX_URL, $media->getContent(), $matches) )
-            $id = $matches[1];
-        else if( preg_match(self::VALIDATION_REGEX_ID, $media->getContent(), $matches) )
-            $id = $matches[0];
+        $id = $this->getIdFromContent($media->getContent());
 
         if($id !== NULL)
         {

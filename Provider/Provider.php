@@ -51,6 +51,15 @@ abstract class Provider implements ProviderInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function hasChangedContent(Media $media)
+    {
+        return ($media->getContent() !== NULL);
+    }
+
+
+    /**
      * Adds a file to the list of temp files generated
      *
      * @param string $file
@@ -81,7 +90,11 @@ abstract class Provider implements ProviderInterface
             self::CONTENT_TYPE_STRING => 'text'
         );
 
-        $formBuilder->add('content', $fieldTypes[self::$contentType]);
+        $fieldOptions = array();
+        if(isset($options['edit']) && $options['edit'] == TRUE)
+            $fieldOptions = array('required' => FALSE);
+
+        $formBuilder->add('content', $fieldTypes[self::$contentType], $fieldOptions);
     }
 
     /**

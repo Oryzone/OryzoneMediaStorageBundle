@@ -5,12 +5,11 @@ namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 use Symfony\Component\HttpFoundation\File\File;
 
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
-    Oryzone\Bundle\MediaStorageBundle\Context\Context,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException,
     Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
-class ImageProvider extends Provider
+class ImageProvider extends FileProvider
 {
     protected $name = 'image';
 
@@ -146,14 +145,6 @@ class ImageProvider extends Provider
 
         return ($content instanceof File && $content->isFile() &&
             in_array($content->getMimeType(), self::$SUPPORTED_TYPES));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function prepare(Media $media, Context $context)
-    {
-        // nothing to do
     }
 
     /**

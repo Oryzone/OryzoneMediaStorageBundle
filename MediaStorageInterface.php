@@ -19,24 +19,21 @@ interface MediaStorageInterface
     /**
      * Saves a media
      *
-     * @param  Model\Media $media
-     * @return mixed
+     * @param Model\Media $media
      */
     public function saveMedia(Media $media);
 
     /**
      * Update media
      *
-     * @param  Model\Media $media
-     * @return mixed
+     * @param Model\Media $media
      */
     public function updateMedia(Media $media);
 
     /**
      * Removes (deletes) a media and connected files
      *
-     * @param  Model\Media $media
-     * @return mixed
+     * @param Model\Media $media
      */
     public function removeMedia(Media $media);
 
