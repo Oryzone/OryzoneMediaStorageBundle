@@ -16,26 +16,22 @@ class YoutubeProvider extends VideoServiceProvider
     protected $name = 'youtube';
 
     /**
-     * Regex to validate youtube video urls
-     * @const string VALIDATION_REGEX_URL
+     * {@inheritDoc}
      */
     const VALIDATION_REGEX_URL = '%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i';
 
     /**
-     * Regex to validate youtube ids
-     * @const string VALIDATION_REGEX_ID
+     * {@inheritDoc}
      */
     const VALIDATION_REGEX_ID = '%^[^"&?/ ]{11}$%i';
 
     /**
-     * Url scheme to retrieve video data
-     * @const string API_URL
+     * {@inheritDoc}
      */
     const API_URL = 'http://gdata.youtube.com/feeds/api/videos/%s';
 
     /**
-     * Canonical url scheme to watch youtube video
-     * @const string CANONICAL_URL
+     * {@inheritDoc}
      */
     const CANONICAL_URL = 'http://www.youtube.com/?v=%s';
 
@@ -44,40 +40,6 @@ class YoutubeProvider extends VideoServiceProvider
      * @const string PREVIEW_IMAGE_URL
      */
     const PREVIEW_IMAGE_URL = 'http://img.youtube.com/vi/%s/0.jpg';
-
-    /**
-     * Tries to extract the video id from a string (generally the media content)
-     *
-     * @param $content
-     * @return string|NULL
-     */
-    protected function getIdFromContent($content)
-    {
-        $id = NULL;
-        if( preg_match(self::VALIDATION_REGEX_URL, $content, $matches) )
-            $id = $matches[1];
-        else if( preg_match(self::VALIDATION_REGEX_ID, $content, $matches) )
-            $id = $matches[0];
-
-        return $id;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasChangedContent(Media $media)
-    {
-        return ($media->getContent() != NULL && $this->getIdFromContent($media) !== $media->getMetaValue('id'));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function validateContent($content)
-    {
-        return preg_match(self::VALIDATION_REGEX_URL, $content) ||
-            preg_match(self::VALIDATION_REGEX_ID, $content);
-    }
 
     /**
      * {@inheritDoc}

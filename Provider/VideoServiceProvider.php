@@ -3,6 +3,7 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Oryzone\Bundle\MediaStorageBundle\Form\DataTransformer\VideoServiceDataTransformer;
 
 use Buzz\Browser;
 
@@ -13,6 +14,30 @@ use Oryzone\Bundle\MediaStorageBundle\Exception\ProviderPrepareException,
 
 abstract class VideoServiceProvider extends ImageProvider
 {
+
+    /**
+     * Regex to validate service video urls
+     * @const string VALIDATION_REGEX_URL
+     */
+    const VALIDATION_REGEX_URL = NULL;
+
+    /**
+     * Regex to validate service ids
+     * @const string VALIDATION_REGEX_ID
+     */
+    const VALIDATION_REGEX_ID = NULL;
+
+    /**
+     * Url scheme to retrieve video data
+     * @const string API_URL
+     */
+    const API_URL = NULL;
+
+    /**
+     * Canonical url scheme that identifies the video
+     * @const string CANONICAL_URL
+     */
+    const CANONICAL_URL = NULL;
 
     /**
      * @var \Buzz\Client\AbstractClient $buzz
@@ -30,6 +55,40 @@ abstract class VideoServiceProvider extends ImageProvider
     {
         parent::__construct($tempDir, $imagine);
         $this->buzz = $buzz;
+    }
+
+    /**
+     * Tries to extract the video id from a string (generally the media content)
+     *
+     * @param $content
+     * @return string|NULL
+     */
+    protected function getIdFromContent($content)
+    {
+        $id = NULL;
+        if( preg_match(static::VALIDATION_REGEX_URL, $content, $matches) )
+            $id = $matches[1];
+        else if( preg_match(static::VALIDATION_REGEX_ID, $content, $matches) )
+            $id = $matches[0];
+
+        return $id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function hasChangedContent(Media $media)
+    {
+        return ($media->getContent() != NULL && $this->getIdFromContent($media) !== $media->getMetaValue('id'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function validateContent($content)
+    {
+        return preg_match(static::VALIDATION_REGEX_URL, $content) ||
+            preg_match(static::VALIDATION_REGEX_ID, $content);
     }
 
     /**
@@ -68,6 +127,7 @@ abstract class VideoServiceProvider extends ImageProvider
         if(isset($options['edit']) && $options['edit'] == TRUE)
             $fieldOptions = array('required' => FALSE);
 
-        $formBuilder->add('content', 'text', $fieldOptions);
+        $formBuilder->add('content', 'text', $fieldOptions)
+                    ->addViewTransformer(new VideoServiceDataTransformer(static::CANONICAL_URL));
     }
 }

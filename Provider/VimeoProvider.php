@@ -13,62 +13,24 @@ class VimeoProvider extends VideoServiceProvider
     protected $name = 'vimeo';
 
     /**
-     * Regex for validating vimeo urls
-     * @const string VALIDATION_REGEX_URL
+     * {@inheritDoc}
      */
     const VALIDATION_REGEX_URL = '%^https?://(?:www\.)?vimeo\.com/(?:m/)?(\d+)(?:.*)?$%i';
 
     /**
-     * Regex for validating vimeo ids
-     * @const string VALIDATION_REGEX_ID
+     * {@inheritDoc}
      */
     const VALIDATION_REGEX_ID = '%^\d+$%';
 
     /**
-     * Api url schema
-     * @const string API_URL
+     * {@inheritDoc}
      */
     const API_URL = 'http://vimeo.com/api/v2/video/%s.xml';
 
     /**
-     * Canonical url schema
-     * @const string CANONICAL_URL
+     * {@inheritDoc}
      */
     const CANONICAL_URL = 'http://vimeo.com/%s';
-
-    /**
-     * Tries to extract the video id from a string (generally the media content)
-     *
-     * @param $content
-     * @return string|NULL
-     */
-    protected function getIdFromContent($content)
-    {
-        $id = NULL;
-        if( preg_match(self::VALIDATION_REGEX_URL, $content, $matches) )
-            $id = $matches[1];
-        else if( preg_match(self::VALIDATION_REGEX_ID, $content, $matches) )
-            $id = $matches[0];
-
-        return $id;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function hasChangedContent(Media $media)
-    {
-        return ($media->getContent() != NULL && $this->getIdFromContent($media) !== $media->getMetaValue('id'));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function validateContent($content)
-    {
-        return preg_match(self::VALIDATION_REGEX_URL, $content) ||
-            preg_match(self::VALIDATION_REGEX_ID, $content);
-    }
 
     /**
      * {@inheritDoc}
