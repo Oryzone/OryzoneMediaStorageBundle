@@ -29,7 +29,7 @@ class VideoServiceDataTransformer implements DataTransformerInterface
      */
     public function transform($media)
     {
-        if($media instanceof Media && $media->getContent() == NULL)
+        if($media instanceof Media && $media->getContent() == NULL && $media->getMetaValue('id'))
             $media->setContent(sprintf($this->urlSchema, $media->getMetaValue('id')));
 
         return $media;
