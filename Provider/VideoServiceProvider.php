@@ -40,7 +40,7 @@ abstract class VideoServiceProvider extends ImageProvider
     const CANONICAL_URL = NULL;
 
     /**
-     * @var \Buzz\Client\AbstractClient $buzz
+     * @var \Buzz\Browser $buzz
      */
     protected $buzz;
 
