@@ -3,6 +3,7 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Symfony\Component\Form\FormBuilderInterface;
+use Oryzone\Bundle\MediaStorageBundle\Integration\Video\VideoServiceInterface;
 use Oryzone\Bundle\MediaStorageBundle\Form\DataTransformer\VideoServiceDataTransformer;
 
 use Buzz\Browser;
@@ -40,21 +41,23 @@ abstract class VideoServiceProvider extends ImageProvider
     const CANONICAL_URL = NULL;
 
     /**
-     * @var \Buzz\Browser $buzz
+     * The service that handles the API calls to retrieve informations
+     *
+     * @var \Oryzone\Bundle\MediaStorageBundle\Integration\Video\VideoServiceInterface
      */
-    protected $buzz;
+    protected $service;
 
     /**
      * Constructor
      *
-     * @param $tempDir
+     * @param string $tempDir
      * @param \Imagine\Image\ImagineInterface $imagine
-     * @param \Buzz\Browser $buzz
+     * @param \Oryzone\Bundle\MediaStorageBundle\Integration\Video\VideoServiceInterface $service
      */
-    public function __construct($tempDir, ImagineInterface $imagine, Browser $buzz)
+    public function __construct($tempDir, ImagineInterface $imagine, VideoServiceInterface $service)
     {
         parent::__construct($tempDir, $imagine);
-        $this->buzz = $buzz;
+        $this->service = $service;
     }
 
     /**

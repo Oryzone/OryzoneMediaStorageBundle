@@ -8,8 +8,7 @@ use Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 use Oryzone\Bundle\MediaStorageBundle\Provider\Provider,
     Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
-    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
-    Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException;
+    Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface;
 
 class YoutubeProvider extends VideoServiceProvider
 {
@@ -28,40 +27,15 @@ class YoutubeProvider extends VideoServiceProvider
     /**
      * {@inheritDoc}
      */
-    const API_URL = 'http://gdata.youtube.com/feeds/api/videos/%s';
-
-    /**
-     * {@inheritDoc}
-     */
-    const CANONICAL_URL = 'http://www.youtube.com/?v=%s';
-
-    /**
-     * Url scheme for the video preview image
-     * @const string PREVIEW_IMAGE_URL
-     */
-    const PREVIEW_IMAGE_URL = 'http://img.youtube.com/vi/%s/0.jpg';
-
-    /**
-     * {@inheritDoc}
-     */
     public function prepare(Media $media, Context $context)
     {
         $id = $this->getIdFromContent($media->getContent());
 
         if($id !== NULL)
         {
-            $apiUrl = sprintf(self::API_URL, $id);
-            $videoUrl = sprintf(self::CANONICAL_URL, $id);
-            $previewImageUrl = sprintf(self::PREVIEW_IMAGE_URL, $id);
+            $this->service->load($id);
 
-            /**
-             * @var \Buzz\Message\Response $response
-             */
-            $response = $this->buzz->get($apiUrl);
-
-            if($response->isClientError() || $response->isServerError())
-                throw new ProviderProcessException(sprintf('Cannot find Youtube video "%s"', $videoUrl), $this, $media);
-
+            $previewImageUrl = $this->service->getMetaValue('thumbnail');
             $previewImageFile = sprintf('%syoutube_preview_%s.jpg', $this->tempDir, $id);
             $this->addTempFile($previewImageFile);
             if(!file_exists($previewImageFile))
@@ -69,35 +43,9 @@ class YoutubeProvider extends VideoServiceProvider
 
             $media->setContent($previewImageFile);
 
-            //parse youtube metadata
-            $title = NULL;
-            $description = NULL;
-            $tags = NULL;
-
-            $doc = new \DOMDocument();
-            $doc->loadXML($response->getContent());
-
-            $xpath = new \DOMXpath($doc);
-            $xpath->registerNamespace('a', 'http://www.w3.org/2005/Atom');
-
-            // title
-            $elements = $xpath->query('/a:entry/a:title');
-            if (!is_null($elements) && $elements->length > 0)
-                $title = $elements->item(0)->nodeValue;
-
-            //description
-            $elements = $xpath->query('/a:entry/a:content');
-            if (!is_null($elements) && $elements->length > 0)
-                $description = $elements->item(0)->nodeValue;
-
-            //tags
-            $elements = $xpath->query('(/a:entry/a:category/@term)[position()>1]');
-            if(!is_null($elements) && $elements->length > 0)
-            {
-                $tags = array();
-                foreach($elements as $element)
-                    $tags[] = $element->nodeValue;
-            }
+            $title = $this->service->getMetaValue('title');
+            $description = $this->service->getMetaValue('content');
+            $tags = $this->service->getMetaValue('tags');
 
             $media->setMetaValue('id', $id);
             if($title)

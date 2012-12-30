@@ -30,7 +30,7 @@
         <service id="oryzone_media_storage.providers.youtube" class="%oryzone_media_storage.providers.youtube.class%">
             <argument>%oryzone_media_storage.providers.youtube.tempDir%</argument>
             <argument type="service" id="imagine" on-invalid="ignore"/>
-            <argument type="service" id="buzz" on-invalid="ignore"/>
+            <argument type="service" id="oryzone_media_storage.integration.video.youtube"/>
             <tag name="oryzone_media_storage_provider" alias="youtube"/>
         </service>
 
@@ -38,7 +38,7 @@
         <service id="oryzone_media_storage.providers.vimeo" class="%oryzone_media_storage.providers.vimeo.class%">
             <argument>%oryzone_media_storage.providers.vimeo.tempDir%</argument>
             <argument type="service" id="imagine" on-invalid="ignore"/>
-            <argument type="service" id="buzz" on-invalid="ignore"/>
+            <argument type="service" id="oryzone_media_storage.integration.video.vimeo"/>
             <tag name="oryzone_media_storage_provider" alias="vimeo"/>
         </service>
 

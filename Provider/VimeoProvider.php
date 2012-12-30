@@ -4,7 +4,6 @@ namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
 use Oryzone\Bundle\MediaStorageBundle\Model\Media,
     Oryzone\Bundle\MediaStorageBundle\Context\Context,
-    Oryzone\Bundle\MediaStorageBundle\Exception\ProviderProcessException,
     Oryzone\Bundle\MediaStorageBundle\Variant\VariantInterface,
     Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException;
 
@@ -25,73 +24,24 @@ class VimeoProvider extends VideoServiceProvider
     /**
      * {@inheritDoc}
      */
-    const API_URL = 'http://vimeo.com/api/v2/video/%s.xml';
-
-    /**
-     * {@inheritDoc}
-     */
-    const CANONICAL_URL = 'http://vimeo.com/%s';
-
-    /**
-     * {@inheritDoc}
-     */
     public function prepare(Media $media, Context $context)
     {
         $id = $this->getIdFromContent($media->getContent());
 
         if($id !== NULL)
         {
-            $apiUrl = sprintf(self::API_URL, $id);
-            $videoUrl = sprintf(self::CANONICAL_URL, $id);
+            $this->service->load($id);
 
-            /**
-             * @var \Buzz\Message\Response $response
-             */
-            $response = $this->buzz->get($apiUrl);
-
-            if($response->isClientError() || $response->isServerError())
-                throw new ProviderProcessException(sprintf('Cannot find Vimeo video "%s"', $videoUrl), $this, $media);
-
-            //parse vimeo metadata
-            $title = NULL;
-            $description = NULL;
-            $tags = NULL;
-
-            $doc = new \DOMDocument();
-            $doc->loadXML($response->getContent());
-
-            $xpath = new \DOMXpath($doc);
-
-            //preview image
-            $elements = $xpath->query('/videos/video/thumbnail_large');
-            if(is_null($elements) || $elements->length == 0)
-                throw new ProviderProcessException(sprintf('Cannot find preview image for Vimeo video "%s"', $videoUrl), $this, $media);
-
-            $previewImageUrl = $elements->item(0)->nodeValue;
+            $previewImageUrl = $this->service->getMetaValue('thumbnail_large');
             $previewImageFile = sprintf('%svimeo_preview_%s.jpg', $this->tempDir, $id);
             $this->addTempFile($previewImageFile);
             if(!file_exists($previewImageFile))
                 $this->downloadFile($previewImageUrl, $previewImageFile, $media);
             $media->setContent($previewImageFile);
 
-            $title = NULL;
-            $description = NULL;
-            $tags = NULL;
-
-            //title
-            $elements = $xpath->query('/videos/video/title');
-            if (!is_null($elements) && $elements->length > 0)
-                $title = $elements->item(0)->nodeValue;
-
-            //description
-            $elements = $xpath->query('/videos/video/description');
-            if (!is_null($elements) && $elements->length > 0)
-                $description = strip_tags($elements->item(0)->nodeValue);
-
-            //tags
-            $elements = $xpath->query('/videos/video/tags');
-            if(!is_null($elements) && $elements->length > 0)
-                $tags = explode(", ", $elements->item(0)->nodeValue);
+            $title = $this->service->getMetaValue('title');
+            $description = $this->service->getMetaValue('description');
+            $tags = $this->service->getMetaValue('tags');
 
             $media->setMetaValue('id', $id);
             if($title)
