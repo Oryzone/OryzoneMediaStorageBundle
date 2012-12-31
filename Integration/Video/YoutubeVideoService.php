@@ -47,6 +47,14 @@ class YoutubeVideoService extends VideoService
     /**
      * {@inheritDoc}
      */
+    protected function getCacheKey($id)
+    {
+        return sprintf('youtube_video_service_%s', $id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getAvailableMetadata()
     {
         return array(
@@ -63,14 +71,14 @@ class YoutubeVideoService extends VideoService
      */
     protected function loadMetaValue($name, $default = NULL)
     {
-        if(!isset(self::$XPATHS[$name]))
-            return $default;
-
-        $elements = $this->xpath->query(self::$XPATHS[$name]);
-
         switch($name)
         {
+            case 'thumbnail':
+                return sprintf(self::PREVIEW_IMAGE_URL, $this->lastId);
+                break;
+
             case 'tags':
+                $elements = $this->xpath->query(self::$XPATHS[$name]);
                 if(!is_null($elements) && $elements->length > 0)
                 {
                     $tags = array();
@@ -81,6 +89,10 @@ class YoutubeVideoService extends VideoService
                 break;
 
             default:
+                $elements = $this->xpath->query(self::$XPATHS[$name]);
+                if(!isset(self::$XPATHS[$name]))
+                    return $default;
+
                 if (!is_null($elements) && $elements->length > 0)
                     return $elements->item(0)->nodeValue;
         }
@@ -103,15 +115,17 @@ class YoutubeVideoService extends VideoService
         if($response->isClientError() || $response->isServerError())
             throw new ResourceNotFoundException(sprintf('Cannot find youtube video with id "%s"', $id), $id);
 
-        $this->metadata['thumbnail'] = sprintf(self::PREVIEW_IMAGE_URL, $id);
+        return $response->getContent();
+    }
 
-        $rawResponse = $response->getContent();
-
+    /**
+     * {@inheritDoc}
+     */
+    protected function afterLoad()
+    {
         $this->document = new \DOMDocument();
-        $this->document->loadXML($rawResponse);
+        $this->document->loadXML($this->response);
         $this->xpath = new \DOMXpath($this->document);
         $this->xpath->registerNamespace('a', 'http://www.w3.org/2005/Atom');
-
-        return $rawResponse;
     }
 }

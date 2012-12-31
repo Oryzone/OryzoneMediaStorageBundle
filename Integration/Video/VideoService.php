@@ -4,14 +4,33 @@ namespace Oryzone\Bundle\MediaStorageBundle\Integration\Video;
 
 use Buzz\Browser;
 
+use Doctrine\Common\Cache\Cache;
+
 abstract class VideoService implements VideoServiceInterface
 {
+    /**
+     * The array of the default options for the load method
+     *
+     * @var array $DEFAULT_OPTIONS
+     */
+    protected static $DEFAULT_OPTIONS = array(
+        'cache' => TRUE,
+        'cacheLifetime' => 604800 // a week
+    );
+
     /**
      * The http client library used to issue requests
      *
      * @var \Buzz\Browser
      */
     protected $buzz;
+
+    /**
+     * Cache layer
+     *
+     * @var \Doctrine\Common\Cache\Cache $cache
+     */
+    protected $cache;
 
     /**
      * The metadata array
@@ -26,14 +45,30 @@ abstract class VideoService implements VideoServiceInterface
     protected $response;
 
     /**
+     * The last loaded id
+     * @var string $lastId
+     */
+    protected $lastId;
+
+    /**
      * Constructor
      *
      * @param \Buzz\Browser $buzz
+     * @param \Doctrine\Common\Cache\Cache $cache
      */
-    public function __construct(Browser $buzz)
+    public function __construct(Browser $buzz, Cache $cache = NULL)
     {
         $this->buzz = $buzz;
+        $this->cache = $cache;
     }
+
+    /**
+     * Gets the cache key for a given id
+     *
+     * @param string $id
+     * @return string
+     */
+    abstract protected function getCacheKey($id);
 
     /**
      * Gets an array of the commonly available metadata keys for the service
@@ -61,12 +96,37 @@ abstract class VideoService implements VideoServiceInterface
     abstract protected function getResponse($id, $options = array());
 
     /**
+     * Called automatically after the load method
+     *
+     * @return void
+     */
+    abstract protected function afterLoad();
+
+    /**
      * {@inheritDoc}
      */
     public function load($id, $options = array())
     {
+        $this->lastId = $id;
+        $options = array_merge(static::$DEFAULT_OPTIONS, $options);
+        $cacheKey = $this->getCacheKey($id);
+
         $this->metadata = array();
-        $this->response = $this->getResponse($id, $options);
+
+        if($this->cache !== NULL && $options['cache'])
+        {
+            if($this->cache->contains($cacheKey))
+                $this->response = $this->cache->fetch($cacheKey);
+            else
+            {
+                $this->response = $this->getResponse($id, $options);
+                $this->cache->save($cacheKey, $this->response, $options['cacheLifetime']);
+            }
+        }
+        else
+            $this->response = $this->getResponse($id, $options);
+
+        $this->afterLoad();
     }
 
     /**

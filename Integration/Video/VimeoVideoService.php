@@ -65,6 +65,14 @@ class VimeoVideoService extends VideoService
     /**
      * {@inheritDoc}
      */
+    protected function getCacheKey($id)
+    {
+        return sprintf('vimeo_video_service_%s', $id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getAvailableMetadata()
     {
         return self::$AVAILABLE_METADATA;
@@ -116,12 +124,17 @@ class VimeoVideoService extends VideoService
         if($response->isClientError() || $response->isServerError())
             throw new ResourceNotFoundException(sprintf('Cannot find youtube video with id "%s"', $id), $id);
 
-        $rawResponse = $response->getContent();
-
-        $this->document = new \DOMDocument();
-        $this->document->loadXML($rawResponse);
-        $this->xpath = new \DOMXpath($this->document);
-
-        return $rawResponse;
+        return $response->getContent();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function afterLoad()
+    {
+        $this->document = new \DOMDocument();
+        $this->document->loadXML($this->response);
+        $this->xpath = new \DOMXpath($this->document);
+    }
+
 }
