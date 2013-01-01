@@ -22,9 +22,14 @@ abstract class Provider implements ProviderInterface
     protected $name;
 
     /**
-     * @var array
+     * @var array $tempFiles
      */
     protected $tempFiles;
+
+    /**
+     * @var array $options
+     */
+    protected $options;
 
     /**
      * Constructor
@@ -32,6 +37,7 @@ abstract class Provider implements ProviderInterface
     public function __construct()
     {
         $this->tempFiles = array();
+        $this->options = array();
     }
 
     /**
@@ -48,6 +54,24 @@ abstract class Provider implements ProviderInterface
     public function getContentType()
     {
         return self::$contentType;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOptions($options)
+    {
+        $this->options = array_merge($this->getDefaultOptions(), $options);
+    }
+
+    /**
+     * Method used to define provider default options (to be rewritten if needed)
+     *
+     * @return array
+     */
+    protected function getDefaultOptions()
+    {
+        return array();
     }
 
     /**

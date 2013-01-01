@@ -41,13 +41,14 @@ class ProviderFactory implements \IteratorAggregate
 
     /**
      * @param string $providerName
-     *
-     * @return ProviderInterface
+     * @param array $providerOptions
      *
      * @throws \InvalidArgumentException
      * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     *
+     * @return ProviderInterface
      */
-    public function get($providerName)
+    public function get($providerName, $providerOptions = array())
     {
         if(!array_key_exists($providerName, $this->aliases))
             throw new \InvalidArgumentException(sprintf('The provider "%s" has not been defined', $providerName));
@@ -61,6 +62,7 @@ class ProviderFactory implements \IteratorAggregate
         if(!$service instanceof ProviderInterface)
             throw new InvalidConfigurationException(sprintf('The service "%s" associated with the provider "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\Provider\ProviderInterface"', $serviceName, $providerName));
 
+        $service->setOptions($providerOptions);
         return $service;
     }
 

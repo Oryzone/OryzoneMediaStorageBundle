@@ -40,6 +40,15 @@ interface ProviderInterface
      */
     public function getContentType();
 
+
+    /**
+     * Sets an array of options for the provider
+     *
+     * @param array $options
+     * @return void
+     */
+    public function setOptions($options);
+
     /**
      * Detects if the current content is a new one (used in case of update)
      *

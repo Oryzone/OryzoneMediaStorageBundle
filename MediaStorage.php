@@ -237,7 +237,7 @@ class MediaStorage implements MediaStorageInterface
     /**
      * {@inheritDoc}
      */
-    public function getProvider($name = NULL)
+    public function getProvider($name = NULL, $options = array())
     {
         if (!$name) {
             if(!$this->defaultProvider)
@@ -246,7 +246,7 @@ class MediaStorage implements MediaStorageInterface
             $name = $this->defaultProvider;
         }
 
-        return $this->providerFactory->get($name);
+        return $this->providerFactory->get($name, $options);
     }
 
     /**
@@ -279,7 +279,7 @@ class MediaStorage implements MediaStorageInterface
         $this->eventDispatcher->dispatch(MediaEvents::BEFORE_PROCESS, $mediaEvent);
 
         $context = $this->getContext($media->getContext());
-        $provider = $this->getProvider($context->getProviderName());
+        $provider = $this->getProvider($context->getProviderName(), $context->getProviderOptions());
         $variantsTree = $context->buildVariantTree();
         $filesystem = $this->getFilesystem($context->getFilesystemName());
         $namingStrategy = $this->getNamingStrategy($context->getNamingStrategyName());
@@ -356,7 +356,7 @@ class MediaStorage implements MediaStorageInterface
     public function prepareMedia(Media $media, $isUpdate = false)
     {
         $context = $this->getContext($media->getContext());
-        $provider = $this->getProvider($context->getProviderName());
+        $provider = $this->getProvider($context->getProviderName(), $context->getProviderOptions());
 
         if(!$isUpdate || $isUpdate && $provider->hasChangedContent($media))
         {
@@ -449,7 +449,7 @@ class MediaStorage implements MediaStorageInterface
                 $variant = $this->defaultVariant;
         }
 
-        $provider = $this->getProvider($context->getProviderName());
+        $provider = $this->getProvider($context->getProviderName(), $context->getProviderOptions());
         $variantInstance = $media->getVariantInstance($variant);
 
         $urlOptions = array();

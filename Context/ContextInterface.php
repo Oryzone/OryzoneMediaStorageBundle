@@ -20,6 +20,13 @@ interface ContextInterface
     public function getProviderName();
 
     /**
+     * Get the array of options associated to the provider
+     *
+     * @return array
+     */
+    public function getProviderOptions();
+
+    /**
      * Get the name of the associated filesystem
      *
      * @return string

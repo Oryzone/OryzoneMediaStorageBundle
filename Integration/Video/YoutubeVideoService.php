@@ -89,9 +89,10 @@ class YoutubeVideoService extends VideoService
                 break;
 
             default:
-                $elements = $this->xpath->query(self::$XPATHS[$name]);
                 if(!isset(self::$XPATHS[$name]))
                     return $default;
+
+                $elements = $this->xpath->query(self::$XPATHS[$name]);
 
                 if (!is_null($elements) && $elements->length > 0)
                     return $elements->item(0)->nodeValue;

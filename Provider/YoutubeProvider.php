@@ -14,6 +14,8 @@ class YoutubeProvider extends VideoServiceProvider
 {
     protected $name = 'youtube';
 
+    const CANONICAL_URL = 'http://www.youtube.com/watch?v=%s';
+
     /**
      * {@inheritDoc}
      */
@@ -23,6 +25,20 @@ class YoutubeProvider extends VideoServiceProvider
      * {@inheritDoc}
      */
     const VALIDATION_REGEX_ID = '%^[^"&?/ ]{11}$%i';
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getDefaultOptions()
+    {
+        return array(
+            'metadata'  => array(
+                'title' => 'title',
+                'content' => 'description',
+                'tags' => 'tags'
+            )
+        );
+    }
 
     /**
      * {@inheritDoc}
@@ -40,20 +56,16 @@ class YoutubeProvider extends VideoServiceProvider
             $this->addTempFile($previewImageFile);
             if(!file_exists($previewImageFile))
                 $this->downloadFile($previewImageUrl, $previewImageFile, $media);
-
             $media->setContent($previewImageFile);
 
-            $title = $this->service->getMetaValue('title');
-            $description = $this->service->getMetaValue('content');
-            $tags = $this->service->getMetaValue('tags');
-
             $media->setMetaValue('id', $id);
-            if($title)
-                $media->setMetaValue('title', $title);
-            if($description)
-                $media->setMetaValue('description', $description);
-            if($tags)
-                $media->setMetaValue('tags', $tags);
+
+            foreach($this->options['metadata'] as $metaName => $mediaMetaName)
+            {
+                $value = $this->service->getMetaValue($metaName);
+                if($value !== NULL)
+                    $media->setMetaValue($mediaMetaName, $value);
+            }
         }
     }
 

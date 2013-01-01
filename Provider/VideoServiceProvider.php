@@ -29,12 +29,6 @@ abstract class VideoServiceProvider extends ImageProvider
     const VALIDATION_REGEX_ID = NULL;
 
     /**
-     * Url scheme to retrieve video data
-     * @const string API_URL
-     */
-    const API_URL = NULL;
-
-    /**
      * Canonical url scheme that identifies the video
      * @const string CANONICAL_URL
      */

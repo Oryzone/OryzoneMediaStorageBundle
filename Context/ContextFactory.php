@@ -58,7 +58,10 @@ class ContextFactory implements \IteratorAggregate
             throw new \InvalidArgumentException(sprintf('The context "%s" has not been defined', $contextName));
 
         $c = $this->contexts[$contextName];
-        $context = new Context($contextName, $c['provider'], $c['filesystem'], $c['cdn'], $c['namingStrategy'], $c['variants'], $c['defaultVariant']);
+        $providerName = key($c['provider']);
+        $providerOptions = $c['provider'][$providerName];
+        $context = new Context($contextName, $providerName, $providerOptions, $c['filesystem'], $c['cdn'],
+                            $c['namingStrategy'], $c['variants'], $c['defaultVariant']);
 
         $instances[$contextName] = $context;
 

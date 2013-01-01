@@ -11,6 +11,8 @@ class VimeoProvider extends VideoServiceProvider
 {
     protected $name = 'vimeo';
 
+    const CANONICAL_URL = 'http://vimeo.com/%s';
+
     /**
      * {@inheritDoc}
      */
@@ -20,6 +22,20 @@ class VimeoProvider extends VideoServiceProvider
      * {@inheritDoc}
      */
     const VALIDATION_REGEX_ID = '%^\d+$%';
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getDefaultOptions()
+    {
+        return array(
+            'metadata'  => array(
+                'title' => 'title',
+                'description' => 'description',
+                'tags' => 'tags'
+            )
+        );
+    }
 
     /**
      * {@inheritDoc}
@@ -39,17 +55,13 @@ class VimeoProvider extends VideoServiceProvider
                 $this->downloadFile($previewImageUrl, $previewImageFile, $media);
             $media->setContent($previewImageFile);
 
-            $title = $this->service->getMetaValue('title');
-            $description = $this->service->getMetaValue('description');
-            $tags = $this->service->getMetaValue('tags');
-
             $media->setMetaValue('id', $id);
-            if($title)
-                $media->setMetaValue('title', $title);
-            if($description)
-                $media->setMetaValue('description', $description);
-            if($tags)
-                $media->setMetaValue('tags', $tags);
+            foreach($this->options['metadata'] as $metaName => $mediaMetaName)
+            {
+                $value = $this->service->getMetaValue($metaName);
+                if($value !== NULL)
+                    $media->setMetaValue($mediaMetaName, $value);
+            }
         }
     }
 

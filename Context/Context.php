@@ -19,6 +19,11 @@ class Context implements ContextInterface
     protected $providerName;
 
     /**
+     * @var array $providerOptions
+     */
+    protected $providerOptions;
+
+    /**
      * @var string filesystemName
      */
     protected $filesystemName;
@@ -55,18 +60,20 @@ class Context implements ContextInterface
      *
      * @param string $name
      * @param string $providerName
+     * @param array  $providerOptions
      * @param string $filesystemName
      * @param string $cdnName
      * @param string $namingStrategyName
      * @param array  $variants
      * @param string $defaultVariant
      */
-    public function __construct($name, $providerName, $filesystemName, $cdnName, $namingStrategyName, $variants = array(), $defaultVariant = 'default')
+    public function __construct($name, $providerName, $providerOptions, $filesystemName, $cdnName, $namingStrategyName, $variants = array(), $defaultVariant = 'default')
     {
         $this->cdnName = $cdnName;
         $this->filesystemName = $filesystemName;
         $this->name = $name;
         $this->providerName = $providerName;
+        $this->providerOptions = $providerOptions;
         $this->namingStrategyName = $namingStrategyName;
         $this->variants = $variants;
         $this->defaultVariant = $defaultVariant;
@@ -86,6 +93,14 @@ class Context implements ContextInterface
     public function getProviderName()
     {
         return $this->providerName;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getProviderOptions()
+    {
+        return $this->providerOptions;
     }
 
     /**
