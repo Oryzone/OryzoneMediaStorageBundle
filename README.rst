@@ -18,9 +18,9 @@ Providers
 MediaStorageBundle is based on the concept of **provider**. A provider is a way to abstract the logic behind a certain
 type of media. The bundle offers a series of default providers to store the following media types (and their metadata):
 
- * Files
- * Images (that can be automatically stretched, shrunk, cropped and converted)
- * Youtube and Vimeo videos (preview image is locally downloaded and che be elaborated as an image)
+* Files
+* Images (that can be automatically stretched, shrunk, cropped and converted)
+* Youtube and Vimeo videos (preview image is locally downloaded and che be elaborated as an image)
 
 So if your environment is built on top of Symfony2/Doctrine2 need to work with external files, images, and online videos
 (Youtube/Vimeo) the bundle should offer everything you need to get the job done. If you need some custom logic (e.g.
@@ -102,9 +102,9 @@ Follows a sample configuration. More detail on the `documentation`_:
 
 Dependencies
 ------------
- * `GaufretteBundle`_ (required, automatically intalled by `Composer`_)
- * `ImagineBundle`_ (optional, required if you want to use Image, Vimeo and Youtube providers)
- * `BuzzBundle`_ (optional, required if you want to use Youtube and Vimeo providers)
+* `GaufretteBundle`_ (required, automatically installed by `Composer`_)
+* `ImagineBundle`_ (optional, required if you want to use Image, Vimeo and Youtube providers)
+* `BuzzBundle`_ (optional, required if you want to use Youtube and Vimeo providers)
 
 Documentation
 -------------
@@ -120,10 +120,10 @@ and submitting a pull request.
 This list provides the next thing Oryzone would like to implement in the bundle. So if you want to contribute and don't
 know where to begin here's some hints ;)
 
- * PhpUnit tests
- * Travis CI integration
- * Improve documentation
- * Build providers for famous external services like DailyMotion, Twitter, Slideshare, etc...
+* PhpUnit tests
+* Travis CI integration
+* Improve documentation
+* Build providers for famous external services like DailyMotion, Twitter, SlideShare, etc...
 
 Thanks
 
