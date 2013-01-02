@@ -2,58 +2,48 @@
 MediaStorageBundle
 ------------------
 
-MediaStorage Bundle is a Symfony2 bundle that aims to provide a solid, extendible infrastructure to handle media storage
-and retrieval. It is freely inspired to some famouse Symfony2 media management bundles such as `SonataMediaBundle`_,
-`AnoMediaBundle`_ and `VichUploaderBundle`_ but it wants to be more extendible and configurable.
+MediaStorageBundle is a `Symfony2`_ bundle that aims to provide a solid, extendible infrastructure to handle media storage
+and retrieval. It's built for `Doctrine2`_ and allows to store files (simple files, images, videos, documents) and related
+metadata as Doctrine entities (Doctrine ORM) or documents (Doctrine ODM). It internally adopt `Gaufrette`_ to abstract the
+filesystem and allows to store files on many external filesystem like `Amazon`_ and `Rackspace`_ or through FTP or SFTP.
+It is freely inspired to some famouse Symfony2 media management bundles such as `SonataMediaBundle`_,
+`AnoMediaBundle`_ and `VichUploaderBundle`_ but it introduces several different peculiarities and tries to be more
+extensible and configurable.
 
+**WARNING:** This bundle version (2.0) is still experimental. It's heavily untested and undocumented, so please do not
+use it in production. If you prefer a more stable release checkout the 1.0 version at the `master branch`_.
 
-**WARNING:** This bundle is going to be totally rewritten, please check the `master branch`_ for the last working version.
+Providers
+---------
+MediaStorageBundle is based on the concept of **provider**. A provider is a way to abstract the logic behind a certain
+type of media. The bundle offers a series of default providers to store the following media types (and their metadata):
 
-I will start by writing the README, following the `readme driven development`_ by `Tom Preston-Werner`_ , so everything you'll read heare is still the "design phase".
-Submit a pull request if you want to share some ideas.
+ * Files
+ * Images (that can be automatically stretched, shrunk, cropped and converted)
+ * Youtube and Vimeo videos (preview image is locally downloaded and che be elaborated as an image)
 
-thanks to `@ellis-`_ for the support!
+So if your environment is built on top of Symfony2/Doctrine2 need to work with external files, images, and online videos
+(Youtube/Vimeo) the bundle should offer everything you need to get the job done. If you need some custom logic (e.g.
+video conversion, pdf preview generation, etc.) you can easily implement your custom provider.
 
+Installation
+------------
+As every Symfony 2.1 bundle, MediaStorageBundle can be installed through `Composer`_. Just add the following dependency
+inside the ``require`` block of your ``composer.json`` file:
 
-Requirements (basic concepts)
-=============================
+.. code-block:: javascript
 
-* **Medias** are used to represent a file (and connected informations) stored somewhere (filesystem, amazon S3, cdn, etc.)
-* Each media is an entity and can be connected (related) to other entities (e.g. a ``Avatar`` media entity can be connected to a ``User`` entity)
-* Media entity should be abstract and should work both in ODM and ORM contexts
-* Each media entity should have an array that holds metadata (width, height, source, gps coords, author, version, etc...)
-* Each media has a given type (image, video, text document, etc...)
-* Each media may have **variants** (e.g. default, big, small, hi-res, long, short, subtitled, censored, etc...)
-* **Variants** are structured as a tree with a 'default' variant on the root and other variants as child.
-* Each child in the variant tree is builded from the file resulting by its parent variant
-* Each media type is managed by a **Provider**.
-* Each provide defines a ``process`` method (e.g. used to resize or optimize pictures) to convert original file to various media **variants**
-* **Process method** can be called **instantly** (when the media is created - ``instant`` mode), **on-demand** (the first time a media variant is requested - ``lazy`` mode), **deferred** (pushed in a queue and processed asynchronously - ``queue`` mode)
-* Media files can be references to external files/resources (youtube/vimeo/scribd/slideshare/etc...)
-* Media is stored to a given filesystem and located through a CDN configuration
-* Media entites can be rendered in templates. Render method must print out appropriate html tags to display the content (``img``, ``video``, ``embed``, etc...)
-* **Contexts** are used to define specific different media configurations (avatars, user pictures, etc...)
-* Provide validators (formats, size, dimensions, proportions, etc) and form types (read, create, edit)
-* Possibility to create named collection of medias (e.g. galleries)
-* Has a data collector to show stats about stored/retrieved medias
+  "oryzone/media-storage-bundle": "2.0.x-dev"
 
-Default available media types (and providers)
-=============================================
+Then you must enable the bundle in your ``AppKernel.php`` file by adding the following line in your ``$bundles`` array:
 
-* File
-* Image
-* Youtube
-* Vimeo
+.. code-block:: php
 
-Default available processors
-============================
-
-* ImageResizer
+  new \Oryzone\Bundle\MediaStorageBundle\OryzoneMediaStorageBundle(),
 
 Configuration
-=============
-
-Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required as they are used to abstract filesystems.
+-------------
+Follows a sample configuration. More detail on the `documentation`_:
 
 .. code-block:: yaml
 
@@ -110,132 +100,40 @@ Here's a sample configuration. `Gaufrette`_ and `GaufretteBundle`_ are required 
               cdn: product_pictures
               variants: ~
 
-
-Prototyping
-=================
-
-MediaStorage
+Dependencies
 ------------
+ * `GaufretteBundle`_ (required, automatically intalled by `Composer`_)
+ * `ImagineBundle`_ (optional, required if you want to use Image, Vimeo and Youtube providers)
+ * `BuzzBundle`_ (optional, required if you want to use Youtube and Vimeo providers)
 
-* cdnFactory
-* contextFactory
-* filesystemMap (from gaufrette bundle)
-* providerFactory
-* prepareMedia(Media $media)
-* saveMedia(Media $media)
-* removeMedia(Media $media)
-* getPath(Media $media)
-* getUrl(Media $media)
+Documentation
+-------------
+Full documentation (still incomplete) is available here: `/Resources/doc/index.rst`_
 
+Contribution
+------------
+**Contribution are always welcome!**
+If you need to report a bug you can use the `github issues for the repository`_ (please specify that it's referred to the
+version 2 of the bundle).
+Otherwise you can easily introduce new features, improvements or fixes by `forking the repository`_
+and submitting a pull request.
+This list provides the next thing Oryzone would like to implement in the bundle. So if you want to contribute and don't
+know where to begin here's some hints ;)
 
-Media (entity)
---------------
+ * PhpUnit tests
+ * Travis CI integration
+ * Improve documentation
+ * Build providers for famous external services like DailyMotion, Twitter, Slideshare, etc...
 
-* id
-* name
-* content (not persisted)
-* provider
-* context
-* metadata (arbitrary array)
-* variants (arbitrary array)
-* createdAt
-* modifiedAt
+Thanks
 
+.. _Symfony2: http://symfony.com/
 
-MediaCollection (entity)
-----------------
+.. _Doctrine2: http://www.doctrine-project.org/
 
-* id
-* name
-* medias
-* createdAt
-* modifiedAt
+.. _Amazon: http://aws.amazon.com/
 
-
-MediaCollectionHasMedia (entity)
-------------------------
-
-* media
-* collection
-* position
-* createdAt
-* modifiedAt
-
-
-ContextInterface
-----------------
-
-* getName()
-* getProviderName()
-* getFilesystemName()
-* getCdnName()
-* getVariants()
-* ...
-
-
-VariantInterface
-----------------
-* const STATUS_READY       = 1;
-* const STATUS_ON_DEMAND   = 2;
-* const STATUS_QUEUED      = 3;
-* const STATUS_PROCESSING  = 5;
-* const STATUS_ERROR       = 4;
-* getName()
-* getFilename()
-* getContentType()
-* getOptions()
-* getMode()
-* getState()
-* isReady() (checks if the state is READY)
-* hasError() (checks if the state is ERROR)
-* getError() (filled in case of the state ERROR)
-* toArray()
-* fromArray()
-
-ProviderInterface
---------
-
-* getName()
-* getRenderAvailableOptions()
-* supports(Media $media)
-* render(Media $media, $variantName, $options = array(), CdnInterface $cdn = NULL)
-* process(Media $media, VariantInterface $variant)
-* ...
-
-
-
-Create a new Media
-==================
-
-Given ``Avatar`` a subclass of the ``Media`` entity and ``$user`` an instance of the ``User`` class. ``Avatar`` class
-automatically sets its context to ``avatar``
-N.B. ``User`` class mapping with ``avatar`` should have set the option ``cascade=all``.
-
-.. code-block:: php
-
-  $path = 'path/to/file.jpg';
-
-  $avatar = new Avatar($path);
-  $avatar->setName('Super Mario\'s profile picture');
-
-  $user->setAvatar( $avatar );
-
-  $em = $this->getDoctrine()->getEntityManager();
-  $em->persist($user);
-  $em->flush();
-
-Get a Media
-===========
-
-TODO!
-
-
-Delete a Media
-==============
-
-TODO!
-
-
+.. _Rackspace: http://www.rackspace.com/
 
 .. _SonataMediaBundle: https://github.com/sonata-project/SonataMediaBundle
 
@@ -245,12 +143,20 @@ TODO!
 
 .. _master branch: https://github.com/Oryzone/OryzoneMediaStorageBundle
 
-.. _readme driven development: http://tom.preston-werner.com/2010/08/23/readme-driven-development.html
-
-.. _Tom Preston-Werner: https://github.com/mojombo
-
-.. _@ellis-: https://github.com/ellis-
+.. _Composer: http://getcomposer.org/
 
 .. _Gaufrette: https://github.com/KnpLabs/Gaufrette
 
 .. _GaufretteBundle: https://github.com/KnpLabs/KnpGaufretteBundle
+
+.. _ImagineBundle: https://github.com/avalanche123/AvalancheImagineBundle
+
+.. _BuzzBundle: https://github.com/sensio/SensioBuzzBundle
+
+.. _/Resources/doc/index.rst: https://github.com/Oryzone/OryzoneMediaStorageBundle/blob/2.0/Resources/doc/index.rst
+
+.. _documentation: https://github.com/Oryzone/OryzoneMediaStorageBundle/blob/2.0/Resources/doc/index.rst
+
+.. _github issues for the repository: https://github.com/Oryzone/OryzoneMediaStorageBundle/issues
+
+.. _forking the repository: https://github.com/Oryzone/OryzoneMediaStorageBundle/fork_select
