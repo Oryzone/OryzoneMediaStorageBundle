@@ -35,6 +35,12 @@ inside the ``require`` block of your ``composer.json`` file:
 
   "oryzone/media-storage-bundle": "2.0.x-dev"
 
+So tell composer to download and install the new bundle:
+
+.. code-block:: bash
+
+  php composer.phar update oryzone/media-storage-bundle
+
 Then you must enable the bundle in your ``AppKernel.php`` file by adding the following line in your ``$bundles`` array:
 
 .. code-block:: php
@@ -103,8 +109,10 @@ Follows a sample configuration. More detail on the `documentation`_:
 Dependencies
 ------------
 * `GaufretteBundle`_ (required, automatically installed by `Composer`_)
-* `ImagineBundle`_ (optional, required if you want to use Image, Vimeo and Youtube providers)
-* `BuzzBundle`_ (optional, required if you want to use Youtube and Vimeo providers)
+* `ImagineBundle`_ (optional, needed if you want to use Image, Vimeo and Youtube providers)
+* `BuzzBundle`_ (optional, needed if you want to use Youtube and Vimeo providers)
+
+To install the optional dependencies please refer to the official documentation of each bundle.
 
 Documentation
 -------------
@@ -112,7 +120,7 @@ Full documentation (still incomplete) is available here: `/Resources/doc/index.r
 
 Contribution
 ------------
-**Contribution are always welcome!**
+**Contributions are always welcome!**
 If you need to report a bug you can use the `github issues for the repository`_ (please specify that it's referred to the
 version 2 of the bundle).
 Otherwise you can easily introduce new features, improvements or fixes by `forking the repository`_
@@ -124,6 +132,7 @@ know where to begin here's some hints ;)
 * Travis CI integration
 * Improve documentation
 * Build providers for famous external services like DailyMotion, Twitter, SlideShare, etc...
+* Integrate different ways of processing media (on demand and background)
 
 Thanks
 
