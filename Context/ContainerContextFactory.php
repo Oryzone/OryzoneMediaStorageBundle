@@ -2,12 +2,14 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Context;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oryzone\Bundle\MediaStorageBundle\Context\Context;
+use Oryzone\MediaStorage\Context\ContextInterface,
+    Oryzone\MediaStorage\Context\ContextFactoryInterface,
+    Oryzone\MediaStorage\Context\Context,
+    Oryzone\MediaStorage\Exception\InvalidArgumentException;
 
-class ContextFactory implements \IteratorAggregate
+class ContainerContextFactory implements ContextFactoryInterface, \IteratorAggregate
 {
 
     /**
@@ -45,8 +47,7 @@ class ContextFactory implements \IteratorAggregate
      *
      * @return ContextInterface
      *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @throws \Oryzone\MediaStorage\Exception\InvalidArgumentException
      */
     public function get($contextName)
     {
@@ -55,7 +56,7 @@ class ContextFactory implements \IteratorAggregate
             return $instances[$contextName];
 
         if(!array_key_exists($contextName, $this->contexts))
-            throw new \InvalidArgumentException(sprintf('The context "%s" has not been defined', $contextName));
+            throw new InvalidArgumentException(sprintf('The context "%s" has not been defined', $contextName));
 
         $c = $this->contexts[$contextName];
         $providerName = key($c['provider']);
