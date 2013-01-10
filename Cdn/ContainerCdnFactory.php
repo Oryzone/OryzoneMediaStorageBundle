@@ -68,15 +68,15 @@ class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
 
     /**
      * @param $cdnName
+     * @throws \Oryzone\MediaStorage\Exception\InvalidArgumentException
+     * @throws \Oryzone\MediaStorage\Exception\InvalidConfigurationException
      * @return CdnInterface
      *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
     public function get($cdnName)
     {
         if(!array_key_exists($cdnName, $this->cdns))
-            throw new \InvalidArgumentException(sprintf('The cdn "%s" has not been defined', $cdnName));
+            throw new InvalidArgumentException(sprintf('The cdn "%s" has not been defined', $cdnName));
 
         $cdn = $this->cdns[$cdnName];
         reset($cdn);
@@ -85,12 +85,12 @@ class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
         $cdnConfiguration = $cdnPlainArray['value'];
 
         if(!isset($this->aliases[$cdnAlias]))
-            throw new InvalidConfigurationException(sprintf('No CDN service defined with the alias "%s". Your confiuration has: %s', $cdnAlias, json_encode($cdn)));
+            throw new InvalidArgumentException(sprintf('No CDN service defined with the alias "%s". Your confiuration has: %s', $cdnAlias, json_encode($cdn)));
 
         $serviceName = $this->aliases[$cdnAlias];
 
         if(!$this->container->has($serviceName))
-            throw new InvalidConfigurationException(sprintf('The service "%s" associated to the cdn "%s" is not defined in the dependency injection container', $serviceName, $cdnName));
+            throw new InvalidArgumentException(sprintf('The service "%s" associated to the cdn "%s" is not defined in the dependency injection container', $serviceName, $cdnName));
 
         $service = $this->container->get($serviceName);
         if(!$service instanceof CdnInterface)
