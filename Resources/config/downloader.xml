@@ -11,6 +11,9 @@
         <!-- oryzone_media_storage.dowloader.curl_downloader -->
         <service id="oryzone_media_storage.dowloader.curl_downloader" class="%oryzone_media_storage.dowloader.curl_downloader.class%">
         </service>
+
+        <!-- sets the oryzone_media_storage.dowloader.curl_downloader as default downloader -->
+        <service id="oryzone_media_storage.dowloader.downloader" alias="oryzone_media_storage.dowloader.curl_downloader"/>
     </services>
 
 </container>

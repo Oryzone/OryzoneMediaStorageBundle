@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.context.container_context_factory.class">Oryzone\Bundle\MediaStorageBundle\Context\ContainerContextFactory</parameter>
+        <parameter key="oryzone_media_storage.context.context_factory.contexts" type="collection"/>
+    </parameters>
+
+    <services>
+        <!-- oryzone_media_storage.context.container_context_factory -->
+        <service id="oryzone_media_storage.context.container_context_factory" class="%oryzone_media_storage.context.container_context_factory.class%">
+            <argument type="service" id="service_container"/>
+            <argument>%oryzone_media_storage.context.context_factory.contexts%</argument>
+        </service>
+
+        <!-- sets the oryzone_media_storage.context.container_context_factory as the default context factory -->
+        <service id="oryzone_media_storage.context.context_factory" alias="oryzone_media_storage.context.container_context_factory"/>
+    </services>
+
+</container>

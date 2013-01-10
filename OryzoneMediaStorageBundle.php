@@ -31,7 +31,7 @@ class OryzoneMediaStorageBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new CdnCompilerPass());
-        $container->addCompilerPass(new ProviderCompilerPass());
         $container->addCompilerPass(new NamingStrategyCompilerPass());
+        $container->addCompilerPass(new ProviderCompilerPass());
     }
 }

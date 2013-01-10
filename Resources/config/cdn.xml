@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.cdn.container_cdn_factory.class">Oryzone\Bundle\MediaStorageBundle\Cdn\ContainerCdnFactory</parameter>
+        <parameter key="oryzone_media_storage.cdn.cdn_factory.cdns" type="collection"/>
+
+        <parameter key="oryzone_media_storage.cdn.local.class">Oryzone\MediaStorage\Cdn\LocalCdn</parameter>
+        <parameter key="oryzone_media_storage.cdn.remote.class">Oryzone\MediaStorage\Cdn\RemoteCdn</parameter>
+    </parameters>
+
+    <services>
+        <!-- oryzone_media_storage.cdn.container_cdn_factory -->
+        <service id="oryzone_media_storage.cdn.container_cdn_factory" class="%oryzone_media_storage.cdn.container_cdn_factory.class%">
+            <argument type="service" id="service_container"/>
+            <argument>%oryzone_media_storage.cdn.cdn_factory.cdns%</argument>
+        </service>
+
+        <!-- sets oryzone_media_storage.cdn.container_cdn_factory as the default cdn factory -->
+        <service id="oryzone_media_storage.cdn.cdn_factory" alias="oryzone_media_storage.cdn.container_cdn_factory"/>
+
+
+        <!-- oryzone_media_storage.cdn.local -->
+        <service id="oryzone_media_storage.cdn.local" class="%oryzone_media_storage.cdn.local.class%">
+            <tag name="oryzone_media_storage_cdn" alias="local"/>
+        </service>
+
+        <!-- oryzone_media_storage.cdns.remote -->
+        <service id="oryzone_media_storage.cdn.remote" class="%oryzone_media_storage.cdn.remote.class%">
+            <tag name="oryzone_media_storage_cdn" alias="remote"/>
+        </service>
+    </services>
+
+</container>

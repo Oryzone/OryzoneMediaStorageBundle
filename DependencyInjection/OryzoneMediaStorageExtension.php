@@ -29,18 +29,18 @@ class OryzoneMediaStorageExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $toLoad = array('cdns.xml', 'naming_strategies.xml', 'providers.xml', 'media_storage.xml', 'templating.xml',
-            'form.xml', 'integration.xml', 'event_dispatcher_adapters.xml', 'persistence_adapters.xml', 'filesystem.xml', 'downloader.xml');
+        $toLoad = array('cdn.xml', 'context.xml', 'downloader.xml', 'event.xml', 'filesystem.xml', 'form.xml',
+            'integration.xml', 'media_storage.xml', 'naming_strategy.xml', 'persistence.xml', 'provider.xml', 'templating.xml');
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         foreach($toLoad as $file)
             $loader->load($file);
 
         // sets parameters from global config
         $dbDriver = $config['db_driver'];
-        $container->setAlias('oryzone_media_storage.persistence_adapter.doctrine.object_manager', new Alias($this->objectManagerMap[$dbDriver]));
+        $container->setAlias('oryzone_media_storage.persistence.adapter.doctrine.object_manager', new Alias($this->objectManagerMap[$dbDriver]));
 
-        $container->setParameter('oryzone_media_storage.cdn_factory.cdns', $config['cdns']);
-        $container->setParameter('oryzone_media_storage.context_factory.contexts', $config['contexts']);
+        $container->setParameter('oryzone_media_storage.cdn.cdn_factory.cdns', $config['cdns']);
+        $container->setParameter('oryzone_media_storage.context.context_factory.contexts', $config['contexts']);
 
         $container->setParameter('oryzone_media_storage.default_cdn', $config['defaultCdn']);
         $container->setParameter('oryzone_media_storage.default_context', $config['defaultContext']);
