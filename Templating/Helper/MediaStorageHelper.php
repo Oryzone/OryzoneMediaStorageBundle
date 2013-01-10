@@ -4,8 +4,8 @@ namespace Oryzone\Bundle\MediaStorageBundle\Templating\Helper;
 
 use Symfony\Component\Templating\Helper\Helper;
 
-use Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface,
-    Oryzone\Bundle\MediaStorageBundle\Model\Media;
+use Oryzone\MediaStorage\MediaStorageInterface,
+    Oryzone\MediaStorage\Model\MediaInterface;
 
 class MediaStorageHelper extends Helper implements MediaStorageHelperInterface
 {
@@ -28,7 +28,7 @@ class MediaStorageHelper extends Helper implements MediaStorageHelperInterface
     /**
      * {@inheritDoc}
      */
-    public function url(Media $media, $variant = NULL, $options = array())
+    public function url(MediaInterface $media, $variant = NULL, $options = array())
     {
         return $this->mediaStorage->getUrl($media, $variant, $options);
     }
@@ -36,7 +36,7 @@ class MediaStorageHelper extends Helper implements MediaStorageHelperInterface
     /**
      * {@inheritDoc}
      */
-    public function render(Media $media, $variant = NULL, $options = array())
+    public function render(MediaInterface $media, $variant = NULL, $options = array())
     {
         return $this->mediaStorage->render($media, $variant, $options);
     }
