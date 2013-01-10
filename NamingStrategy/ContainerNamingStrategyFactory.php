@@ -2,10 +2,14 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\NamingStrategy;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class NamingStrategyFactory implements \IteratorAggregate
+use Oryzone\MediaStorage\NamingStrategy\NamingStrategyFactoryInterface,
+    Oryzone\MediaStorage\NamingStrategy\NamingStrategyInterface,
+    Oryzone\MediaStorage\Exception\InvalidArgumentException,
+    Oryzone\MediaStorage\Exception\InvalidConfigurationException;
+
+class ContainerNamingStrategyFactory implements NamingStrategyFactoryInterface, \IteratorAggregate
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -40,17 +44,12 @@ class NamingStrategyFactory implements \IteratorAggregate
     }
 
     /**
-     * @param string $namingStrategyName
-     *
-     * @return NamingStrategyInterface
-     *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * {@inheritDoc}
      */
     public function get($namingStrategyName)
     {
         if(!array_key_exists($namingStrategyName, $this->aliases))
-            throw new \InvalidArgumentException(sprintf('The naming strategy "%s" has not been defined', $namingStrategyName));
+            throw new InvalidArgumentException(sprintf('The naming strategy "%s" has not been defined', $namingStrategyName));
 
         $serviceName = $this->aliases[$namingStrategyName];
 
@@ -65,7 +64,7 @@ class NamingStrategyFactory implements \IteratorAggregate
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getIterator()
     {
