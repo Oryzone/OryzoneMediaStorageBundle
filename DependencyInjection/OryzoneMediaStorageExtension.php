@@ -37,7 +37,7 @@ class OryzoneMediaStorageExtension extends Extension
 
         // sets parameters from global config
         $dbDriver = $config['db_driver'];
-        $container->setAlias('oryzone_media_storage.persistence.doctrine.object_manager', new Alias($this->objectManagerMap[$dbDriver]));
+        $container->setAlias('oryzone_media_storage.persistence_adapter.doctrine.object_manager', new Alias($this->objectManagerMap[$dbDriver]));
 
         $container->setParameter('oryzone_media_storage.cdn_factory.cdns', $config['cdns']);
         $container->setParameter('oryzone_media_storage.context_factory.contexts', $config['contexts']);

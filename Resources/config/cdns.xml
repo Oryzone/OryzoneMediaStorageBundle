@@ -4,8 +4,8 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="oryzone_media_storage.cdns.local.class">Oryzone\Bundle\MediaStorageBundle\Cdn\LocalCdn</parameter>
-        <parameter key="oryzone_media_storage.cdns.remote.class">Oryzone\Bundle\MediaStorageBundle\Cdn\RemoteCdn</parameter>
+        <parameter key="oryzone_media_storage.cdns.local.class">Oryzone\MediaStorage\Cdn\LocalCdn</parameter>
+        <parameter key="oryzone_media_storage.cdns.remote.class">Oryzone\MediaStorage\Cdn\RemoteCdn</parameter>
     </parameters>
 
     <services>

@@ -4,22 +4,22 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="oryzone_media_storage.persistence.null.class">Oryzone\MediaStorage\Persistence\NullPersistenceAdapter</parameter>
-        <parameter key="oryzone_media_storage.persistence.doctrine.class">Oryzone\Bundle\MediaStorageBundle\Persistence\DoctrinePersistenceAdapter</parameter>
+        <parameter key="oryzone_media_storage.persistence_adapter.null.class">Oryzone\MediaStorage\Persistence\NullPersistenceAdapter</parameter>
+        <parameter key="oryzone_media_storage.persistence_adapter.doctrine.class">Oryzone\Bundle\MediaStorageBundle\Persistence\DoctrinePersistenceAdapter</parameter>
     </parameters>
 
     <services>
         <!-- NullPersistenceAdapter -->
-        <service id="oryzone_media_storage.persistence.null" class="%oryzone_media_storage.persistence.null.class%">
+        <service id="oryzone_media_storage.persistence_adapter.null" class="%oryzone_media_storage.persistence_adapter.null.class%">
         </service>
 
         <!-- DoctrinePersistenceAdapter -->
-        <service id="oryzone_media_storage.persistence.doctrine" class="%oryzone_media_storage.persistence.doctrine.class%">
-            <argument type="service" id="oryzone_media_storage.persistence.doctrine.object_manager"/>
+        <service id="oryzone_media_storage.persistence_adapter.doctrine" class="%oryzone_media_storage.persistence_adapter.doctrine.class%">
+            <argument type="service" id="oryzone_media_storage.persistence_adapter.doctrine.object_manager"/>
         </service>
 
         <!-- Sets DoctrinePersistenceAdapter as the default one -->
-        <service id="oryzone_media_storage.persistence" alias="oryzone_media_storage.persistence.doctrine">
+        <service id="oryzone_media_storage.persistence_adapter" alias="oryzone_media_storage.persistence_adapter.doctrine">
         </service>
     </services>
 
