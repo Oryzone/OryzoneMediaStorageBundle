@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="oryzone_media_storage.event_dispatcher_adapter.symfony.class">Oryzone\Bundle\MediaStorageBundle\Event\SymfonyEventDispatcherAdapter</parameter>
-        <parameter key="oryzone_media_storage.event_dispatcher_adapter.null.class">Oryzone\MediaStorage\Events\NullEventDispatcheAdapter</parameter>
+        <parameter key="oryzone_media_storage.event_dispatcher_adapter.null.class">Oryzone\MediaStorage\Events\NullEventDispatcherAdapter</parameter>
     </parameters>
 
     <services>
@@ -20,7 +20,8 @@
         </service>
 
         <!-- Sets SymfonyEventDispatcherAdapter as the default one -->
-        <service id="oryzone_media_storage.event_dispatcher_adapter" alias="oryzone_media_storage.event_dispatcher_adapter.symfony"></service>
+        <service id="oryzone_media_storage.event_dispatcher_adapter" alias="oryzone_media_storage.event_dispatcher_adapter.symfony">
+        </service>
     </services>
 
 </container>

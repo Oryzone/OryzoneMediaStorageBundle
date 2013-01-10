@@ -6,7 +6,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Symfony\Component\Config\Definition\ConfigurationInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-use Oryzone\MediaStorage\Variant\VariantInterface;
+use Oryzone\MediaStorage\Variant\VariantInterface,
+    Oryzone\MediaStorage\Variant\Variant;
 
 /**
  * This is the class that validates and merges configuration from your app/config files

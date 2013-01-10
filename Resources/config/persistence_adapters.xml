@@ -15,7 +15,7 @@
 
         <!-- DoctrinePersistenceAdapter -->
         <service id="oryzone_media_storage.persistence.doctrine" class="%oryzone_media_storage.persistence.doctrine.class%">
-            <parameter type="service" id="oryzone_media_storage.persistence.doctrine.object_manager"/>
+            <argument type="service" id="oryzone_media_storage.persistence.doctrine.object_manager"/>
         </service>
 
         <!-- Sets DoctrinePersistenceAdapter as the default one -->
