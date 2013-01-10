@@ -30,7 +30,7 @@ class OryzoneMediaStorageExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $toLoad = array('cdns.xml', 'naming_strategies.xml', 'providers.xml', 'media_storage.xml', 'templating.xml',
-            'form.xml', 'integration.xml', 'event_dispatcher_adapters.xml', 'persistence_adapters.xml');
+            'form.xml', 'integration.xml', 'event_dispatcher_adapters.xml', 'persistence_adapters.xml', 'filesystem.xml');
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         foreach($toLoad as $file)
             $loader->load($file);
