@@ -2,10 +2,14 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Provider;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class ProviderFactory implements \IteratorAggregate
+use Oryzone\MediaStorage\Provider\ProviderFactoryInterface,
+    Oryzone\MediaStorage\Provider\ProviderInterface,
+    Oryzone\MediaStorage\Exception\InvalidArgumentException,
+    Oryzone\MediaStorage\Exception\InvalidConfigurationException;
+
+class ContainerProviderFactory implements ProviderFactoryInterface, \IteratorAggregate
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
@@ -40,18 +44,12 @@ class ProviderFactory implements \IteratorAggregate
     }
 
     /**
-     * @param string $providerName
-     * @param array $providerOptions
-     *
-     * @throws \InvalidArgumentException
-     * @throws \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     *
-     * @return ProviderInterface
+     * {@inheritDoc}
      */
     public function get($providerName, $providerOptions = array())
     {
         if(!array_key_exists($providerName, $this->aliases))
-            throw new \InvalidArgumentException(sprintf('The provider "%s" has not been defined', $providerName));
+            throw new InvalidArgumentException(sprintf('The provider "%s" has not been defined', $providerName));
 
         $serviceName = $this->aliases[$providerName];
 
@@ -67,7 +65,7 @@ class ProviderFactory implements \IteratorAggregate
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getIterator()
     {

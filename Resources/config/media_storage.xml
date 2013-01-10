@@ -9,7 +9,7 @@
         <parameter key="oryzone_media_storage.cdn_factory.cdns" type="collection"/>
         <parameter key="oryzone_media_storage.context_factory.class">Oryzone\Bundle\MediaStorageBundle\Context\ContainerContextFactory</parameter>
         <parameter key="oryzone_media_storage.context_factory.contexts" type="collection"/>
-        <parameter key="oryzone_media_storage.provider_factory.class">Oryzone\Bundle\MediaStorageBundle\Provider\ProviderFactory</parameter>
+        <parameter key="oryzone_media_storage.provider_factory.class">Oryzone\Bundle\MediaStorageBundle\Provider\ContainerProviderFactory</parameter>
         <parameter key="oryzone_media_storage.naming_strategy_factory.class">Oryzone\Bundle\MediaStorageBundle\NamingStrategy\ContainerNamingStrategyFactory</parameter>
     </parameters>
 
