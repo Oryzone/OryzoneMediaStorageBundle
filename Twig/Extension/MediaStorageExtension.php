@@ -3,7 +3,7 @@
 namespace Oryzone\Bundle\MediaStorageBundle\Twig\Extension;
 
 use Oryzone\Bundle\MediaStorageBundle\Templating\Helper\MediaStorageHelperInterface,
-    Oryzone\Bundle\MediaStorageBundle\Model\Media;
+    Oryzone\MediaStorage\Model\MediaInterface;
 
 class MediaStorageExtension extends \Twig_Extension
 {
@@ -38,12 +38,12 @@ class MediaStorageExtension extends \Twig_Extension
     /**
      * Get media url
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @param \Oryzone\MediaStorage\Model\MediaInterface $media
      * @param null $variant
      * @param array $options
      * @return string
      */
-    public function mediaUrl(Media $media, $variant = NULL, $options = array())
+    public function mediaUrl(MediaInterface $media, $variant = NULL, $options = array())
     {
         return $this->helper->url($media, $variant, $options);
     }
@@ -51,12 +51,12 @@ class MediaStorageExtension extends \Twig_Extension
     /**
      * Renders a media
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\Model\Media $media
+     * @param \Oryzone\MediaStorage\Model\MediaInterface $media
      * @param null $variant
      * @param array $options
      * @return string
      */
-    public function mediaRender(Media $media, $variant = NULL, $options = array())
+    public function mediaRender(MediaInterface $media, $variant = NULL, $options = array())
     {
         return $this->helper->render($media, $variant, $options);
     }
