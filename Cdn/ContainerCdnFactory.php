@@ -2,10 +2,14 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Cdn;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class CdnFactory implements \IteratorAggregate
+use Oryzone\MediaStorage\Cdn\CdnFactoryInterface,
+    Oryzone\MediaStorage\Cdn\CdnInterface,
+    Oryzone\MediaStorage\Exception\InvalidConfigurationException,
+    Oryzone\MediaStorage\Exception\InvalidArgumentException;
+
+class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface $container
