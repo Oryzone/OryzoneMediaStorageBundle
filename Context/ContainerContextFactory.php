@@ -43,11 +43,7 @@ class ContainerContextFactory implements ContextFactoryInterface, \IteratorAggre
     }
 
     /**
-     * @param string $contextName
-     *
-     * @return ContextInterface
-     *
-     * @throws \Oryzone\MediaStorage\Exception\InvalidArgumentException
+     * {@inheritDoc}
      */
     public function get($contextName)
     {
@@ -80,7 +76,7 @@ class ContainerContextFactory implements ContextFactoryInterface, \IteratorAggre
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getIterator()
     {

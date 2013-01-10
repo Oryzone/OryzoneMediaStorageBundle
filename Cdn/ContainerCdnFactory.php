@@ -67,11 +67,7 @@ class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
     }
 
     /**
-     * @param $cdnName
-     * @throws \Oryzone\MediaStorage\Exception\InvalidArgumentException
-     * @throws \Oryzone\MediaStorage\Exception\InvalidConfigurationException
-     * @return CdnInterface
-     *
+     * {@inheritDoc}
      */
     public function get($cdnName)
     {
