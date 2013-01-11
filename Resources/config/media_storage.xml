@@ -24,6 +24,9 @@
             <argument>%oryzone_media_storage.default_naming_strategy%</argument>
             <argument>%oryzone_media_storage.default_variant%</argument>
         </service>
+
+        <!-- short alias -->
+        <service id="media_storage" alias="oryzone_media_storage"/>
     </services>
 
 </container>
