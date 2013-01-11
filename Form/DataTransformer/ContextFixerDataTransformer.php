@@ -41,7 +41,7 @@ class ContextFixerDataTransformer implements DataTransformerInterface
         }
 
         if (!$media->getContext())
-            $media->setContext($this->contextName);
+            $media->setContextName($this->contextName);
 
         return $media;
     }
