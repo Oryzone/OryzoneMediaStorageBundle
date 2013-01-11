@@ -21,8 +21,9 @@ use Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\CdnCompilerPass,
-    Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\ProviderCompilerPass,
-    Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\NamingStrategyCompilerPass;
+    Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\FormTypeBuilderCompilerPass,
+    Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\NamingStrategyCompilerPass,
+    Oryzone\Bundle\MediaStorageBundle\DependencyInjection\Compiler\ProviderCompilerPass;
 
 class OryzoneMediaStorageBundle extends Bundle
 {
@@ -31,6 +32,7 @@ class OryzoneMediaStorageBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new CdnCompilerPass());
+        $container->addCompilerPass(new FormTypeBuilderCompilerPass());
         $container->addCompilerPass(new NamingStrategyCompilerPass());
         $container->addCompilerPass(new ProviderCompilerPass());
     }

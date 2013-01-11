@@ -20,11 +20,13 @@ class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
      * @var array $cdns
      *
      * Must follow this structure
+     * <code>
      * array(
      *      'cdnName' => array(
-     *          'cdnType' =>  array( <options> )
+     *          'cdnType' =>  'options...'
      *      )
      * )
+     * </code>
      */
     protected $cdns;
 
@@ -33,10 +35,12 @@ class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
      *
      * E.g.
      *
+     * <code>
      * array(
-     *  'remote'    => 'oryzone_media_storage.cdns.remote',
-     *  'local'     => 'oryzone_media_storage.cdns.local'
+     *  'remote'    => 'oryzone_media_storage.cdn.remote',
+     *  'local'     => 'oryzone_media_storage.cdn.local'
      * )
+     * </code>
      *
      * @var array $cdnAliases
      */

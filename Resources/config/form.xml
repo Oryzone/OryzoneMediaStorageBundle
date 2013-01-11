@@ -5,16 +5,63 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="oryzone_media_storage.media_type.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\MediaType</parameter>
+        <parameter key="oryzone_media_storage.form.builder.container_factory.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\ContainerFormTypeBuilderFactory</parameter>
+        <parameter key="oryzone_media_storage.form.builder.container_factory.aliases" type="collection"/>
+        <parameter key="oryzone_media_storage.form.builder.container_factory.default">default</parameter>
+
+        <parameter key="oryzone_media_storage.form.media_type.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\MediaType</parameter>
+
+        <parameter key="oryzone_media_storage.form.builder.default.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\DefaultFormTypeBuilder</parameter>
+        <parameter key="oryzone_media_storage.form.builder.file.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\FileFormTypeBuilder</parameter>
+        <parameter key="oryzone_media_storage.form.builder.image.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\ImageFormTypeBuilder</parameter>
+        <parameter key="oryzone_media_storage.form.builder.vimeo.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\VimeoFormTypeBuilder</parameter>
+        <parameter key="oryzone_media_storage.form.builder.youtube.class">Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\YoutubeFormTypeBuilder</parameter>
     </parameters>
 
     <services>
-        <service id="oryzone_media_storage.media_type" class="%oryzone_media_storage.media_type.class%">
+        <!-- oryzone_media_storage.form.builder.container_factory -->
+        <service id="oryzone_media_storage.form.builder.container_factory" class="%oryzone_media_storage.form.builder.container_factory.class%">
+            <argument type="service" id="service_container"/>
+            <argument>%oryzone_media_storage.form.builder.container_factory.aliases%</argument>
+            <argument>%oryzone_media_storage.form.builder.container_factory.default%</argument>
+        </service>
+
+        <!-- sets oryzone_media_storage.form.builder.container_factory as default form type builder factory -->
+        <service id="oryzone_media_storage.form.builder.factory" alias="oryzone_media_storage.form.builder.container_factory"/>
+
+
+        <!-- oryzone_media_storage.form.media_type -->
+        <service id="oryzone_media_storage.form.media_type" class="%oryzone_media_storage.form.media_type.class%">
             <tag name="form.type" alias="oryzone_media_storage_media" />
             <argument type="service" id="oryzone_media_storage" />
+            <argument type="service" id="oryzone_media_storage.form.builder.factory" />
             <argument />
         </service>
 
+        <!-- oryzone_media_storage.form.builder.default -->
+        <service id="oryzone_media_storage.form.builder.default" class="%oryzone_media_storage.form.builder.default.class%">
+            <tag name="oryzone_media_storage_form_type_builder" alias="default"/>
+        </service>
+
+        <!-- oryzone_media_storage.form.builder.file -->
+        <service id="oryzone_media_storage.form.builder.file" class="%oryzone_media_storage.form.builder.file.class%">
+            <tag name="oryzone_media_storage_form_type_builder" alias="file"/>
+        </service>
+
+        <!-- oryzone_media_storage.form.builder.image -->
+        <service id="oryzone_media_storage.form.builder.image" class="%oryzone_media_storage.form.builder.image.class%">
+            <tag name="oryzone_media_storage_form_type_builder" alias="image"/>
+        </service>
+
+        <!-- oryzone_media_storage.form.builder.vimeo -->
+        <service id="oryzone_media_storage.form.builder.vimeo" class="%oryzone_media_storage.form.builder.vimeo.class%">
+            <tag name="oryzone_media_storage_form_type_builder" alias="vimeo"/>
+        </service>
+
+        <!-- oryzone_media_storage.form.builder.youtube -->
+        <service id="oryzone_media_storage.form.builder.youtube" class="%oryzone_media_storage.form.builder.youtube.class%">
+            <tag name="oryzone_media_storage_form_type_builder" alias="youtube"/>
+        </service>
     </services>
 
 </container>
