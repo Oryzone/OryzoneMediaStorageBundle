@@ -11,20 +11,19 @@ interface MediaStorageHelperInterface
      * Gets the url of a given media variant
      *
      * @param \Oryzone\MediaStorage\Model\MediaInterface $media
-     * @param string|null $variant
-     * @param  array            $options
+     * @param string|null                                $variant
+     * @param array                                      $options
      *
      * @return string
      */
     public function url(MediaInterface $media, $variant = NULL, $options = array());
 
-
     /**
      * Renders a media
      *
      * @param \Oryzone\MediaStorage\Model\MediaInterface $media
-     * @param null $variant
-     * @param array $options
+     * @param null                                       $variant
+     * @param array                                      $options
      *
      * @return string
      */

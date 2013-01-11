@@ -38,9 +38,9 @@ class MediaStorageExtension extends \Twig_Extension
     /**
      * Get media url
      *
-     * @param \Oryzone\MediaStorage\Model\MediaInterface $media
-     * @param null $variant
-     * @param array $options
+     * @param  \Oryzone\MediaStorage\Model\MediaInterface $media
+     * @param  null                                       $variant
+     * @param  array                                      $options
      * @return string
      */
     public function mediaUrl(MediaInterface $media, $variant = NULL, $options = array())
@@ -51,9 +51,9 @@ class MediaStorageExtension extends \Twig_Extension
     /**
      * Renders a media
      *
-     * @param \Oryzone\MediaStorage\Model\MediaInterface $media
-     * @param null $variant
-     * @param array $options
+     * @param  \Oryzone\MediaStorage\Model\MediaInterface $media
+     * @param  null                                       $variant
+     * @param  array                                      $options
      * @return string
      */
     public function mediaRender(MediaInterface $media, $variant = NULL, $options = array())

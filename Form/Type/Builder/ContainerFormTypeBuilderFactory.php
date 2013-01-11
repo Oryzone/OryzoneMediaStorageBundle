@@ -62,8 +62,7 @@ class ContainerFormTypeBuilderFactory implements FormTypeBuilderFactoryInterface
      */
     public function get($formTypeBuilderName)
     {
-        if(!array_key_exists($formTypeBuilderName, $this->aliases))
-        {
+        if (!array_key_exists($formTypeBuilderName, $this->aliases)) {
             if(!array_key_exists($this->default, $this->aliases))
                 throw new InvalidArgumentException(sprintf('Form type builder "%s" not found, tried to switch to default form type builder ("%s") but it was not found either', $formTypeBuilderName, $this->default));
 

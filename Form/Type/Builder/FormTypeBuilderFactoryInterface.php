@@ -8,7 +8,7 @@ interface FormTypeBuilderFactoryInterface
     /**
      * Get a form type builder with a given name
      *
-     * @param string $formTypeBuilderName
+     * @param  string                                                                        $formTypeBuilderName
      * @return \Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\FormTypeBuilderInterface
      */
     public function get($formTypeBuilderName);

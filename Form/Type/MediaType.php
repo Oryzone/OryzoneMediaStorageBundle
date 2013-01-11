@@ -36,8 +36,8 @@ class MediaType extends AbstractType
      * Constructor
      *
      * @param \Oryzone\MediaStorage\MediaStorageInterface $mediaStorage
-     * @param Builder\FormTypeBuilderFactoryInterface $formTypeBuilderFactory
-     * @param null|string $class
+     * @param Builder\FormTypeBuilderFactoryInterface     $formTypeBuilderFactory
+     * @param null|string                                 $class
      */
     public function __construct(MediaStorageInterface $mediaStorage, FormTypeBuilderFactoryInterface $formTypeBuilderFactory, $class = NULL)
     {

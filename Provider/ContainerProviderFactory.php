@@ -61,6 +61,7 @@ class ContainerProviderFactory implements ProviderFactoryInterface, \IteratorAgg
             throw new InvalidConfigurationException(sprintf('The service "%s" associated with the provider "%s" does not implement "Oryzone\MediaStorage\Provider\ProviderInterface"', $serviceName, $providerName));
 
         $service->setOptions($providerOptions);
+
         return $service;
     }
 

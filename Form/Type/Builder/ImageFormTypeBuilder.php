@@ -6,4 +6,3 @@ class ImageFormTypeBuilder extends DefaultFormTypeBuilder
 {
 
 }
-

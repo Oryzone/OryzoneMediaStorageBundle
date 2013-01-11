@@ -24,7 +24,7 @@ class DoctrinePersistenceAdapter implements PersistenceAdapterInterface
      * Constructor
      *
      * @param \Doctrine\Common\Persistence\ObjectManager $objectManager
-     * @param bool $autoFlush if <code>TRUE</code> will auto-flush the object manager after each change
+     * @param bool                                       $autoFlush     if <code>TRUE</code> will auto-flush the object manager after each change
      */
     public function __construct(ObjectManager $objectManager, $autoFlush = TRUE)
     {
@@ -34,8 +34,7 @@ class DoctrinePersistenceAdapter implements PersistenceAdapterInterface
 
     protected function callObjectManager(MediaInterface $media, $method = 'save')
     {
-        try
-        {
+        try {
             if($method == 'remove')
                 $this->objectManager->remove($media);
             else
@@ -43,9 +42,7 @@ class DoctrinePersistenceAdapter implements PersistenceAdapterInterface
 
             if($this->autoFlush)
                 $this->objectManager->flush();
-        }
-        catch(\Exception $e)
-        {
+        } catch (\Exception $e) {
             throw new PersistenceException(sprintf('Cannot %s media "%s": %s', $method, $media->__toString(), $e->getMessage()), $this, 0, $e);
         }
     }

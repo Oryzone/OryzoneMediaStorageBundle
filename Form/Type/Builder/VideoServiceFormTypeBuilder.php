@@ -14,7 +14,7 @@ abstract class VideoServiceFormTypeBuilder implements FormTypeBuilderInterface
      *
      * @return string
      */
-    protected abstract function getCanonicalUrl();
+    abstract protected function getCanonicalUrl();
 
     /**
      * {@inheritDoc}

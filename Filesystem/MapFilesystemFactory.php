@@ -30,12 +30,9 @@ class MapFilesystemFactory implements FilesystemFactoryInterface
      */
     public function get($filesystemName)
     {
-        try
-        {
+        try {
             return $this->map->get($filesystemName);
-        }
-        catch(\InvalidArgumentException $e)
-        {
+        } catch (\InvalidArgumentException $e) {
             throw new InvalidArgumentException(sprintf('Cannot find a filesystem named "%s"', $filesystemName), 0, $e);
         }
     }
