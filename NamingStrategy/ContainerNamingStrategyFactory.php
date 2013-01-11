@@ -58,7 +58,7 @@ class ContainerNamingStrategyFactory implements NamingStrategyFactoryInterface, 
 
         $service = $this->container->get($serviceName);
         if(!$service instanceof NamingStrategyInterface)
-            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the naming strategy "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\NamingStrategy\NamingStrategyInterface"', $serviceName, $namingStrategyName));
+            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the naming strategy "%s" does not implement "Oryzone\MediaStorage\NamingStrategy\NamingStrategyInterface"', $serviceName, $namingStrategyName));
 
         return $service;
     }

@@ -58,7 +58,7 @@ class ContainerProviderFactory implements ProviderFactoryInterface, \IteratorAgg
 
         $service = $this->container->get($serviceName);
         if(!$service instanceof ProviderInterface)
-            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the provider "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\Provider\ProviderInterface"', $serviceName, $providerName));
+            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the provider "%s" does not implement "Oryzone\MediaStorage\Provider\ProviderInterface"', $serviceName, $providerName));
 
         $service->setOptions($providerOptions);
         return $service;

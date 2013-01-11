@@ -94,7 +94,7 @@ class ContainerCdnFactory implements CdnFactoryInterface, \IteratorAggregate
 
         $service = $this->container->get($serviceName);
         if(!$service instanceof CdnInterface)
-            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the cdn "%s" does not implement "Oryzone\Bundle\MediaStorageBundle\Cdn\CdnInterface"', $serviceName, $cdnName));
+            throw new InvalidConfigurationException(sprintf('The service "%s" associated with the cdn "%s" does not implement "Oryzone\MediaStorage\Cdn\CdnInterface"', $serviceName, $cdnName));
 
         $service->setConfiguration($cdnConfiguration);
 
