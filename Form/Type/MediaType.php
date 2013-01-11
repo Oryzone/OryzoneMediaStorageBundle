@@ -6,9 +6,9 @@ use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
     Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oryzone\Bundle\MediaStorageBundle\Exception\InvalidArgumentException,
-    Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface,
-    Oryzone\Bundle\MediaStorageBundle\Form\DataTransformer\ProviderDataTransformer;
+use Oryzone\MediaStorage\MediaStorageInterface,
+    Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\FormTypeBuilderFactoryInterface,
+    Oryzone\Bundle\MediaStorageBundle\Form\DataTransformer\ContextFixerDataTransformer;
 
 class MediaType extends AbstractType
 {
@@ -18,9 +18,14 @@ class MediaType extends AbstractType
     const DEFAULT_CLASS = 'Oryzone\Bundle\MediaStorageBundle\Entity\Media';
 
     /**
-     * @var \Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface $mediaStorage
+     * @var \Oryzone\MediaStorage\MediaStorageInterface $mediaStorage
      */
     protected $mediaStorage;
+
+    /**
+     * @var Builder\FormTypeBuilderFactoryInterface $formTypeBuilderFactory
+     */
+    protected $formTypeBuilderFactory;
 
     /**
      * @var null|string $class
@@ -30,15 +35,17 @@ class MediaType extends AbstractType
     /**
      * Constructor
      *
-     * @param \Oryzone\Bundle\MediaStorageBundle\MediaStorageInterface $mediaStorage
-     * @param null|string $class media class
+     * @param \Oryzone\MediaStorage\MediaStorageInterface $mediaStorage
+     * @param Builder\FormTypeBuilderFactoryInterface     $formTypeBuilderFactory
+     * @param null|string                                 $class
      */
-    public function __construct(MediaStorageInterface $mediaStorage, $class = NULL)
+    public function __construct(MediaStorageInterface $mediaStorage, FormTypeBuilderFactoryInterface $formTypeBuilderFactory, $class = NULL)
     {
         if($class == NULL)
             $class = self::DEFAULT_CLASS;
 
         $this->mediaStorage = $mediaStorage;
+        $this->formTypeBuilderFactory = $formTypeBuilderFactory;
         $this->class = $class;
     }
 
@@ -50,14 +57,13 @@ class MediaType extends AbstractType
         $context = $this->mediaStorage->getContext($options['context']);
         $provider = $this->mediaStorage->getProvider($context->getProviderName());
 
-        $builder->appendNormTransformer(new ProviderDataTransformer($provider, array(
-            'context'  => $options['context'],
-        )));
+        $builder->appendNormTransformer(new ContextFixerDataTransformer($options['context']));
 
         if($options['showName'])
             $builder->add('name', 'text', isset($options['name']) ? array('data' => $options['name']) : array());
 
-        $provider->buildMediaType($builder, $options);
+        $formTypeBuilder = $this->formTypeBuilderFactory->get($provider->getName());
+        $formTypeBuilder->buildMediaType($builder, $options);
     }
 
     /**

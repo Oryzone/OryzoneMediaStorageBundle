@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.naming_strategy.naming_strategy_factory.class">Oryzone\Bundle\MediaStorageBundle\NamingStrategy\ContainerNamingStrategyFactory</parameter>
+
+        <parameter key="oryzone_media_storage.naming_strategy.slugged.class">Oryzone\MediaStorage\NamingStrategy\SluggedNamingStrategy</parameter>
+    </parameters>
+
+    <services>
+        <!-- oryzone_media_storage.naming_strategy.naming_strategy_factory -->
+        <service id="oryzone_media_storage.naming_strategy.container_naming_strategy_factory" class="%oryzone_media_storage.naming_strategy.naming_strategy_factory.class%">
+            <argument type="service" id="service_container"/>
+        </service>
+
+        <!-- sets oryzone_media_storage.naming_strategy.container_naming_strategy_factory as default naming strategy factory -->
+        <service id="oryzone_media_storage.naming_strategy.naming_strategy_factory" alias="oryzone_media_storage.naming_strategy.container_naming_strategy_factory"/>
+
+
+        <!-- oryzone_media_storage.naming_strategy.slugged -->
+        <service id="oryzone_media_storage.naming_strategy.slugged" class="%oryzone_media_storage.naming_strategy.slugged.class%">
+            <tag name="oryzone_media_storage_naming_strategy" alias="slugged"/>
+        </service>
+    </services>
+
+</container>

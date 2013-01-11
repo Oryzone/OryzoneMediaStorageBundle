@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface,
 class ProviderCompilerPass implements CompilerPassInterface
 {
 
-    const PROVIDER_FACTORY_SERVICE = 'oryzone_media_storage.provider_factory';
+    const PROVIDER_FACTORY_SERVICE = 'oryzone_media_storage.provider.container_provider_factory';
     const PROVIDER_SERVICES_TAG = 'oryzone_media_storage_provider';
 
     /**
@@ -18,14 +18,14 @@ class ProviderCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         if (false === $container->hasDefinition(self::PROVIDER_FACTORY_SERVICE)) {
-            return;
+            throw new InvalidConfigurationException(sprintf('The provider factory service ("%s") is missing', self::PROVIDER_FACTORY_SERVICE));
         }
 
         $definition = $container->getDefinition(self::PROVIDER_FACTORY_SERVICE);
 
         foreach ($container->findTaggedServiceIds(self::PROVIDER_SERVICES_TAG) as $id => $attributes) {
             if(!isset($attributes[0]['alias']))
-                throw new InvalidConfigurationException(sprintf('Service "%s" lacks of mandatory "alias" attribute for service tagged as "%s"', $id, self::PROVIDER_SERVICES_TAG));
+                throw new InvalidConfigurationException(sprintf('Service "%s" needs mandatory "alias" attribute for service tagged as "%s"', $id, self::PROVIDER_SERVICES_TAG));
 
             $definition->addMethodCall('addAlias', array($id, $attributes[0]['alias']));
         }

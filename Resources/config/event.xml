@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.event.event_dispatcher_adapter.symfony.class">Oryzone\Bundle\MediaStorageBundle\Event\SymfonyEventDispatcherAdapter</parameter>
+        <parameter key="oryzone_media_storage.event.event_dispatcher_adapter.null.class">Oryzone\MediaStorage\Events\NullEventDispatcherAdapter</parameter>
+    </parameters>
+
+    <services>
+        <!-- oryzone_media_storage.event.event_dispatcher_adapter.symfony -->
+        <service id="oryzone_media_storage.event.event_dispatcher_adapter.symfony" class="%oryzone_media_storage.event.event_dispatcher_adapter.symfony.class%">
+            <argument type="service" id="event_dispatcher" />
+        </service>
+
+        <!-- oryzone_media_storage.event.event_dispatcher_adapter.null -->
+        <service id="oryzone_media_storage.event.event_dispatcher_adapter.null" class="%oryzone_media_storage.event.event_dispatcher_adapter.null.class%">
+        </service>
+
+        <!-- sets oryzone_media_storage.event.event_dispatcher_adapter.symfony as the default event dispatcher -->
+        <service id="oryzone_media_storage.event.event_dispatcher_adapter" alias="oryzone_media_storage.event.event_dispatcher_adapter.symfony"/>
+    </services>
+
+</container>

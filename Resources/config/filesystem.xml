@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="oryzone_media_storage.filesystem.map_filesystem_factory.class">Oryzone\Bundle\MediaStorageBundle\Filesystem\MapFilesystemFactory</parameter>
+    </parameters>
+
+    <services>
+        <!-- oryzone_media_storage.filesystem.map_filesystem_factory -->
+        <service id="oryzone_media_storage.filesystem.map_filesystem_factory" class="%oryzone_media_storage.filesystem.map_filesystem_factory.class%">
+            <argument type="service" id="knp_gaufrette.filesystem_map"/>
+        </service>
+
+        <!-- sets oryzone_media_storage.filesystem.filesystem_factory as the default filesystem factory -->
+        <service id="oryzone_media_storage.filesystem.filesystem_factory" alias="oryzone_media_storage.filesystem.map_filesystem_factory"/>
+    </services>
+
+</container>

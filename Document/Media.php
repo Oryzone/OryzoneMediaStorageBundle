@@ -2,9 +2,9 @@
 
 namespace Oryzone\Bundle\MediaStorageBundle\Document;
 
-use Oryzone\Bundle\MediaStorageBundle\Model\Media as BaseMedia;
+use Oryzone\MediaStorage\Model\Media as BaseMedia;
 
-class Media extends BaseMedia
+abstract class Media extends BaseMedia
 {
 
 }
