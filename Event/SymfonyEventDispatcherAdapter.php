@@ -19,7 +19,7 @@ class SymfonyEventDispatcherAdapter implements EventDispatcherAdapterInterface
      *
      * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher
      */
-    public function __contruct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
     }
