@@ -6,7 +6,7 @@
     <parameters>
         <parameter key="oryzone_media_storage.naming_strategy.naming_strategy_factory.class">Oryzone\Bundle\MediaStorageBundle\NamingStrategy\ContainerNamingStrategyFactory</parameter>
 
-        <parameter key="oryzone_media_storage.naming_strategy.slugged.class">Oryzone\Bundle\MediaStorageBundle\NamingStrategy\SluggedNamingStrategy</parameter>
+        <parameter key="oryzone_media_storage.naming_strategy.slugged.class">Oryzone\MediaStorage\NamingStrategy\SluggedNamingStrategy</parameter>
     </parameters>
 
     <services>
