@@ -6,7 +6,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder,
     Symfony\Component\Config\Definition\ConfigurationInterface,
     Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
-use Oryzone\Bundle\MediaStorageBundle\Variant\Variant;
+use Oryzone\MediaStorage\Variant\VariantInterface,
+    Oryzone\MediaStorage\Variant\Variant;
 
 /**
  * This is the class that validates and merges configuration from your app/config files
@@ -32,7 +33,7 @@ class Configuration implements ConfigurationInterface
         'default' => array(
             'parent' => NULL,
             'process' => NULL,
-            'mode' => Variant::MODE_INSTANT
+            'mode' => VariantInterface::MODE_INSTANT
         )
     );
 
@@ -59,8 +60,8 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('db_driver')
                 ->defaultValue('auto')
                 ->validate()
-                    ->ifNotInArray(array('orm', 'mongodb', 'auto'))
-                    ->thenInvalid('Invalid database driver "%s". Allowed values: "orm", "mongodb", "auto"')
+                    ->ifNotInArray(array('orm', 'mongodb'))
+                    ->thenInvalid('Invalid database driver "%s". Allowed values: "orm", "mongodb"')
                 ->end()
             ->end()
         ->end();

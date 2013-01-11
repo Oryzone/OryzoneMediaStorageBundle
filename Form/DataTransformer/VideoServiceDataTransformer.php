@@ -4,7 +4,7 @@ namespace Oryzone\Bundle\MediaStorageBundle\Form\DataTransformer;
 
 use Symfony\Component\Form\DataTransformerInterface;
 
-use Oryzone\Bundle\MediaStorageBundle\Model\Media;
+use Oryzone\MediaStorage\Model\MediaInterface;
 
 class VideoServiceDataTransformer implements DataTransformerInterface
 {
@@ -29,7 +29,7 @@ class VideoServiceDataTransformer implements DataTransformerInterface
      */
     public function transform($media)
     {
-        if($media instanceof Media && $media->getContent() == NULL && $media->getMetaValue('id'))
+        if($media instanceof MediaInterface && $media->getContent() == NULL && $media->getMetaValue('id'))
             $media->setContent(sprintf($this->urlSchema, $media->getMetaValue('id')));
 
         return $media;
