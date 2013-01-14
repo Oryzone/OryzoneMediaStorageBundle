@@ -17,6 +17,13 @@ interface MediaStorageHelperInterface
 {
 
     /**
+     * Get the current instance of the media storage
+     *
+     * @return \Oryzone\MediaStorage\MediaStorageInterface
+     */
+    public function getMediaStorage();
+
+    /**
      * Gets the url of a given media variant
      *
      * @param \Oryzone\MediaStorage\Model\MediaInterface $media

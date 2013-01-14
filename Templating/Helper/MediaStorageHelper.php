@@ -19,11 +19,27 @@ use Oryzone\MediaStorage\MediaStorageInterface,
 class MediaStorageHelper extends Helper implements MediaStorageHelperInterface
 {
 
+    /**
+     * @var \Oryzone\MediaStorage\MediaStorageInterface $mediaStorage
+     */
     protected $mediaStorage;
 
+    /**
+     * Constructor
+     *
+     * @param \Oryzone\MediaStorage\MediaStorageInterface $mediaStorage
+     */
     public function __construct(MediaStorageInterface $mediaStorage)
     {
         $this->mediaStorage = $mediaStorage;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getMediaStorage()
+    {
+        return $this->mediaStorage;
     }
 
     /**

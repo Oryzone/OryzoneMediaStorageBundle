@@ -35,6 +35,16 @@ class MediaStorageExtension extends \Twig_Extension
     /**
      * {@inheritDoc}
      */
+    public function getFunctions()
+    {
+        return array(
+            'getMediaStorage' => new \Twig_Function_Method($this, 'getMediaStorage')
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function getFilters()
     {
         return array
@@ -55,6 +65,16 @@ class MediaStorageExtension extends \Twig_Extension
     public function mediaUrl(MediaInterface $media, $variant = NULL, $options = array())
     {
         return $this->helper->url($media, $variant, $options);
+    }
+
+    /**
+     * Gets the instance of the media storage
+     *
+     * @return \Oryzone\MediaStorage\MediaStorageInterface
+     */
+    public function getMediaStorage()
+    {
+        return $this->helper->getMediaStorage();
     }
 
     /**
