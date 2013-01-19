@@ -26,5 +26,10 @@
   "autoload": {
     "psr-0": { "Oryzone\\Bundle\\MediaStorageBundle": "" }
   },
-  "target-dir": "Oryzone/Bundle/MediaStorageBundle"
+  "target-dir": "Oryzone/Bundle/MediaStorageBundle",
+  "extra": {
+    "branch-alias": {
+        "dev-master": "1.0.x-dev"
+    }
+  }
 }
