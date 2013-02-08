@@ -276,3 +276,16 @@ If you need to do it within a Twig template (best choice) you can use the `media
   </div>
 
 This will generate an `img` tag with proper `width`, `height`, and `alt` attributes.
+
+
+Going deep
+----------
+
+* Use forms (to be written)
+* Events (to be written)
+* Write custom Naming Strategies (to be written)
+* Write custom provider (to be written)
+* Write custom cdn (to be written)
+* Write custom events adapter (to be written)
+* Write custom persistence adapter (to be written)
+
