@@ -288,7 +288,7 @@ Diving deep
 
 * `Use forms`_ (to be written)
 * `Events`_ (to be written)
-* `Write custom Naming Strategies`_ (to be written)
+* `Write custom naming strategy`_ (to be written)
 * `Write custom provider`_ (to be written)
 * `Write custom cdn`_ (to be written)
 * `Write custom events adapter`_ (to be written)
@@ -303,7 +303,7 @@ Diving deep
 
 .. _Use forms: forms.rst
 .. _Events: events.rst
-.. _Write custom Naming Strategies: custom-naming-strategy.rst
+.. _Write custom naming strategy: custom-naming-strategy.rst
 .. _Write custom provider: custom-provider.rst
 .. _Write custom cdn: custom-cdn.rst
 .. _Write custom events adapter: custom-event-adapter.rst
