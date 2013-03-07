@@ -22,7 +22,7 @@
     "require": {
         "php": ">=5.3.3",
         "oryzone/media-storage": "2.0.*@dev",
-        "symfony/framework-bundle": ">=2.1,<2.2-dev",
+        "symfony/framework-bundle": ">=2.1,<2.3-dev",
         "knplabs/knp-gaufrette-bundle": "0.2.*@dev"
     },
     "suggest": {
