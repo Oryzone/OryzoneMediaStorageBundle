@@ -25,11 +25,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder,
 class OryzoneMediaStorageExtension extends Extension
 {
 
-    protected $objectManagerMap = array(
-        'orm'     => 'doctrine.orm.entity_manager',
-        'mongodb' => 'doctrine.odm.mongodb.document_manager'
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -43,10 +38,6 @@ class OryzoneMediaStorageExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         foreach($toLoad as $file)
             $loader->load($file);
-
-        // sets parameters from global config
-        $dbDriver = $config['db_driver'];
-        $container->setAlias('oryzone_media_storage.persistence.adapter.doctrine.object_manager', new Alias($this->objectManagerMap[$dbDriver]));
 
         $container->setParameter('oryzone_media_storage.cdn.cdn_factory.cdns', $config['cdns']);
         $container->setParameter('oryzone_media_storage.context.context_factory.contexts', $config['contexts']);

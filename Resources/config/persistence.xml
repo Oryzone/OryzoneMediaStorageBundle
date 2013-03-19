@@ -6,11 +6,17 @@
     <parameters>
         <parameter key="oryzone_media_storage.persistence.adapter.null.class">Oryzone\MediaStorage\Persistence\NullPersistenceAdapter</parameter>
         <parameter key="oryzone_media_storage.persistence.adapter.doctrine.class">Oryzone\Bundle\MediaStorageBundle\Persistence\DoctrinePersistenceAdapter</parameter>
+        <parameter key="oryzone_media_storage.persistence.adapter.doctrine.model_manager_name">default</parameter>
     </parameters>
 
     <services>
         <!-- oryzone_media_storage.persistence.adapter.null -->
         <service id="oryzone_media_storage.persistence.adapter.null" class="%oryzone_media_storage.persistence.adapter.null.class%">
+        </service>
+
+        <!-- oryzone_media_storage.persistence.adapter.doctrine.object_manager -->
+        <service id="oryzone_media_storage.persistence.adapter.doctrine.object_manager" factory-service="doctrine" factory-method="getManager" class="Doctrine\ORM\EntityManager" public="false">
+            <argument>%oryzone_media_storage.persistence.adapter.doctrine.model_manager_name%</argument>
         </service>
 
         <!-- oryzone_media_storage.persistence.adapter.doctrine -->

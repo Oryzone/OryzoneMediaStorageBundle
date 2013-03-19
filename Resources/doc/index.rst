@@ -75,7 +75,7 @@ Follows a sample configuration:
               adapter:    video_adapter
 
   oryzone_media_storage:
-      db_driver: orm #to use doctrine orm drivers (you can also use 'mongodb')
+      db_driver: orm # to use doctrine orm drivers, you can also use 'mongodb' (optional from 2.0.1)
       cdns:
           avatar_cdn:
                   local: { path: '/img/avatar/' }
