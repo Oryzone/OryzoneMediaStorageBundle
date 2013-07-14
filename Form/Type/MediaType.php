@@ -10,17 +10,14 @@ namespace Oryzone\Bundle\MediaStorageBundle\Form\Type;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code (Resources/meta/LICENSE).
  */
-
-use Oryzone\Bundle\MediaStorageBundle\Form\EventListener\ContextFixerListener;
 use Symfony\Component\Form\AbstractType,
     Symfony\Component\Form\FormBuilderInterface,
-    Symfony\Component\OptionsResolver\OptionsResolverInterface;
+    Symfony\Component\OptionsResolver\OptionsResolverInterface,
+    Symfony\Component\Form\FormEvent,
+    Symfony\Component\Form\FormEvents;
 
 use Oryzone\MediaStorage\MediaStorageInterface,
-    Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\FormTypeBuilderFactoryInterface,
-    Oryzone\Bundle\MediaStorageBundle\Form\DataTransformer\ContextFixerDataTransformer;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
+    Oryzone\Bundle\MediaStorageBundle\Form\Type\Builder\FormTypeBuilderFactoryInterface;
 
 class MediaType extends AbstractType
 {
