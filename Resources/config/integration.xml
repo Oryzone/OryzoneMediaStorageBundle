@@ -17,7 +17,7 @@
 
         <!-- oryzone_media_storage.integration.video.vimeo -->
         <service id="oryzone_media_storage.integration.video.vimeo" class="%oryzone_media_storage.integration.video.vimeo.class%">
-            <argument type="service" id="buzz" />
+            <argument type="service" id="buzz" on-invalid="ignore"/>
             <argument type="service" id="cache" on-invalid="ignore"/>
         </service>
     </services>
